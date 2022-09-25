@@ -17,6 +17,7 @@ Once you are on the release page, just download the relevant .py file, called Al
 Run the py file and you're good.
 # Contributing.
 **No.**
+
 On a more serious note, you can submit an issue or fork it and make a pull request.
 # Planned Features
 [Section coming soon]
