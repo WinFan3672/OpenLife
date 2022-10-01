@@ -28,7 +28,7 @@ Most people do not realise it, but there are a lot of moving parts in BitLife, m
 ## What can I do so far?
 - You can live a full life now [up to 130 if you keep respawning]
 - Go to University and get a degree
-- Get a job and earn money [Alpha 11]
+- Get a job and earn money
 - Have [0] Children
 - Have [0] Generations of children
 - Gamble
