@@ -20,7 +20,7 @@ Run the py file and you're good.
 
 On a more serious note, you can submit an issue or fork it and make a pull request.
 # Planned Features
-[ ] Every feature you can think of.
+Section coming soon
 # FAQ
 ## How finished is it?
 Not very. I just started. I need to add a lot of things.
