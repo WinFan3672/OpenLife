@@ -34,6 +34,7 @@ Most people do not realise it, but there are a lot of moving parts in BitLife, m
 - Gamble
 - Play the lottery
 - Nothing much, really
+
 The game is far from complete for a reason.
 ## Can I contact you?
 Go ahead:
