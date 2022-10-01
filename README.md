@@ -20,13 +20,21 @@ Run the py file and you're good.
 
 On a more serious note, you can submit an issue or fork it and make a pull request.
 # Planned Features
-[Section coming soon]
+[ ] Every feature you can think of.
 # FAQ
 ## How finished is it?
 Not very. I just started. I need to add a lot of things.
 Most people do not realise it, but there are a lot of moving parts in BitLife, making it quite an ambitious project to recreate it.
 ## What can I do so far?
-Play up to age 12. There are very few activities and no scenarios whatsoever.
+- You can live a full life now [up to 130 if you keep respawning]
+- Go to University and get a degree
+- Get a job and earn money [Alpha 11]
+- Have [0] Children
+- Have [0] Generations of children
+- Gamble
+- Play the lottery
+- Nothing much, really
+The game is far from complete for a reason.
 ## Can I contact you?
 Go ahead:
 `winfan3672@gmail.com`
