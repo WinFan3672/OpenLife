@@ -1,3 +1,6 @@
+# Note From WinFan3672
+This is the default GitHub Code of Conduct. I do not really enforce this, but it should set your expectations.
+
 # Contributor Covenant Code of Conduct
 
 ## Our Pledge
