@@ -32,7 +32,8 @@ Most people do not realise it, but there are a lot of moving parts in BitLife, m
 - Have [0] Children
 - Have [0] Generations of children
 - Gamble
-- Play the lottery
+- Play the lottery [and win trillions]
+- Retire
 - Nothing much, really
 
 The game is far from complete for a reason.
