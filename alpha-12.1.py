@@ -1172,7 +1172,7 @@ try:
         
     def uni_start():
         div()
-        global uni_end_age, age
+        global uni_end_age, age, money
         uni_end_age=age+5
         print("You will end uni at age:",uni_end_age)
         uni()
@@ -1230,8 +1230,7 @@ try:
                 if ch == 0:
                     adult()
                 elif ch == 1:
-                    global debt
-                    debt+=25000
+                    money-=25000
                     uni_start()
                 elif ch == 1:
                     if money >= 25000:
