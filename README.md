@@ -8,7 +8,17 @@ For years BitLife has suffered from:
 - Subscription services
 - Garbage spin-off apps that are ovbious cash grabs
 - Functionality in the "God Mode" getting removed, making it weaker and weaker
-# Installing
+# System Requirements
+## Windows-Based Systems
+- `Python 3.9+`
+- Windows 10/11
+- Make sure you can run MS paint
+## Linux-Based Systems
+- `Python 3.9+`
+- A  Linux distro supported by Python, such as `Arch`, `Debian`, etc. [Check your package manager]
+## Mac-Based Systems
+`Python 3.10` is supported by `MacOS 10.9` and higher. 
+# Installation
 ## All major releases
 Just clone this repo. You will get a copy of every release inside of a folder. 
 ## Specific Releases
