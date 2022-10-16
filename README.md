@@ -56,7 +56,8 @@ Credit where credit is due.
 Below I will link some similar projets to mine that are under active development.
 
 ### LifeSimulator1
-Ah, yes, from my good friend `fungamer2`. Great project. Bigger team, smaller game, growing faster, has a better library.
+Ah, yes, from my good friend `fungamer2`. Great project. Bigger team, smaller game, growing faster, has a better library. Also, I put forward a few ideas for the project, not to blow my own trumpet.
+
 [Download it here](https://github.com/fungamer2-2/Life-Simulator1)
 
 ## Tools Used/Code Used/etc.
