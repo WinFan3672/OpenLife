@@ -50,10 +50,14 @@ The game is far from complete for a reason.
 ## Can I contact you?
 Go ahead:
 `winfan3672@gmail.com`
-# Similar Projects
+# Credits
+Credit where credit is due.
+## Similar projects
 Below I will link some similar projets to mine that are under active development.
 
-## LifeSimulator1
-Ah, yes, from my good friend `fungamer2`. 
-
+### LifeSimulator1
+Ah, yes, from my good friend `fungamer2`. Great project. Bigger team, smaller game, growing faster, has a better library.
 [Download it here](https://github.com/fungamer2-2/Life-Simulator1)
+
+## Tools Used/Code Used/etc.
+Black `https://github.com/psf/black` was used to format all versions of OpenLife after `Alpha 12.2`
