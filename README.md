@@ -55,6 +55,8 @@ Credit where credit is due.
 ## Similar projects
 Below I will link some similar projets to mine that are under active development.
 
+If you want a shoutout ask me, I might add your project if I like it.
+
 ### LifeSimulator1
 Ah, yes, from my good friend `fungamer2`. Great project. Bigger team, smaller game, growing faster, has a better library. Also, I put forward a few ideas for the project, not to blow my own trumpet.
 
