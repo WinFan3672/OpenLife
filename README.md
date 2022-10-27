@@ -10,11 +10,11 @@ For years BitLife has suffered from:
 - Functionality in the "God Mode" getting removed, making it weaker and weaker
 # System Requirements
 ## Windows-Based Systems
-- `Python 3.9+`
+- `Python 3.8+`
 - Windows 10/11
 - Make sure you can run MS paint
 ## Linux-Based Systems
-- `Python 3.9+`
+- `Python 3.8+`
 - A  Linux distro supported by Python, such as `Arch`, `Debian`, etc. [Check your package manager]
 ## Mac-Based Systems
 `Python 3.10` is supported by `MacOS 10.9` and higher. 
