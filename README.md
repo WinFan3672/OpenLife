@@ -43,9 +43,11 @@ Most people do not realise it, but there are a lot of moving parts in BitLife, m
 - Have [0] Children
 - Have [0] Generations of children
 - Gamble
-- Play the lottery [and win trillions]
+- Play the lottery [and win trillions](https://github.com/WinFan3672/OpenLife/wiki/Guides#infinite-money-glitch-alpha-12)
 - Retire
-- Nothing much, really
+- Become famous
+- Enter the Witness Protection Program
+- Go to prison
 
 The game is far from complete for a reason.
 ## Can I contact you?
@@ -66,3 +68,5 @@ Ah, yes, from my good friend `fungamer2`. Great project. Bigger team, smaller ga
 ## Tools Used/Code Used/etc.
 ### Black
 Black `https://github.com/psf/black` was used to format all versions of OpenLife after `Alpha 12.2`
+### Fungamer2's Life Simulator
+I did copy a lot of code from him, but it's under the MIT license, so credit is all I need to provide. A lot of lists were "provided" by him.
