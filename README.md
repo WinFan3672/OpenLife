@@ -10,6 +10,7 @@ For years BitLife has suffered from:
 - Garbage spin-off apps that are ovbious cash grabs
 - Functionality in the "God Mode" getting removed, making it weaker and weaker
 # System Requirements
+While the system requirements are very loose, the game has not been tested on Python releases older than 3.8. Releases older than 3.6 will not work since string formatting is used very frequently. Feel free to play the game on Python 3.6, but remember that only Python 3.8+ are supported.
 ## Windows-Based Systems
 - `Python 3.8+`
 - Windows 10/11
