@@ -8,16 +8,20 @@ from random import randint as rng
 from random import choice
 from time import sleep
 import os
-__author__="WinFan3672 [winfan3672.000webhostapp.com]"
+
+__author__ = "WinFan3672 [winfan3672.000webhostapp.com]"
+
 
 class House:
     def __init__(self, value, buy_price, age, haunted, model, condition):
-        self.value=value
-        self.buy_price=buy_price
-        self.age=age
-        self.haunted=haunted
-        self.model=model
-        self.condition=condition
+        self.value = value
+        self.buy_price = buy_price
+        self.age = age
+        self.haunted = haunted
+        self.model = model
+        self.condition = condition
+
+
 class FriendRecompile:
     # This class is used by load_game() to take raw save data and rebuild it as a proper friend object
     # The normal Friend class cannot be used as it randomises stats
@@ -45,17 +49,20 @@ class Friend:
         self.end = self.age + rng(25, 55)
         self.rel = rng(50, 75) / 100
 
+
 class ChildRecompile:
-    # Used by load_game() to rebuild 
+    # Used by load_game() to rebuild
     def __init__(self, name, age, rel, end, gender, intel, looks, craziness):
         self.name = name
         self.age = age
         self.rel = rel
         self.end = end
         self.gender = gender
-        self.intel=intel
-        self.looks=looks
-        self.craziness=craziness
+        self.intel = intel
+        self.looks = looks
+        self.craziness = craziness
+
+
 class Child:
     def __init__(self, name, age):
         self.name = name
@@ -63,9 +70,9 @@ class Child:
         self.rel = 1
         self.end = rng(35, 85)
         self.gender = rng(0, 1)
-        self.intel=rng(0,100)/100
-        self.looks=rng(0,100)/100
-        self.craziness=rng(0,100)/100
+        self.intel = rng(0, 100) / 100
+        self.looks = rng(0, 100) / 100
+        self.craziness = rng(0, 100) / 100
 
 
 class Parent:
@@ -89,7 +96,18 @@ class SpouseRecompile:
     # This is a class that is used in load_game()
     # in order to rebuild the spouse object
     def __init__(
-        self, name, rel, lvl, age, end, intel, looks, craziness, gender, fortune, pregnant
+        self,
+        name,
+        rel,
+        lvl,
+        age,
+        end,
+        intel,
+        looks,
+        craziness,
+        gender,
+        fortune,
+        pregnant,
     ):
         self.name = name
         self.age = age
@@ -114,8 +132,8 @@ class Spouse:
         self.age = your_age + rng(-5, 5)
         if self.age < 19:
             self.age = 19
-        self.end = (
-            self.age + rng(10,35)
+        self.end = self.age + rng(
+            10, 35
         )  # This means you will [almost] always outlive your spouse.
         self.rel = relation
         self.gender = gender
@@ -128,7 +146,7 @@ class Spouse:
         self.looks = (rng(1, 100)) / 100
         self.craziness = (rng(1, 100)) / 100
         self.fortune = rng(0, 10000000)
-        self.pregnant=0
+        self.pregnant = 0
 
 
 class SpouseDatingApp:
@@ -210,6 +228,7 @@ except:
 try:
     global has_first_run
     has_first_run = 0
+
     def child_list():
         div()
         global child_count, child_1, child_2, child_3, child_4, child_5, child_6, child_7, child_8
@@ -257,7 +276,7 @@ try:
         print("[0] Return")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         div()
@@ -279,6 +298,7 @@ try:
             child_8_interact()
         else:
             adult()
+
     def child_1_interact():
         global child_1, child_count, happiness, intel, spouse
         print("[1] Spend Time With")
@@ -289,18 +309,18 @@ try:
         print("[5] Insult")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         if ch == 1:
             print(f"You took your child {choice(spend_time)}.")
-            happiness+=0.25
-            child_1.rel+=0.45
+            happiness += 0.25
+            child_1.rel += 0.45
             adult()
         elif ch == 2:
             print(f"You called your child {choice(compliments)}.")
-            happiness+=0.25
-            child_1.rel+=0.25
+            happiness += 0.25
+            child_1.rel += 0.25
             adult()
         elif ch == 3:
             print(f"You had a conversation with your child about {choice(debates)}.")
@@ -308,15 +328,15 @@ try:
             happiness += 0.25
             child_1.rel += 0.35
             adult()
-##        elif ch == 4 or ch == 5:
-##            if ch == 4:
-##                print("You put out your child for adoption.")
-##            else:
-##                print("You abandoned your child.")
-##            spouse.rel -= 0.95
-##            if child_count == 1:
-##                child_count == 0
-##                del(child_1)
+        ##        elif ch == 4 or ch == 5:
+        ##            if ch == 4:
+        ##                print("You put out your child for adoption.")
+        ##            else:
+        ##                print("You abandoned your child.")
+        ##            spouse.rel -= 0.95
+        ##            if child_count == 1:
+        ##                child_count == 0
+        ##                del(child_1)
         elif ch == 5:
             print(f"You called your child {choice(insults)}!")
             child_1.rel -= 0.55
@@ -324,6 +344,7 @@ try:
             spouse_1.rel -= 0.65
         else:
             adult()
+
     def child_2_interact():
         global child_2, child_count, happiness, intel, spouse
         print("[1] Spend Time With")
@@ -334,18 +355,18 @@ try:
         print("[5] Insult")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         if ch == 1:
             print(f"You took your child {choice(spend_time)}.")
-            happiness+=0.25
-            child_2.rel+=0.45
+            happiness += 0.25
+            child_2.rel += 0.45
             adult()
         elif ch == 2:
             print(f"You called your child {choice(compliments)}.")
-            happiness+=0.25
-            child_2.rel+=0.25
+            happiness += 0.25
+            child_2.rel += 0.25
             adult()
         elif ch == 3:
             print(f"You had a conversation with your child about {choice(debates)}.")
@@ -353,15 +374,15 @@ try:
             happiness += 0.25
             child_2.rel += 0.35
             adult()
-##        elif ch == 4 or ch == 5:
-##            if ch == 4:
-##                print("You put out your child for adoption.")
-##            else:
-##                print("You abandoned your child.")
-##            spouse.rel -= 0.95
-##            if child_count == 1:
-##                child_count == 0
-##                del(child_2)
+        ##        elif ch == 4 or ch == 5:
+        ##            if ch == 4:
+        ##                print("You put out your child for adoption.")
+        ##            else:
+        ##                print("You abandoned your child.")
+        ##            spouse.rel -= 0.95
+        ##            if child_count == 1:
+        ##                child_count == 0
+        ##                del(child_2)
         elif ch == 5:
             print(f"You called your child {choice(insults)}!")
             child_2.rel -= 0.55
@@ -369,6 +390,7 @@ try:
             spouse_1.rel -= 0.65
         else:
             adult()
+
     def child_3_interact():
         global child_3, child_count, happiness, intel, spouse
         print("[1] Spend Time With")
@@ -379,18 +401,18 @@ try:
         print("[5] Insult")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         if ch == 1:
             print(f"You took your child {choice(spend_time)}.")
-            happiness+=0.25
-            child_3.rel+=0.45
+            happiness += 0.25
+            child_3.rel += 0.45
             adult()
         elif ch == 2:
             print(f"You called your child {choice(compliments)}.")
-            happiness+=0.25
-            child_3.rel+=0.25
+            happiness += 0.25
+            child_3.rel += 0.25
             adult()
         elif ch == 3:
             print(f"You had a conversation with your child about {choice(debates)}.")
@@ -398,15 +420,15 @@ try:
             happiness += 0.25
             child_3.rel += 0.35
             adult()
-##        elif ch == 4 or ch == 5:
-##            if ch == 4:
-##                print("You put out your child for adoption.")
-##            else:
-##                print("You abandoned your child.")
-##            spouse.rel -= 0.95
-##            if child_count == 1:
-##                child_count == 0
-##                del(child_3)
+        ##        elif ch == 4 or ch == 5:
+        ##            if ch == 4:
+        ##                print("You put out your child for adoption.")
+        ##            else:
+        ##                print("You abandoned your child.")
+        ##            spouse.rel -= 0.95
+        ##            if child_count == 1:
+        ##                child_count == 0
+        ##                del(child_3)
         elif ch == 5:
             print(f"You called your child {choice(insults)}!")
             child_3.rel -= 0.55
@@ -414,6 +436,7 @@ try:
             spouse_1.rel -= 0.65
         else:
             adult()
+
     def child_4_interact():
         global child_4, child_count, happiness, intel, spouse
         print("[1] Spend Time With")
@@ -424,18 +447,18 @@ try:
         print("[5] Insult")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         if ch == 1:
             print(f"You took your child {choice(spend_time)}.")
-            happiness+=0.25
-            child_4.rel+=0.45
+            happiness += 0.25
+            child_4.rel += 0.45
             adult()
         elif ch == 2:
             print(f"You called your child {choice(compliments)}.")
-            happiness+=0.25
-            child_4.rel+=0.25
+            happiness += 0.25
+            child_4.rel += 0.25
             adult()
         elif ch == 3:
             print(f"You had a conversation with your child about {choice(debates)}.")
@@ -443,15 +466,15 @@ try:
             happiness += 0.25
             child_4.rel += 0.35
             adult()
-##        elif ch == 4 or ch == 5:
-##            if ch == 4:
-##                print("You put out your child for adoption.")
-##            else:
-##                print("You abandoned your child.")
-##            spouse.rel -= 0.95
-##            if child_count == 1:
-##                child_count == 0
-##                del(child_4)
+        ##        elif ch == 4 or ch == 5:
+        ##            if ch == 4:
+        ##                print("You put out your child for adoption.")
+        ##            else:
+        ##                print("You abandoned your child.")
+        ##            spouse.rel -= 0.95
+        ##            if child_count == 1:
+        ##                child_count == 0
+        ##                del(child_4)
         elif ch == 5:
             print(f"You called your child {choice(insults)}!")
             child_4.rel -= 0.55
@@ -459,6 +482,7 @@ try:
             spouse_1.rel -= 0.65
         else:
             adult()
+
     def child_7_interact():
         global child_7, child_count, happiness, intel, spouse
         print("[1] Spend Time With")
@@ -469,18 +493,18 @@ try:
         print("[5] Insult")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         if ch == 1:
             print(f"You took your child {choice(spend_time)}.")
-            happiness+=0.25
-            child_7.rel+=0.45
+            happiness += 0.25
+            child_7.rel += 0.45
             adult()
         elif ch == 2:
             print(f"You called your child {choice(compliments)}.")
-            happiness+=0.25
-            child_7.rel+=0.25
+            happiness += 0.25
+            child_7.rel += 0.25
             adult()
         elif ch == 3:
             print(f"You had a conversation with your child about {choice(debates)}.")
@@ -488,15 +512,15 @@ try:
             happiness += 0.25
             child_7.rel += 0.35
             adult()
-##        elif ch == 4 or ch == 5:
-##            if ch == 4:
-##                print("You put out your child for adoption.")
-##            else:
-##                print("You abandoned your child.")
-##            spouse.rel -= 0.95
-##            if child_count == 1:
-##                child_count == 0
-##                del(child_7)
+        ##        elif ch == 4 or ch == 5:
+        ##            if ch == 4:
+        ##                print("You put out your child for adoption.")
+        ##            else:
+        ##                print("You abandoned your child.")
+        ##            spouse.rel -= 0.95
+        ##            if child_count == 1:
+        ##                child_count == 0
+        ##                del(child_7)
         elif ch == 5:
             print(f"You called your child {choice(insults)}!")
             child_7.rel -= 0.55
@@ -504,6 +528,7 @@ try:
             spouse_1.rel -= 0.65
         else:
             adult()
+
     def child_8_interact():
         global child_8, child_count, happiness, intel, spouse
         print("[1] Spend Time With")
@@ -514,18 +539,18 @@ try:
         print("[5] Insult")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         if ch == 1:
             print(f"You took your child {choice(spend_time)}.")
-            happiness+=0.25
-            child_8.rel+=0.45
+            happiness += 0.25
+            child_8.rel += 0.45
             adult()
         elif ch == 2:
             print(f"You called your child {choice(compliments)}.")
-            happiness+=0.25
-            child_8.rel+=0.25
+            happiness += 0.25
+            child_8.rel += 0.25
             adult()
         elif ch == 3:
             print(f"You had a conversation with your child about {choice(debates)}.")
@@ -533,15 +558,15 @@ try:
             happiness += 0.25
             child_8.rel += 0.35
             adult()
-##        elif ch == 4 or ch == 5:
-##            if ch == 4:
-##                print("You put out your child for adoption.")
-##            else:
-##                print("You abandoned your child.")
-##            spouse.rel -= 0.95
-##            if child_count == 1:
-##                child_count == 0
-##                del(child_8)
+        ##        elif ch == 4 or ch == 5:
+        ##            if ch == 4:
+        ##                print("You put out your child for adoption.")
+        ##            else:
+        ##                print("You abandoned your child.")
+        ##            spouse.rel -= 0.95
+        ##            if child_count == 1:
+        ##                child_count == 0
+        ##                del(child_8)
         elif ch == 5:
             print(f"You called your child {choice(insults)}!")
             child_8.rel -= 0.55
@@ -549,6 +574,7 @@ try:
             spouse_1.rel -= 0.65
         else:
             adult()
+
     def child_6_interact():
         global child_6, child_count, happiness, intel, spouse
         print("[1] Spend Time With")
@@ -559,18 +585,18 @@ try:
         print("[5] Insult")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         if ch == 1:
             print(f"You took your child {choice(spend_time)}.")
-            happiness+=0.25
-            child_6.rel+=0.45
+            happiness += 0.25
+            child_6.rel += 0.45
             adult()
         elif ch == 2:
             print(f"You called your child {choice(compliments)}.")
-            happiness+=0.25
-            child_6.rel+=0.25
+            happiness += 0.25
+            child_6.rel += 0.25
             adult()
         elif ch == 3:
             print(f"You had a conversation with your child about {choice(debates)}.")
@@ -578,15 +604,15 @@ try:
             happiness += 0.25
             child_6.rel += 0.35
             adult()
-##        elif ch == 4 or ch == 5:
-##            if ch == 4:
-##                print("You put out your child for adoption.")
-##            else:
-##                print("You abandoned your child.")
-##            spouse.rel -= 0.95
-##            if child_count == 1:
-##                child_count == 0
-##                del(child_6)
+        ##        elif ch == 4 or ch == 5:
+        ##            if ch == 4:
+        ##                print("You put out your child for adoption.")
+        ##            else:
+        ##                print("You abandoned your child.")
+        ##            spouse.rel -= 0.95
+        ##            if child_count == 1:
+        ##                child_count == 0
+        ##                del(child_6)
         elif ch == 5:
             print(f"You called your child {choice(insults)}!")
             child_6.rel -= 0.55
@@ -594,6 +620,7 @@ try:
             spouse_1.rel -= 0.65
         else:
             adult()
+
     def child_5_interact():
         global child_5, child_count, happiness, intel, spouse
         print("[1] Spend Time With")
@@ -604,18 +631,18 @@ try:
         print("[5] Insult")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         if ch == 1:
             print(f"You took your child {choice(spend_time)}.")
-            happiness+=0.25
-            child_5.rel+=0.45
+            happiness += 0.25
+            child_5.rel += 0.45
             adult()
         elif ch == 2:
             print(f"You called your child {choice(compliments)}.")
-            happiness+=0.25
-            child_5.rel+=0.25
+            happiness += 0.25
+            child_5.rel += 0.25
             adult()
         elif ch == 3:
             print(f"You had a conversation with your child about {choice(debates)}.")
@@ -623,15 +650,15 @@ try:
             happiness += 0.25
             child_5.rel += 0.35
             adult()
-##        elif ch == 4 or ch == 5:
-##            if ch == 4:
-##                print("You put out your child for adoption.")
-##            else:
-##                print("You abandoned your child.")
-##            spouse.rel -= 0.95
-##            if child_count == 1:
-##                child_count == 0
-##                del(child_5)
+        ##        elif ch == 4 or ch == 5:
+        ##            if ch == 4:
+        ##                print("You put out your child for adoption.")
+        ##            else:
+        ##                print("You abandoned your child.")
+        ##            spouse.rel -= 0.95
+        ##            if child_count == 1:
+        ##                child_count == 0
+        ##                del(child_5)
         elif ch == 5:
             print(f"You called your child {choice(insults)}!")
             child_5.rel -= 0.55
@@ -639,6 +666,7 @@ try:
             spouse_1.rel -= 0.65
         else:
             adult()
+
     def view_ribbons(reason):
         global money, debt, ethics, intel, age, ethics, looks, age, happiness, health, is_depressed, lottery_wins, fame, is_bandit, is_cancer
         has_ribbon = 0
@@ -701,9 +729,8 @@ try:
         # Debug options
         global allow_debug, allow_test
         # Some debug commands are hidden behind this flag, and ExitError spits out a load of debug info upon exiting
-        allow_debug =0
+        allow_debug = 0
         allow_test = 0
-        
 
         # 0=Original UI style [Looks kinda bad when you compare it to the others]
         # 1=Experimental UI style [with squares] [Never used] [Ugly]
@@ -725,8 +752,8 @@ try:
 
         # Set to 1 to instantly create a quick life on first launch
         # Useful development feature
-        instant_life=0
-        
+        instant_life = 0
+
         # End of configurable data
         has_first_run = 1
 
@@ -752,21 +779,21 @@ try:
 
         # Non-configurable data
         global yearly_videos, is_common_cold, is_cancer
-        yearly_videos, is_common_cold, is_cancer = 0,0,0
+        yearly_videos, is_common_cold, is_cancer = 0, 0, 0
         global lottery_wins, is_bandit, book_base, house_count
         lottery_wins, is_bandit, house_count = 0, 0, 0
         book_base = 0  # Decreases every year. Incremented by 3 when you publish a book. Can only publish a book if this value = 0
         global fame, is_wpp, friend_count, is_opentube
         fame = 0
         is_wpp = 0
-        is_opentube=0
+        is_opentube = 0
         friend_count = 0
 
         global is_smartphone, pistol_ammo, chainsaw_count, taser_count
-        is_smartphone, pistol_ammo, chainsaw_count, taser_count = 0,0,0,0
-        
+        is_smartphone, pistol_ammo, chainsaw_count, taser_count = 0, 0, 0, 0
+
         global is_fertile
-        is_fertile=1
+        is_fertile = 1
         global juvie_years, prison_years, sentence
         juvie_years = 0
         prison_years = 0
@@ -794,7 +821,7 @@ try:
         teen_salary = 0
         teen_hours = 0
         global pistol_count, knife_count
-        pistol_count, knife_count = 0,0
+        pistol_count, knife_count = 0, 0
         global forename_m, forename_f, surnames, gang_names, compliments, insults, debates, spend_time, job_roles, birthdays
         global auto_deposit
         auto_deposit = 0  # Set to 1 to automatically send all your money to savings account every year
@@ -2598,68 +2625,74 @@ try:
             print(f"You have been sent to juvenile detention for {juvie_years} years.")
         sentence = juvie_years
         juvie()
+
     def personal_bankrupcy():
         print("You filed for personal bankrupcy.")
         global house_count, house_1, house_2, house_3, debt, is_job, job_id, money, savings, edu_lvl, degree, fame, pension
         try:
-            del(house_1)
+            del house_1
         except:
             pass
         try:
-            del(house_2)
+            del house_2
         except:
             pass
         try:
-            del(house_3)
+            del house_3
         except:
             pass
-        house_count=0
-        debt=0
-        is_job, job_id = 0,0
-        money, savings=0,0
+        house_count = 0
+        debt = 0
+        is_job, job_id = 0, 0
+        money, savings = 0, 0
         if edu_lvl > 1:
-            edu_lvl=1
-        fame=0
-        degree=0
-        pension=0
+            edu_lvl = 1
+        fame = 0
+        degree = 0
+        pension = 0
         adult()
+
     def sponsor():
         global subscribers, money
-        money_paid=int(subscribers/15)
-        print(f"The sponsor wants to pay you {currency}"+str("{:,}".format(((money_paid)))))
+        money_paid = int(subscribers / 15)
+        print(
+            f"The sponsor wants to pay you {currency}"
+            + str("{:,}".format(((money_paid))))
+        )
         div()
         print("[1] Take Offer")
         print("[2] Negotiate for higher price")
         print("[0] Decline")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             opentube()
         if ch == 1:
-            chance=rng(1,3)
+            chance = rng(1, 3)
             if chance == 1:
                 print("You did the sponsorship deal.")
-                print("Reception",pbar2(1))
-                money+=money_paid
+                print("Reception", pbar2(1))
+                money += money_paid
                 opentube()
             elif chance == 2:
                 print("You did the sponsorship deal.")
-                print("Reception",pbar2(0.45))
-                money+=money_paid
-                old_subs=subscribers
-                subscribers-=(int(subscribers/10))
+                print("Reception", pbar2(0.45))
+                money += money_paid
+                old_subs = subscribers
+                subscribers -= int(subscribers / 10)
                 print(f"You lost {old_subs/10} subscribers.")
                 opentube()
             elif chance == 3:
                 print("You did the sponsorship deal.")
-                money+=money_paid
-                print("Reception",pbar2(0))
-                subscribers=int(subscribers/10)
+                money += money_paid
+                print("Reception", pbar2(0))
+                subscribers = int(subscribers / 10)
                 print(f"You lost {subscribers*9} subscribers.")
                 opentube()
         else:
             opentube()
+
     def opentube_init():
         div()
         print("Welcome to OpenTube")
@@ -2668,36 +2701,38 @@ try:
         global money, is_monetised, watch_time, opentube_year, forename, surname
         print("OpenTube Channel name:")
         try:
-            channel_name=input(">")
+            channel_name = input(">")
         except:
             adult()
         if channel_name == "":
-            channel_name=f"{forename} {surname}"
-        subscribers=0
-        watch_time=0
-        opentube_year=1
-        view_count=0
-        is_verif=0
-        video_count=0
-        money=0
-        is_monetised=0
-        is_opentube=1
+            channel_name = f"{forename} {surname}"
+        subscribers = 0
+        watch_time = 0
+        opentube_year = 1
+        view_count = 0
+        is_verif = 0
+        video_count = 0
+        money = 0
+        is_monetised = 0
+        is_opentube = 1
         opentube()
+
     def opentube_age():
         global opentube_year, video_count, view_count, subscribers, money, is_monetised
-        opentube_year+=1
+        opentube_year += 1
         for i in range(video_count):
-            oldsubs=subscribers
-            views_gained=(int(oldsubs+int((oldsubs/2))))
-            view_count+=views_gained
-            subs_gained=int(views_gained/3)
+            oldsubs = subscribers
+            views_gained = int(oldsubs + int((oldsubs / 2)))
+            view_count += views_gained
+            subs_gained = int(views_gained / 3)
             if subs_gained > 7984578812 - subscribers:
                 subs_gained = 7984578812 - subscribers
-            subscribers+=subs_gained
+            subscribers += subs_gained
             if is_monetised == 1:
-                cpm=(views_gained/17)/100
-                money+=int(cpm)
+                cpm = (views_gained / 17) / 100
+                money += int(cpm)
         opentube()
+
     def upload():
         global view_count, subscribers, video_count, money, is_monetised
         div()
@@ -2715,95 +2750,124 @@ try:
         print("[x] Drama [CPM=11] [-SUB]")
         print("[x] Music [CPM=0] [SUB x3]")
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
-            ch=0
+            ch = 0
         if ch == 0:
             opentube()
         elif ch == 1 or ch == 3 or ch == 4 or ch == 5:
             if ch == 1:
-                cpm=17
+                cpm = 17
             elif ch == 3:
-                cpm=10
+                cpm = 10
             elif ch == 4:
-                cpm=7
+                cpm = 7
             elif ch == 5:
-                cpm=6
+                cpm = 6
             else:
-                cpm=0
-            views=(subscribers)+(subscribers/3)
-            chance=rng(1,40)
-            bomb_chance=rng(1,20)
+                cpm = 0
+            views = (subscribers) + (subscribers / 3)
+            chance = rng(1, 40)
+            bomb_chance = rng(1, 20)
             if bomb_chance == 20:
                 print("Your video wast terrible :(")
-                views/=10
-                subs_gained=(-views)*3
+                views /= 10
+                subs_gained = (-views) * 3
             if chance == 40:
                 print("Your video went viral!")
-                views*=11
-                subs_gained=(views/9)
+                views *= 11
+                subs_gained = views / 9
             if views < 1:
-                views=1
+                views = 1
             if chance != 40 or bomb_chance != 20:
-                subs_gained=(views/3)
+                subs_gained = views / 3
             if subs_gained < 1:
                 subs_gained = 1
             if subs_gained > 10:
-                subs_gained+= (rng((-(int(subs_gained/10))),(int(subs_gained/10))))
-            views=int(views)
-            subs_gained=int(subs_gained)
-            if subs_gained > (7984578812-subscribers):
-                subs_gained=7984578812-subscribers
-            base=int(views/1000)
-            money_made=int((base*cpm)/100)
+                subs_gained += rng((-(int(subs_gained / 10))), (int(subs_gained / 10)))
+            views = int(views)
+            subs_gained = int(subs_gained)
+            if subs_gained > (7984578812 - subscribers):
+                subs_gained = 7984578812 - subscribers
+            base = int(views / 1000)
+            money_made = int((base * cpm) / 100)
             if views == 1 and subs_gained == 1:
                 print("Your video gained 1 view and 1 subscriber.")
             elif views == 1:
                 if subs_gained < 0:
-                    print(f"Your video gained 1 view and you lost",str("{:,}".format(((-subs_gained)))),"subscribers.")
+                    print(
+                        f"Your video gained 1 view and you lost",
+                        str("{:,}".format(((-subs_gained)))),
+                        "subscribers.",
+                    )
                 else:
-                    print(f"Your video gained 1 view and ",str("{:,}".format((subs_gained))),"subscribers.")
+                    print(
+                        f"Your video gained 1 view and ",
+                        str("{:,}".format((subs_gained))),
+                        "subscribers.",
+                    )
             elif subs_gained == 1:
-                print(f"Your video gained",str("{:,}".format((views))),"views and 1 subscriber.")
+                print(
+                    f"Your video gained",
+                    str("{:,}".format((views))),
+                    "views and 1 subscriber.",
+                )
             else:
                 if subs_gained < 0:
-                    print(f"Your video gained",str("{:,}".format((views))),"views and you lost",str("{:,}".format(((-subs_gained)))),"subscribers.")
+                    print(
+                        f"Your video gained",
+                        str("{:,}".format((views))),
+                        "views and you lost",
+                        str("{:,}".format(((-subs_gained)))),
+                        "subscribers.",
+                    )
                 else:
-                    print(f"Your video gained",str("{:,}".format((views))),"views and",str("{:,}".format((subs_gained))),"subscribers.")
+                    print(
+                        f"Your video gained",
+                        str("{:,}".format((views))),
+                        "views and",
+                        str("{:,}".format((subs_gained))),
+                        "subscribers.",
+                    )
             if is_monetised == 1:
-                print(f"Your video made {currency}"+str("{:,}".format((money_made))))
-                money+=money_made
-            view_count+=views
-            subscribers+=subs_gained
-            if subscribers >  7984578812:
-                subscribers=7984578812
-            video_count+=1
+                print(f"Your video made {currency}" + str("{:,}".format((money_made))))
+                money += money_made
+            view_count += views
+            subscribers += subs_gained
+            if subscribers > 7984578812:
+                subscribers = 7984578812
+            video_count += 1
             opentube()
         else:
             opentube()
+
     def delete_channel():
         div()
         global channel_name, subscribers, view_count, video_count, money, is_opentube
-        print("Your channel,",channel_name+", is gone.")
+        print("Your channel,", channel_name + ", is gone.")
         div()
-        print(f"It had",str("{:,}".format((subscribers))),"subscribers.")
-        print(f"It had",str("{:,}".format((view_count))),"views.")
-        print(f"You uploaded",str("{:,}".format((video_count))),"videos.")
+        print(f"It had", str("{:,}".format((subscribers))), "subscribers.")
+        print(f"It had", str("{:,}".format((view_count))), "views.")
+        print(f"You uploaded", str("{:,}".format((video_count))), "videos.")
         div()
-        print(f"Money: {currency}"+str("{:,}".format((money))))
-        is_opentube=0
+        print(f"Money: {currency}" + str("{:,}".format((money))))
+        is_opentube = 0
         adult()
+
     def opentube_stats():
         div()
         global channel_name, subscribers, view_count, video_count, is_verif
         global money, is_monetised, watch_time
-        print(f'Views:',str("{:,}".format((view_count))))
-        print(f"Subscribers:",str("{:,}".format((subscribers))))
-        print(f"Video Count:",video_count)
+        print(f"Views:", str("{:,}".format((view_count))))
+        print(f"Subscribers:", str("{:,}".format((subscribers))))
+        print(f"Video Count:", video_count)
         div()
         print(f"Watch Time: {view_count/4} hours")
-        print(f"Current Watch Rate: [{int(subscribers+(subscribers/2))}]V [{int((int(subscribers+(subscribers/2)))/3)}]S")
+        print(
+            f"Current Watch Rate: [{int(subscribers+(subscribers/2))}]V [{int((int(subscribers+(subscribers/2)))/3)}]S"
+        )
         opentube()
+
     def opentube():
         div()
         print()
@@ -2811,16 +2875,16 @@ try:
         global channel_name, subscribers, view_count, video_count, is_verif
         global money, is_monetised, opentube_year
         if is_verif == 1:
-            print(channel_name,"[✓]")
+            print(channel_name, "[✓]")
         else:
             print(channel_name)
         div()
         print(f"Year: {opentube_year}")
         div()
-        print(f"Subscribers:",str("{:,}".format((subscribers))))
-        print(f"Views:",str("{:,}".format((view_count))))
-        print(f"Video Count:",str("{:,}".format((video_count))))
-        print(f"Money: {currency}"+str("{:,}".format((money))))
+        print(f"Subscribers:", str("{:,}".format((subscribers))))
+        print(f"Views:", str("{:,}".format((view_count))))
+        print(f"Video Count:", str("{:,}".format((video_count))))
+        print(f"Money: {currency}" + str("{:,}".format((money))))
         div()
         print("[1] Upload Video")
         if is_monetised == 0:
@@ -2835,9 +2899,9 @@ try:
         print("[9] Set Video Schedule")
         print("[0] Age Up")
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
-            ch=1
+            ch = 1
         if ch == 1:
             upload()
         elif ch == 8:
@@ -2848,24 +2912,24 @@ try:
             print("[3] Weekly  [52 yer year] [+25% stress]")
             print("[4] Daily [365 per year [+70% stress]")
             try:
-                ch=int(input(">"))
+                ch = int(input(">"))
             except:
                 opentube()
             global yearly_videos
             if ch == 1:
-                yearly_videos=0
+                yearly_videos = 0
             elif ch == 2:
-                yearly_videos=12
+                yearly_videos = 12
             elif ch == 3:
-                yearly_videos=52
+                yearly_videos = 52
             elif ch == 4:
-                yearly_videos=365
+                yearly_videos = 365
             else:
                 pass
             div()
             print("Schedule adjusted.")
             opentube()
-                
+
         elif ch == 0:
             age_up(1)
         elif ch == 7:
@@ -2884,7 +2948,7 @@ try:
                 div()
                 if view_count > 100000:
                     print("You have been accepted for monetisation.")
-                    is_monetised=1
+                    is_monetised = 1
                     opentube()
                 else:
                     print("Your monetisation request was denied.")
@@ -2895,7 +2959,7 @@ try:
             print("[0] Return")
             div()
             try:
-                ch=int(input(">"))
+                ch = int(input(">"))
             except:
                 opentube()
             if ch == 1:
@@ -2909,7 +2973,7 @@ try:
             else:
                 div()
                 if subscribers >= 100000:
-                    is_verif=1
+                    is_verif = 1
                     print("You have been verified :O")
                     opentube()
                 else:
@@ -2917,33 +2981,37 @@ try:
                     opentube()
         elif ch == 4:
             if subscribers >= 10000:
-                price=subscribers/15
-                price=int(price)
-                print(f"Someone wants to buy your channel for {currency}"+str("{:,}".format((price))))
+                price = subscribers / 15
+                price = int(price)
+                print(
+                    f"Someone wants to buy your channel for {currency}"
+                    + str("{:,}".format((price)))
+                )
                 print("[1] Take Offer")
                 print("[0] Decline Offer")
                 try:
-                    ch=int(input(">"))
+                    ch = int(input(">"))
                 except:
-                    ch=0
+                    ch = 0
                 if ch == 0:
                     opentube()
                 else:
-                    money+=price
+                    money += price
                     delete_channel()
             else:
                 print("You need 10k subs to sell your channel.")
                 opentube()
-                      
+
         else:
             div()
             print("Not in current build.")
             opentube()
+
     def house_1_interact():
         global money, debt, house_count, house_1, house_2, house_3
         print("House #1")
-        print(f"Value: {currency}"+str("{:,}".format((house_1.value))))
-        print(f"Buy Price: {currency}"+str("{:,}".format((house_1.buy_price))))
+        print(f"Value: {currency}" + str("{:,}".format((house_1.value))))
+        print(f"Buy Price: {currency}" + str("{:,}".format((house_1.buy_price))))
         div()
         print("[1] Sell")
         print("[x] Renovate")
@@ -2955,7 +3023,7 @@ try:
         print("[0] Return")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         div()
@@ -2963,28 +3031,29 @@ try:
             if house_count == 1:
                 money += house_1.value
                 house_count = 0
-                del(house_1)
+                del house_1
             elif house_count == 2:
                 money += house_1.value
-                house_count=1
-                house_1=house_2
-                del(house_2)
+                house_count = 1
+                house_1 = house_2
+                del house_2
             elif house_count == 3:
                 money += house_1.value
-                house_count=2
-                house_1=house_2
-                house_2=house_3
-                del(house_3)
+                house_count = 2
+                house_1 = house_2
+                house_2 = house_3
+                del house_3
             else:
                 raise FeatureNotInGameError
             adult()
         else:
             adult()
+
     def house_2_interact():
         global money, debt, house_count, house_1, house_2, house_3
         print("House #2")
-        print(f"Value: {currency}"+str("{:,}".format((house_2.value))))
-        print(f"Buy Price: {currency}"+str("{:,}".format((house_2.buy_price))))
+        print(f"Value: {currency}" + str("{:,}".format((house_2.value))))
+        print(f"Buy Price: {currency}" + str("{:,}".format((house_2.buy_price))))
         div()
         print("[1] Sell")
         print("[x] Renovate")
@@ -2996,30 +3065,31 @@ try:
         print("[0] Return")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         div()
         if ch == 1:
             if house_count == 2:
                 money += house_2.value
-                house_count=1
-                del(house_2)
+                house_count = 1
+                del house_2
             elif house_count == 3:
                 money += house_2.value
-                house_count=2
-                house_2=house_3
-                del(house_3)
+                house_count = 2
+                house_2 = house_3
+                del house_3
             else:
                 raise FeatureNotInGameError
             adult()
         else:
             adult()
+
     def house_3_interact():
         global money, debt, house_count, house_1, house_2, house_3
         print("House #3")
-        print(f"Value: {currency}"+str("{:,}".format((house_3.value))))
-        print(f"Buy Price: {currency}"+str("{:,}".format((house_3.buy_price))))
+        print(f"Value: {currency}" + str("{:,}".format((house_3.value))))
+        print(f"Buy Price: {currency}" + str("{:,}".format((house_3.buy_price))))
         div()
         print("[1] Sell")
         print("[x] Renovate")
@@ -3031,24 +3101,25 @@ try:
         print("[0] Return")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         div()
         if ch == 1:
             if house_count == 3:
-                money+=house_3.value
+                money += house_3.value
                 house_count = 2
-                del(house_3)
+                del house_3
             else:
                 raise FeatureNotInGameError
             adult()
         else:
             adult()
-    def list_house(): 
+
+    def list_house():
         global house_count, house_1, house_2, house_3
         div()
-        if house_count==0:
+        if house_count == 0:
             print("No properties")
         if house_count >= 1:
             print("House #1")
@@ -3077,7 +3148,7 @@ try:
             print("[3] Interact")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         if ch == 1 and house_count >= 1:
@@ -3088,94 +3159,95 @@ try:
             house_3_interact()
         else:
             adult()
+
     def house_buy():
         global money, debt, house_count, house_1, house_2, house_3
         # def __init__(self, value, buy_price, age, haunted):
-        manor=House(rng(10000000,20000000),0,0,rng(0,1),0,1)
+        manor = House(rng(10000000, 20000000), 0, 0, rng(0, 1), 0, 1)
         if manor.haunted == 1:
-            manor.value=int(manor.value/2)
-        villa=House(rng(1000000,5000000),0,0,rng(0,1),0,1)
+            manor.value = int(manor.value / 2)
+        villa = House(rng(1000000, 5000000), 0, 0, rng(0, 1), 0, 1)
         if villa.haunted == 1:
-            villa.value=int(villa.value/2)
-        castle=House(rng(5000000,15000000),0,0,rng(0,1),0,1)
+            villa.value = int(villa.value / 2)
+        castle = House(rng(5000000, 15000000), 0, 0, rng(0, 1), 0, 1)
         if castle.haunted == 1:
-            castle.value=int(castle.value/2)
-        equestrian=House(rng(500000,5000000),0,0,rng(0,1),0,1)
+            castle.value = int(castle.value / 2)
+        equestrian = House(rng(500000, 5000000), 0, 0, rng(0, 1), 0, 1)
         if equestrian.haunted == 1:
-            equestrian.value=int(equestrian.value/2)
-        duplex=House(rng(2500000,3000000),0,0,rng(0,1),0,1)
+            equestrian.value = int(equestrian.value / 2)
+        duplex = House(rng(2500000, 3000000), 0, 0, rng(0, 1), 0, 1)
         if duplex.haunted == 1:
-            duplex.value=int(duplex.value/2)
+            duplex.value = int(duplex.value / 2)
         base = str("{:,}".format((money)))
         print(f"Balance: {currency}{base}")
-        base=str("{:,}".format((manor.value)))
+        base = str("{:,}".format((manor.value)))
         if manor.haunted == 1:
             print(f"[1] Manor [{currency}{base}] [Haunted]")
         else:
             print(f"[1] Manor [{currency}{base}]")
-        base=str("{:,}".format((villa.value)))
+        base = str("{:,}".format((villa.value)))
         if villa.haunted == 1:
             print(f"[2] Villa [{currency}{base}] [Haunted]")
         else:
             print(f"[2] Villa [{currency}{base}]")
-        base=str("{:,}".format((castle.value)))
+        base = str("{:,}".format((castle.value)))
         if castle.haunted == 1:
             print(f"[3] Castle [{currency}{base}] [Haunted]")
         else:
             print(f"[3] Castle [{currency}{base}]")
-        base=str("{:,}".format((equestrian.value)))
+        base = str("{:,}".format((equestrian.value)))
         if equestrian.haunted == 1:
             print(f"[4] Equestrian Property [{currency}{base}] [Haunted]")
         else:
             print(f"[4] Equestrian Property [{currency}{base}]")
-        base=str("{:,}".format((duplex.value)))
+        base = str("{:,}".format((duplex.value)))
         if duplex.haunted == 1:
             print(f"[5] Duplex [{currency}{base}] [Haunted]")
         else:
             print(f"[5] Duplex [{currency}{base}]")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         if ch == 1:
-            base=str("{:,}".format((manor.value)))
+            base = str("{:,}".format((manor.value)))
             if house_count == 0:
                 house_count += 1
-                house_1=manor
-                house_1.buy_price=house_1.value
+                house_1 = manor
+                house_1.buy_price = house_1.value
             elif house_count == 1:
                 house_count += 1
-                house_2=manor
-                house_2.buy_price=house_2.value
+                house_2 = manor
+                house_2.buy_price = house_2.value
             elif house_count == 2:
                 house_count += 1
-                house_3=manor
-                house_3.buy_price=house_3.value
+                house_3 = manor
+                house_3.buy_price = house_3.value
             else:
                 print("You can only have [3] properties.")
                 adult()
             if money > manor.value:
                 money -= manor.value
-                print(f"You purchased a manor for {currency}{base}")             
+                print(f"You purchased a manor for {currency}{base}")
             else:
-                debt+=manor.value
+                debt += manor.value
                 print(f"You took out a mortgage for a manor for {currency}{base}")
             adult()
         if ch == 2:
-            base=str("{:,}".format((villa.value)))
+            base = str("{:,}".format((villa.value)))
             if house_count == 0:
                 house_count += 1
-                house_1=villa
-                house_1.buy_price=house_1.value
+                house_1 = villa
+                house_1.buy_price = house_1.value
             elif house_count == 1:
                 house_count += 1
-                house_2=villa
-                house_2.buy_price=house_2.value
+                house_2 = villa
+                house_2.buy_price = house_2.value
             elif house_count == 2:
                 house_count += 1
-                house_3=villa
-                house_3.buy_price=house_3.value
+                house_3 = villa
+                house_3.buy_price = house_3.value
             else:
                 print("You can only have [3] properties.")
                 adult()
@@ -3183,20 +3255,20 @@ try:
                 money -= villa.value
                 print(f"You purchased a villa for {currency}{base}")
             else:
-                debt+=villa.value
+                debt += villa.value
                 print(f"You took out a mortgage for a villa for {currency}{base}")
             adult()
         if ch == 3:
-            base=str("{:,}".format((castle.value)))
+            base = str("{:,}".format((castle.value)))
             if house_count == 0:
                 house_count += 1
-                house_1=castle
+                house_1 = castle
             elif house_count == 1:
                 house_count += 1
-                house_2=castle
+                house_2 = castle
             elif house_count == 2:
                 house_count += 1
-                house_3=castle
+                house_3 = castle
             else:
                 print("You can only have [3] properties.")
                 adult()
@@ -3204,20 +3276,20 @@ try:
                 money -= castle.value
                 print(f"You purchased a castle for {currency}{base}")
             else:
-                debt+=castle.value
+                debt += castle.value
                 print(f"You took out a mortgage for a castle for {currency}{base}")
             adult()
         if ch == 4:
-            base=str("{:,}".format((equestrian.value)))
+            base = str("{:,}".format((equestrian.value)))
             if house_count == 0:
                 house_count += 1
-                house_1=equestrian
+                house_1 = equestrian
             elif house_count == 1:
                 house_count += 1
-                house_2=equestrian
+                house_2 = equestrian
             elif house_count == 2:
                 house_count += 1
-                house_3=equestrian
+                house_3 = equestrian
             else:
                 print("You can only have [3] properties.")
                 adult()
@@ -3225,20 +3297,22 @@ try:
                 money -= manor.value
                 print(f"You purchased an equestrian property for {currency}{base}")
             else:
-                debt+=manor.value
-                print(f"You took out a mortgage for an equestrian property for {currency}{base}")
+                debt += manor.value
+                print(
+                    f"You took out a mortgage for an equestrian property for {currency}{base}"
+                )
             adult()
         if ch == 5:
-            base=str("{:,}".format((manor.value)))
+            base = str("{:,}".format((manor.value)))
             if house_count == 0:
                 house_count += 1
-                house_1=duplex
+                house_1 = duplex
             elif house_count == 1:
                 house_count += 1
-                house_2=duplex
+                house_2 = duplex
             elif house_count == 2:
                 house_count += 1
-                house_3=duplex
+                house_3 = duplex
             else:
                 print("You can only have [3] properties.")
                 adult()
@@ -3246,13 +3320,14 @@ try:
                 money -= duplex.value
                 print(f"You purchased a duplex for {currency}{base}")
             else:
-                debt+=duplex.value
+                debt += duplex.value
                 print(f"You took out a mortgage for a duplex for {currency}{base}")
             adult()
         else:
             adult()
-        
+
         adult()
+
     def teen_calc_stress():
         global edu_lvl, pension, job_lvl, is_spouse, spouse
         global salary, hours
@@ -3295,11 +3370,11 @@ try:
         if is_depressed == 1:
             stress *= 2
         if yearly_videos == 12:
-            stress+=0.1
+            stress += 0.1
         if yearly_videos == 52:
-            stress+=0.25
+            stress += 0.25
         if yearly_videos == 35:
-            stress+=0.75
+            stress += 0.75
         if happiness <= 0.5:
             stress += happiness
         if happiness >= 0.5 and hours < 40:
@@ -3309,6 +3384,7 @@ try:
         if stress < 0:
             stress = 0
         return True
+
     def wpp_reveal():
         global is_wpp, wpp_name, wpp_year, age, forename, surname, gender
         if gender == 0 or gender == 1:
@@ -3340,32 +3416,59 @@ try:
         print(f"{game_name} Times")
         print("The *best* newspaper since 2022 AD")
         div()
-        print(f"{wpp_name[0]} {wpp_name[1]}'s death was FAKED the whole time; FBI in it for the money")
+        print(
+            f"{wpp_name[0]} {wpp_name[1]}'s death was FAKED the whole time; FBI in it for the money"
+        )
         div()
-        print(f"In {wpp_year}, {wpp_name[0]} {wpp_name[1]} sadly passed away as a result of a tragic heart attack. Millions of fans were distraught, with hundreds of flowers sent to {his_her} estate.")
+        print(
+            f"In {wpp_year}, {wpp_name[0]} {wpp_name[1]} sadly passed away as a result of a tragic heart attack. Millions of fans were distraught, with hundreds of flowers sent to {his_her} estate."
+        )
         print(f"Or did {he_she}?")
         div()
-        print(f"Yesterday, we announced that {forename} {surname} had died, touching the heart of {his_her} friends and family.")
-        print(f"Literally this morning, the Federal Bureau of Investigation released the following statement:")
+        print(
+            f"Yesterday, we announced that {forename} {surname} had died, touching the heart of {his_her} friends and family."
+        )
+        print(
+            f"Literally this morning, the Federal Bureau of Investigation released the following statement:"
+        )
         div()
-        print(f"NEWS REGARDING {forename.upper()} {surname.upper()} and {wpp_name[0].upper()} {wpp_name[1].upper()}")
+        print(
+            f"NEWS REGARDING {forename.upper()} {surname.upper()} and {wpp_name[0].upper()} {wpp_name[1].upper()}"
+        )
         div()
-        print(f"Yesterday, {forename} {surname} passed away. The {game_name} Times were eager to report on this, leaving it on the front page.")
-        print(f"We would like to announce that {forename} was actually {wpp_name[0]} {wpp_name[1]} under our Witness Protection Program.")
-        print(f"As you have seen over the years {he_she} {was_were} pretty bad at covering their tracks, leading to conspiracy theories that landed on the {game_name} Times's front page.")
-        print(f"Well, those conspiracy theorists were right, and now {wpp_name[0]} {wpp_name[1]} is *actually* dead. We are sorry for the loss, and {his_her} open_casket funeral will be available for the public to either go to or watch on TV.")
+        print(
+            f"Yesterday, {forename} {surname} passed away. The {game_name} Times were eager to report on this, leaving it on the front page."
+        )
+        print(
+            f"We would like to announce that {forename} was actually {wpp_name[0]} {wpp_name[1]} under our Witness Protection Program."
+        )
+        print(
+            f"As you have seen over the years {he_she} {was_were} pretty bad at covering their tracks, leading to conspiracy theories that landed on the {game_name} Times's front page."
+        )
+        print(
+            f"Well, those conspiracy theorists were right, and now {wpp_name[0]} {wpp_name[1]} is *actually* dead. We are sorry for the loss, and {his_her} open_casket funeral will be available for the public to either go to or watch on TV."
+        )
         print(f"We bid farewell to {wpp_name[0]} {wpp_name[1]}.")
         div()
-        print(f"Either way, the news is likely to shock fans, with a lot of conspiracy theories saying \"I told you so!\". Just to clarify, we were never made aware of this, and were taken aback.")
-        print(f"We hope that fans of {wpp_name[0]} {wpp_name[1]} can respect the decision {he_she} made in {his_her} lifetime to fade away from the public consciousness.")
-        print(f"Being famous is not easy, and can take an incredible toll on the famous person. It's only understandable that {he_she} chose to break away from it, deciding that peace was what {he_she} needed, away from the Paparazzi.")
-        print(f"Either way, you can rest easy knowing that {wpp_name[0]} is resting in Heaven [or in the ground, if you don't believe in that] as we speak.")
+        print(
+            f'Either way, the news is likely to shock fans, with a lot of conspiracy theories saying "I told you so!". Just to clarify, we were never made aware of this, and were taken aback.'
+        )
+        print(
+            f"We hope that fans of {wpp_name[0]} {wpp_name[1]} can respect the decision {he_she} made in {his_her} lifetime to fade away from the public consciousness."
+        )
+        print(
+            f"Being famous is not easy, and can take an incredible toll on the famous person. It's only understandable that {he_she} chose to break away from it, deciding that peace was what {he_she} needed, away from the Paparazzi."
+        )
+        print(
+            f"Either way, you can rest easy knowing that {wpp_name[0]} is resting in Heaven [or in the ground, if you don't believe in that] as we speak."
+        )
         div()
         print(f"{wpp_name[0]} {wpp_name[1]}")
         print(f"{year-age} - {wpp_year}")
         print(f"{wpp_year} - {year}")
         br()
         return True
+
     def die(reason):
         global age, forename, surname, is_depressed, is_spouse, spouse, gender, is_wpp
         div()
@@ -3670,21 +3773,33 @@ try:
                 mainmenu()
         elif reason == 6:
             if gender == 0:
-                he_she="he"
+                he_she = "he"
             elif gender == 1:
                 he_she == "she"
             else:
-                he_she="they"
+                he_she = "they"
             print(f"{forename} {surname} gets struck by lighting")
             div()
-            print(f"{forename} {surname}, aged {age}, was struck by lighning in a fatal accident.")
-            print(f"They were walking in the park when a storm hit. According to eyewitnesses,")
-            print(f"{he_she} tried to run away but instead ran straight into the lightning bolt's path.")
+            print(
+                f"{forename} {surname}, aged {age}, was struck by lighning in a fatal accident."
+            )
+            print(
+                f"They were walking in the park when a storm hit. According to eyewitnesses,"
+            )
+            print(
+                f"{he_she} tried to run away but instead ran straight into the lightning bolt's path."
+            )
             print("Death did the rest.")
             div()
-            print(f"999 was dialled, but by the time {he_she} was put into the ambulance, they were already dead.")
-            print(f"If you are in a storm, the Met Office has some great advice for what to do:")
-            print("https://metoffice.gov.uk/weather/warnings-and-advice/seasonal-advice/your-home/stay-safe-in-a-storm/")
+            print(
+                f"999 was dialled, but by the time {he_she} was put into the ambulance, they were already dead."
+            )
+            print(
+                f"If you are in a storm, the Met Office has some great advice for what to do:"
+            )
+            print(
+                "https://metoffice.gov.uk/weather/warnings-and-advice/seasonal-advice/your-home/stay-safe-in-a-storm/"
+            )
             div()
             view_ribbons(reason)
             div()
@@ -3720,15 +3835,16 @@ try:
                 mainmenu()
         else:
             raise FeatureNotInGameError
+
     def make_child():
         global child_count, child_1, child_2, child_3, child_4, child_5, child_6, child_7, child_8
         if child_count == 0:
             child_count = 1
-            child_1=Child(">",0)
+            child_1 = Child(">", 0)
             if child_1.gender == 0:
-                child_1.name=f"{choice(forename_m)} {surname}"
+                child_1.name = f"{choice(forename_m)} {surname}"
             else:
-                child_1.name=f"{choice(forename_f)} {surname}"
+                child_1.name = f"{choice(forename_f)} {surname}"
             div()
             print("You had a child!")
             div()
@@ -3738,17 +3854,25 @@ try:
             else:
                 print("Female")
             div()
-            print("Smarts   :",pbar2(child_1.intel),str(int(child_1.intel*100))+"%")
-            print("Looks    :",pbar2(child_1.looks),str(int(child_1.looks*100))+"%")
-            print("Craziness:",pbar2(child_1.craziness),str(int(child_1.craziness*100))+"%")
+            print(
+                "Smarts   :", pbar2(child_1.intel), str(int(child_1.intel * 100)) + "%"
+            )
+            print(
+                "Looks    :", pbar2(child_1.looks), str(int(child_1.looks * 100)) + "%"
+            )
+            print(
+                "Craziness:",
+                pbar2(child_1.craziness),
+                str(int(child_1.craziness * 100)) + "%",
+            )
             return True
         elif child_count == 1:
             child_count = 2
-            child_2=Child(">",0)
+            child_2 = Child(">", 0)
             if child_2.gender == 0:
-                child_2.name=f"{choice(forename_m)} {surname}"
+                child_2.name = f"{choice(forename_m)} {surname}"
             else:
-                child_2.name=f"{choice(forename_f)} {surname}"
+                child_2.name = f"{choice(forename_f)} {surname}"
             div()
             print("You had a child!")
             div()
@@ -3758,17 +3882,25 @@ try:
             else:
                 print("Female")
             div()
-            print("Smarts   :",pbar2(child_2.intel),str(int(child_2.intel*100))+"%")
-            print("Looks    :",pbar2(child_2.looks),str(int(child_2.looks*100))+"%")
-            print("Craziness:",pbar2(child_2.craziness),str(int(child_2.craziness*100))+"%")
+            print(
+                "Smarts   :", pbar2(child_2.intel), str(int(child_2.intel * 100)) + "%"
+            )
+            print(
+                "Looks    :", pbar2(child_2.looks), str(int(child_2.looks * 100)) + "%"
+            )
+            print(
+                "Craziness:",
+                pbar2(child_2.craziness),
+                str(int(child_2.craziness * 100)) + "%",
+            )
             return True
         elif child_count == 2:
             child_count = 3
-            child_3=Child(">",0)
+            child_3 = Child(">", 0)
             if child_3.gender == 0:
-                child_3.name=f"{choice(forename_m)} {surname}"
+                child_3.name = f"{choice(forename_m)} {surname}"
             else:
-                child_3.name=f"{choice(forename_f)} {surname}"
+                child_3.name = f"{choice(forename_f)} {surname}"
             div()
             print("You had a child!")
             div()
@@ -3778,17 +3910,25 @@ try:
             else:
                 print("Female")
             div()
-            print("Smarts   :",pbar2(child_3.intel),str(int(child_3.intel*100))+"%")
-            print("Looks    :",pbar2(child_3.looks),str(int(child_3.looks*100))+"%")
-            print("Craziness:",pbar2(child_3.craziness),str(int(child_3.craziness*100))+"%")
+            print(
+                "Smarts   :", pbar2(child_3.intel), str(int(child_3.intel * 100)) + "%"
+            )
+            print(
+                "Looks    :", pbar2(child_3.looks), str(int(child_3.looks * 100)) + "%"
+            )
+            print(
+                "Craziness:",
+                pbar2(child_3.craziness),
+                str(int(child_3.craziness * 100)) + "%",
+            )
             return True
         elif child_count == 3:
             child_count = 4
-            child_4=Child(">",0)
+            child_4 = Child(">", 0)
             if child_4.gender == 0:
-                child_4.name=f"{choice(forename_m)} {surname}"
+                child_4.name = f"{choice(forename_m)} {surname}"
             else:
-                child_4.name=f"{choice(forename_f)} {surname}"
+                child_4.name = f"{choice(forename_f)} {surname}"
             div()
             print("You had a child!")
             div()
@@ -3798,17 +3938,25 @@ try:
             else:
                 print("Female")
             div()
-            print("Smarts   :",pbar2(child_4.intel),str(int(child_4.intel*100))+"%")
-            print("Looks    :",pbar2(child_4.looks),str(int(child_4.looks*100))+"%")
-            print("Craziness:",pbar2(child_4.craziness),str(int(child_4.craziness*100))+"%")
+            print(
+                "Smarts   :", pbar2(child_4.intel), str(int(child_4.intel * 100)) + "%"
+            )
+            print(
+                "Looks    :", pbar2(child_4.looks), str(int(child_4.looks * 100)) + "%"
+            )
+            print(
+                "Craziness:",
+                pbar2(child_4.craziness),
+                str(int(child_4.craziness * 100)) + "%",
+            )
             return True
         elif child_count == 4:
             child_count = 5
-            child_5=Child(">",0)
+            child_5 = Child(">", 0)
             if child_5.gender == 0:
-                child_5.name=f"{choice(forename_m)} {surname}"
+                child_5.name = f"{choice(forename_m)} {surname}"
             else:
-                child_5.name=f"{choice(forename_f)} {surname}"
+                child_5.name = f"{choice(forename_f)} {surname}"
             div()
             print("You had a child!")
             div()
@@ -3818,17 +3966,25 @@ try:
             else:
                 print("Female")
             div()
-            print("Smarts   :",pbar2(child_5.intel),str(int(child_5.intel*100))+"%")
-            print("Looks    :",pbar2(child_5.looks),str(int(child_5.looks*100))+"%")
-            print("Craziness:",pbar2(child_5.craziness),str(int(child_5.craziness*100))+"%")
+            print(
+                "Smarts   :", pbar2(child_5.intel), str(int(child_5.intel * 100)) + "%"
+            )
+            print(
+                "Looks    :", pbar2(child_5.looks), str(int(child_5.looks * 100)) + "%"
+            )
+            print(
+                "Craziness:",
+                pbar2(child_5.craziness),
+                str(int(child_5.craziness * 100)) + "%",
+            )
             return True
         elif child_count == 5:
             child_count = 6
-            child_6=Child(">",0)
+            child_6 = Child(">", 0)
             if child_6.gender == 0:
-                child_6.name=f"{choice(forename_m)} {surname}"
+                child_6.name = f"{choice(forename_m)} {surname}"
             else:
-                child_6.name=f"{choice(forename_f)} {surname}"
+                child_6.name = f"{choice(forename_f)} {surname}"
             div()
             print("You had a child!")
             div()
@@ -3838,17 +3994,25 @@ try:
             else:
                 print("Female")
             div()
-            print("Smarts   :",pbar2(child_6.intel),str(int(child_6.intel*100))+"%")
-            print("Looks    :",pbar2(child_6.looks),str(int(child_6.looks*100))+"%")
-            print("Craziness:",pbar2(child_6.craziness),str(int(child_6.craziness*100))+"%")
+            print(
+                "Smarts   :", pbar2(child_6.intel), str(int(child_6.intel * 100)) + "%"
+            )
+            print(
+                "Looks    :", pbar2(child_6.looks), str(int(child_6.looks * 100)) + "%"
+            )
+            print(
+                "Craziness:",
+                pbar2(child_6.craziness),
+                str(int(child_6.craziness * 100)) + "%",
+            )
             return True
         elif child_count == 6:
             child_count = 7
-            child_7=Child(">",0)
+            child_7 = Child(">", 0)
             if child_7.gender == 0:
-                child_7.name=f"{choice(forename_m)} {surname}"
+                child_7.name = f"{choice(forename_m)} {surname}"
             else:
-                child_7.name=f"{choice(forename_f)} {surname}"
+                child_7.name = f"{choice(forename_f)} {surname}"
             div()
             print("You had a child!")
             div()
@@ -3858,17 +4022,25 @@ try:
             else:
                 print("Female")
             div()
-            print("Smarts   :",pbar2(child_7.intel),str(int(child_7.intel*100))+"%")
-            print("Looks    :",pbar2(child_7.looks),str(int(child_7.looks*100))+"%")
-            print("Craziness:",pbar2(child_7.craziness),str(int(child_7.craziness*100))+"%")
+            print(
+                "Smarts   :", pbar2(child_7.intel), str(int(child_7.intel * 100)) + "%"
+            )
+            print(
+                "Looks    :", pbar2(child_7.looks), str(int(child_7.looks * 100)) + "%"
+            )
+            print(
+                "Craziness:",
+                pbar2(child_7.craziness),
+                str(int(child_7.craziness * 100)) + "%",
+            )
             return True
         elif child_count == 7:
             child_count = 8
-            child_8=Child(">",0)
+            child_8 = Child(">", 0)
             if child_8.gender == 0:
-                child_8.name=f"{choice(forename_m)} {surname}"
+                child_8.name = f"{choice(forename_m)} {surname}"
             else:
-                child_8.name=f"{choice(forename_f)} {surname}"
+                child_8.name = f"{choice(forename_f)} {surname}"
             div()
             print("You had a child!")
             div()
@@ -3878,12 +4050,21 @@ try:
             else:
                 print("Female")
             div()
-            print("Smarts   :",pbar2(child_8.intel),str(int(child_8.intel*100))+"%")
-            print("Looks    :",pbar2(child_8.looks),str(int(child_8.looks*100))+"%")
-            print("Craziness:",pbar2(child_8.craziness),str(int(child_8.craziness*100))+"%")
+            print(
+                "Smarts   :", pbar2(child_8.intel), str(int(child_8.intel * 100)) + "%"
+            )
+            print(
+                "Looks    :", pbar2(child_8.looks), str(int(child_8.looks * 100)) + "%"
+            )
+            print(
+                "Craziness:",
+                pbar2(child_8.craziness),
+                str(int(child_8.craziness * 100)) + "%",
+            )
             return True
         else:
             adult()
+
     def spouse_interact(goto):
         global spouse, happiness, is_spouse, money, debt, currency, compliments, insults, spend_time, gender, intel
         div()
@@ -3942,16 +4123,21 @@ try:
         elif ch == 6:
             div()
             print("You made love with your spouse.")
-            print("Your enjoyment :",pbar2(rng(1,100)/100))
-            print("Their enjoyment:",pbar2(rng(1,100)/100))
+            print("Your enjoyment :", pbar2(rng(1, 100) / 100))
+            print("Their enjoyment:", pbar2(rng(1, 100) / 100))
             div()
             if is_fertile == 1:
-                spouse.rel+=0.55
-                happiness+=0.55
+                spouse.rel += 0.55
+                happiness += 0.55
                 if child_count < 8:
                     if spouse.pregnant == 0:
-                        if gender == 0 and spouse.gender == 1 or gender == 1 and spouse.gender == 0:
-                            spouse.pregnant=1
+                        if (
+                            gender == 0
+                            and spouse.gender == 1
+                            or gender == 1
+                            and spouse.gender == 0
+                        ):
+                            spouse.pregnant = 1
                             if gender == 0:
                                 print("Your spouse is pregnant with your child!")
                             else:
@@ -3965,8 +4151,8 @@ try:
                 else:
                     adult()
             else:
-                spouse.rel+=0.55
-                happiness+=0.55
+                spouse.rel += 0.55
+                happiness += 0.55
                 if goto == 1:
                     uni()
                 else:
@@ -4067,7 +4253,7 @@ try:
                 print("You divorced your spouse.")
                 money -= int(spouse.fortune / 2)
                 is_spouse = 0
-                del(spouse)
+                del spouse
                 if goto == 1:
                     uni()
                 else:
@@ -4321,6 +4507,7 @@ try:
             teen()
         else:
             teen()
+
     def oll_to_oll2():
         global allow_debug, did_tutor, degree, is_spouse, spouse, part_time_salary, friend_1, friend_2, friend_3, friend_count, fame, is_wpp, wpp_name, sentence, prison_years, juvie_years
         global happiness, health, intel, looks, ethics, money, forename, surname, age, work_e, edu_lvl, work_e_base, promo_base, degree, hours, salary, mother_rel, father_rel, house_count, house_1, house_2, house_3
@@ -4351,9 +4538,9 @@ try:
         sn = sn.replace(">", "")
         sn = sn.replace(":", "")
         sn = sn.replace('"', "")
-        sn2=sn
+        sn2 = sn
         sn += ".oll"  # file extension
-        sn2+=".oll2"
+        sn2 += ".oll2"
         try:
             f = open(sn, "rb")
         except:
@@ -4374,30 +4561,30 @@ try:
             print("FileError: File not base64-encoded")
             mainmenu()
         # save=forename+"|"+surname+"|"+str(age)+"|"+str(happiness)+"|"
-        #+str(looks)+"|"+str(health)+"|"+str(ethics)+"|"+str(intel)+"|
-        #+str(mother_rel)+"|"+str(father_rel)+str(money)+"|"+
-        #mother_name+"|"+father_name+"|"+str(mother_age)+"|"+str(father_age)
+        # +str(looks)+"|"+str(health)+"|"+str(ethics)+"|"+str(intel)+"|
+        # +str(mother_rel)+"|"+str(father_rel)+str(money)+"|"+
+        # mother_name+"|"+father_name+"|"+str(mother_age)+"|"+str(father_age)
         try:
-            s0=save[0]
-            s1=save[1]
-            s2=save[2]
-            s3=save[3]
-            s4=save[4]
-            s5=save[5]
-            s6=save[6]
-            s7=save[7]
-            s8=save[8]
-            s9=save[9]
-            s10=save[10]
-            s11=save[11]
-            s12=save[12]
-            s13=save[13]
-            s14=str(int(save[12])+5)
-            s15=str(int(save[13])+6)
+            s0 = save[0]
+            s1 = save[1]
+            s2 = save[2]
+            s3 = save[3]
+            s4 = save[4]
+            s5 = save[5]
+            s6 = save[6]
+            s7 = save[7]
+            s8 = save[8]
+            s9 = save[9]
+            s10 = save[10]
+            s11 = save[11]
+            s12 = save[12]
+            s13 = save[13]
+            s14 = str(int(save[12]) + 5)
+            s15 = str(int(save[13]) + 6)
         except:
             print("FileError: File not compatible.")
             mainmenu()
-        '''
+        """
         save= (
             forename #0
             +"|"
@@ -4429,14 +4616,50 @@ try:
             +str(father_age)#13
 
         )
-        '''
-        new_save=["Alpha","12",s3,s5,s7,s4,s6,"0",s0,s1,s2,"0","1","0","0","0","0","0","0","0","0","0","0","2022","0","0",s10,s11,s12,s13,s14,s15,"1","0.75","0.75"]
-        ns2=""
+        """
+        new_save = [
+            "Alpha",
+            "12",
+            s3,
+            s5,
+            s7,
+            s4,
+            s6,
+            "0",
+            s0,
+            s1,
+            s2,
+            "0",
+            "1",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "2022",
+            "0",
+            "0",
+            s10,
+            s11,
+            s12,
+            s13,
+            s14,
+            s15,
+            "1",
+            "0.75",
+            "0.75",
+        ]
+        ns2 = ""
         for item in new_save:
-            ns2+=str(item)
-            ns2+="|"
-        new_save=ns2
-        save=ns2
+            ns2 += str(item)
+            ns2 += "|"
+        new_save = ns2
+        save = ns2
         import codecs
 
         save = save.encode("utf-8")
@@ -4448,7 +4671,7 @@ try:
         br()
         div()
         mainmenu()
-        
+
     def save_game():
         global money, pistol_count, knife_count, is_common_cold
         global is_smartphone, pistol_ammo, chainsaw_count, taser_count
@@ -4490,14 +4713,14 @@ try:
             sn = sn.replace(":", "-")
             sn = sn.replace(" ", "_")
         if is_opentube == 0:
-            opentube_year=1
-            is_verif=0
-            is_monetised=0
-            watch_time=0
+            opentube_year = 1
+            is_verif = 0
+            is_monetised = 0
+            watch_time = 0
             channel_name = "No Channel"
-            video_count, view_count, subscribers=0,0,0
+            video_count, view_count, subscribers = 0, 0, 0
         if is_wpp == 0:
-            wpp_name = ["[N/A]","[N/A]"]
+            wpp_name = ["[N/A]", "[N/A]"]
         if is_spouse == 0:
             spouse = Spouse("N/A", 1, 1, age, 1)
         if friend_count == 0:
@@ -4510,59 +4733,59 @@ try:
         elif friend_count == 2:
             friend_3 = Friend("N/A", 18, 0)
         if house_count == 0:
-            house_1=House(0,0,0,0,0,1)
-            house_2=House(0,0,0,0,0,1)
-            house_3=House(0,0,0,0,0,1)
+            house_1 = House(0, 0, 0, 0, 0, 1)
+            house_2 = House(0, 0, 0, 0, 0, 1)
+            house_3 = House(0, 0, 0, 0, 0, 1)
         elif house_count == 1:
-            house_2=House(0,0,0,0,0,1)
-            house_3=House(0,0,0,0,0,1)
+            house_2 = House(0, 0, 0, 0, 0, 1)
+            house_3 = House(0, 0, 0, 0, 0, 1)
         elif house_count == 2:
-            house_3=House(0,0,0,0,0,1)
-            
+            house_3 = House(0, 0, 0, 0, 0, 1)
+
         if child_count == 0:
-            child_1=Child("Not_a_Child",0)
-            child_2=Child("Not_a_Child",0)
-            child_3=Child("Not_a_Child",0)
-            child_4=Child("Not_a_Child",0)
-            child_5=Child("Not_a_Child",0)
-            child_6=Child("Not_a_Child",0)
-            child_7=Child("Not_a_Child",0)
-            child_8=Child("Not_a_Child",0)
+            child_1 = Child("Not_a_Child", 0)
+            child_2 = Child("Not_a_Child", 0)
+            child_3 = Child("Not_a_Child", 0)
+            child_4 = Child("Not_a_Child", 0)
+            child_5 = Child("Not_a_Child", 0)
+            child_6 = Child("Not_a_Child", 0)
+            child_7 = Child("Not_a_Child", 0)
+            child_8 = Child("Not_a_Child", 0)
         elif child_count == 1:
-            child_2=Child("Not_a_Child",0)
-            child_3=Child("Not_a_Child",0)
-            child_4=Child("Not_a_Child",0)
-            child_5=Child("Not_a_Child",0)
-            child_6=Child("Not_a_Child",0)
-            child_7=Child("Not_a_Child",0)
-            child_8=Child("Not_a_Child",0)
+            child_2 = Child("Not_a_Child", 0)
+            child_3 = Child("Not_a_Child", 0)
+            child_4 = Child("Not_a_Child", 0)
+            child_5 = Child("Not_a_Child", 0)
+            child_6 = Child("Not_a_Child", 0)
+            child_7 = Child("Not_a_Child", 0)
+            child_8 = Child("Not_a_Child", 0)
         elif child_count == 2:
-            child_3=Child("Not_a_Child",0)
-            child_4=Child("Not_a_Child",0)
-            child_5=Child("Not_a_Child",0)
-            child_6=Child("Not_a_Child",0)
-            child_7=Child("Not_a_Child",0)
-            child_8=Child("Not_a_Child",0)
+            child_3 = Child("Not_a_Child", 0)
+            child_4 = Child("Not_a_Child", 0)
+            child_5 = Child("Not_a_Child", 0)
+            child_6 = Child("Not_a_Child", 0)
+            child_7 = Child("Not_a_Child", 0)
+            child_8 = Child("Not_a_Child", 0)
         elif child_count == 3:
-            child_4=Child("Not_a_Child",0)
-            child_5=Child("Not_a_Child",0)
-            child_6=Child("Not_a_Child",0)
-            child_7=Child("Not_a_Child",0)
-            child_8=Child("Not_a_Child",0)
+            child_4 = Child("Not_a_Child", 0)
+            child_5 = Child("Not_a_Child", 0)
+            child_6 = Child("Not_a_Child", 0)
+            child_7 = Child("Not_a_Child", 0)
+            child_8 = Child("Not_a_Child", 0)
         elif child_count == 4:
-            child_5=Child("Not_a_Child",0)
-            child_6=Child("Not_a_Child",0)
-            child_7=Child("Not_a_Child",0)
-            child_8=Child("Not_a_Child",0)
+            child_5 = Child("Not_a_Child", 0)
+            child_6 = Child("Not_a_Child", 0)
+            child_7 = Child("Not_a_Child", 0)
+            child_8 = Child("Not_a_Child", 0)
         elif child_count == 5:
-            child_6=Child("Not_a_Child",0)
-            child_7=Child("Not_a_Child",0)
-            child_8=Child("Not_a_Child",0)
+            child_6 = Child("Not_a_Child", 0)
+            child_7 = Child("Not_a_Child", 0)
+            child_8 = Child("Not_a_Child", 0)
         elif child_count == 6:
-            child_7=Child("Not_a_Child",0)
-            child_8=Child("Not_a_Child",0)
+            child_7 = Child("Not_a_Child", 0)
+            child_8 = Child("Not_a_Child", 0)
         elif child_count == 7:
-            child_8=Child("Not_a_Child",0)
+            child_8 = Child("Not_a_Child", 0)
         save = (
             "Alpha|15|"
             + str(happiness)
@@ -4733,209 +4956,207 @@ try:
             + "|"
             + str(juvie_years)  # 85
             + "|0|"
-            
-            + str(house_count) #87
+            + str(house_count)  # 87
             + "|"
-            + str(house_1.value) #88
+            + str(house_1.value)  # 88
             + "|"
-            + str(house_1.buy_price)#89
+            + str(house_1.buy_price)  # 89
             + "|"
-            + str(house_1.age)#90
+            + str(house_1.age)  # 90
             + "|"
-            + str(house_1.haunted)#91
+            + str(house_1.haunted)  # 91
             + "|"
-            + str(house_2.value)#92
+            + str(house_2.value)  # 92
             + "|"
-            + str(house_2.buy_price)#93
+            + str(house_2.buy_price)  # 93
             + "|"
-            + str(house_2.age)#94
+            + str(house_2.age)  # 94
             + "|"
-            + str(house_2.haunted)#95
+            + str(house_2.haunted)  # 95
             + "|"
-            + str(house_3.value)#96
+            + str(house_3.value)  # 96
             + "|"
-            + str(house_3.buy_price)#97
+            + str(house_3.buy_price)  # 97
             + "|"
-            + str(house_3.age)#98
+            + str(house_3.age)  # 98
             + "|"
-            + str(house_3.haunted)#99
+            + str(house_3.haunted)  # 99
             + "|"
-            + str(house_1.model) #100
+            + str(house_1.model)  # 100
             + "|"
-            + str(house_1.condition)#101
+            + str(house_1.condition)  # 101
             + "|"
-            + str(house_2.model)#102
+            + str(house_2.model)  # 102
             + "|"
-            + str(house_2.condition)#103
+            + str(house_2.condition)  # 103
             + "|"
-            + str(house_3.model)#104
+            + str(house_3.model)  # 104
             + "|"
-            + str(house_3.condition)#105
+            + str(house_3.condition)  # 105
             + "|"
-            + str(child_1.name)#106
+            + str(child_1.name)  # 106
             + "|"
-            + str(child_1.age)#107
+            + str(child_1.age)  # 107
             + "|"
-            + str(child_1.rel)#108
+            + str(child_1.rel)  # 108
             + "|"
-            + str(child_1.end)#109
+            + str(child_1.end)  # 109
             + "|"
-            + str(child_1.gender)#110
+            + str(child_1.gender)  # 110
             + "|"
-            + str(child_1.intel)#111
+            + str(child_1.intel)  # 111
             + "|"
-            + str(child_1.looks)#112
+            + str(child_1.looks)  # 112
             + "|"
-            + str(child_1.craziness)#113
+            + str(child_1.craziness)  # 113
             + "|"
-            + str(child_2.name)#114
+            + str(child_2.name)  # 114
             + "|"
-            + str(child_2.age)#115
+            + str(child_2.age)  # 115
             + "|"
-            + str(child_2.rel)#116
+            + str(child_2.rel)  # 116
             + "|"
-            + str(child_2.end)#117
+            + str(child_2.end)  # 117
             + "|"
-            + str(child_2.gender)#118
+            + str(child_2.gender)  # 118
             + "|"
-            + str(child_2.intel)#119
+            + str(child_2.intel)  # 119
             + "|"
-            + str(child_2.looks)#120
+            + str(child_2.looks)  # 120
             + "|"
-            + str(child_2.craziness)#121
+            + str(child_2.craziness)  # 121
             + "|"
-            + str(child_3.name)#122
+            + str(child_3.name)  # 122
             + "|"
-            + str(child_3.age)#123
+            + str(child_3.age)  # 123
             + "|"
-            + str(child_3.rel)#124
+            + str(child_3.rel)  # 124
             + "|"
-            + str(child_3.end)#125
+            + str(child_3.end)  # 125
             + "|"
-            + str(child_3.gender)#126
+            + str(child_3.gender)  # 126
             + "|"
-            + str(child_3.intel)#127
+            + str(child_3.intel)  # 127
             + "|"
-            + str(child_3.looks)#128
+            + str(child_3.looks)  # 128
             + "|"
-            + str(child_3.craziness)#129
+            + str(child_3.craziness)  # 129
             + "|"
-            + str(child_4.name)#130
+            + str(child_4.name)  # 130
             + "|"
-            + str(child_4.age)#131
+            + str(child_4.age)  # 131
             + "|"
-            + str(child_4.rel)#132
+            + str(child_4.rel)  # 132
             + "|"
-            + str(child_4.end)#133
+            + str(child_4.end)  # 133
             + "|"
-            + str(child_4.gender)#134
+            + str(child_4.gender)  # 134
             + "|"
-            + str(child_4.intel)#135
+            + str(child_4.intel)  # 135
             + "|"
-            + str(child_4.looks)#136
+            + str(child_4.looks)  # 136
             + "|"
-            + str(child_4.craziness)#137
+            + str(child_4.craziness)  # 137
             + "|"
-            + str(child_5.name)#138
+            + str(child_5.name)  # 138
             + "|"
-            + str(child_5.age)#139
+            + str(child_5.age)  # 139
             + "|"
-            + str(child_5.rel)#140
+            + str(child_5.rel)  # 140
             + "|"
-            + str(child_5.end)#141
+            + str(child_5.end)  # 141
             + "|"
-            + str(child_5.gender)#142
+            + str(child_5.gender)  # 142
             + "|"
-            + str(child_5.intel)#143
+            + str(child_5.intel)  # 143
             + "|"
-            + str(child_5.looks)#144
+            + str(child_5.looks)  # 144
             + "|"
-            + str(child_5.craziness)#145
+            + str(child_5.craziness)  # 145
             + "|"
-            + str(child_6.name)#146
+            + str(child_6.name)  # 146
             + "|"
-            + str(child_6.age)#147
+            + str(child_6.age)  # 147
             + "|"
-            + str(child_6.rel)#148
+            + str(child_6.rel)  # 148
             + "|"
-            + str(child_6.end)#149
+            + str(child_6.end)  # 149
             + "|"
-            + str(child_6.gender)#150
+            + str(child_6.gender)  # 150
             + "|"
-            + str(child_6.intel)#151
+            + str(child_6.intel)  # 151
             + "|"
-            + str(child_6.looks)#152
+            + str(child_6.looks)  # 152
             + "|"
-            + str(child_6.craziness)#153
+            + str(child_6.craziness)  # 153
             + "|"
-            + str(child_7.name)#154
+            + str(child_7.name)  # 154
             + "|"
-            + str(child_7.age)#155
+            + str(child_7.age)  # 155
             + "|"
-            + str(child_7.rel)#156
+            + str(child_7.rel)  # 156
             + "|"
-            + str(child_7.end)#157
+            + str(child_7.end)  # 157
             + "|"
-            + str(child_7.gender)#158
+            + str(child_7.gender)  # 158
             + "|"
-            + str(child_7.intel)#159
+            + str(child_7.intel)  # 159
             + "|"
-            + str(child_7.looks)#160
+            + str(child_7.looks)  # 160
             + "|"
-            + str(child_7.craziness)#161
+            + str(child_7.craziness)  # 161
             + "|"
-            + str(child_8.name)#162
+            + str(child_8.name)  # 162
             + "|"
-            + str(child_8.age)#163
+            + str(child_8.age)  # 163
             + "|"
-            + str(child_8.rel)#164
+            + str(child_8.rel)  # 164
             + "|"
-            + str(child_8.end)#165
+            + str(child_8.end)  # 165
             + "|"
-            + str(child_8.gender)#166
+            + str(child_8.gender)  # 166
             + "|"
-            + str(child_8.intel)#167
+            + str(child_8.intel)  # 167
             + "|"
-            + str(child_8.looks)#168
+            + str(child_8.looks)  # 168
             + "|"
-            + str(child_8.craziness)#169
+            + str(child_8.craziness)  # 169
             + "|"
-            + str(is_opentube)#170
+            + str(is_opentube)  # 170
             + "|"
-            + str(opentube_year)#171
+            + str(opentube_year)  # 171
             + "|"
-            + str(is_verif)#172
+            + str(is_verif)  # 172
             + "|"
-            + str(is_monetised)#173
+            + str(is_monetised)  # 173
             + "|"
-            + str(watch_time)#174
+            + str(watch_time)  # 174
             + "|"
-            + str(channel_name)#175
+            + str(channel_name)  # 175
             + "|"
-            + str(subscribers)#176
+            + str(subscribers)  # 176
             + "|"
-            + str(video_count)#177
+            + str(video_count)  # 177
             + "|"
-            + str(view_count)#178
+            + str(view_count)  # 178
             + "|"
-            + str(opentube_year)#179
+            + str(opentube_year)  # 179
             + "|"
-            + str(pistol_count)#180
+            + str(pistol_count)  # 180
             + "|"
-            + str(knife_count)#181
+            + str(knife_count)  # 181
             + "|"
-            + str(is_smartphone)#182
+            + str(is_smartphone)  # 182
             + "|"
-            + str(pistol_ammo)#183
+            + str(pistol_ammo)  # 183
             + "|"
-            + str(chainsaw_count)#184
+            + str(chainsaw_count)  # 184
             + "|"
-            + str(taser_count)#185
+            + str(taser_count)  # 185
             + "|"
-            + str(is_common_cold)#186
+            + str(is_common_cold)  # 186
             + "|"
             + str(child_count)
-            
         )
         if allow_debug == 2:
             print(save)
@@ -5063,7 +5284,7 @@ try:
                 float(save[49]),
                 int(save[51]),
                 int(save[53]),
-                0
+                0,
             )
             enemy_gang_rel = float(save[41])
             enemy_gang_lead = float(save[42])
@@ -5110,39 +5331,132 @@ try:
             sentence = int(save[83])
             prison_years = int(save[84])
             juvie_years = int(save[85])
-            house_count= int(save[87])
-            house_1=House(int(save[88]),int(save[89]),int(save[90]),int(save[91]),int(save[100]),float(save[101]))
-            house_2=House(int(save[92]),int(save[93]),int(save[94]),int(save[95]),int(save[102]),float(save[103]))
-            house_3=House(int(save[96]),int(save[97]),int(save[98]),int(save[99]),int(save[104]),float(save[105]))
-            
-            child_1=ChildRecompile(save[106],int(save[107]),int(save[108]),int(save[109]),int(save[110]),float(save[111]),float(save[112]),float(save[113]))
-            child_2=ChildRecompile(save[114],int(save[115]),int(save[116]),int(save[117]),int(save[118]),float(save[119]),float(save[120]),float(save[121]))
-            child_3=ChildRecompile(save[122],int(save[123]),int(save[124]),int(save[125]),int(save[126]),float(save[127]),float(save[128]),float(save[129]))
-            child_4=ChildRecompile(save[130],int(save[131]),int(save[132]),int(save[133]),int(save[134]),float(save[135]),float(save[136]),float(save[137]))
-            child_5=ChildRecompile(save[138],int(save[139]),int(save[140]),int(save[141]),int(save[142]),float(save[143]),float(save[144]),float(save[145]))
-            child_6=ChildRecompile(save[146],int(save[147]),int(save[148]),int(save[149]),int(save[150]),float(save[151]),float(save[152]),float(save[153]))
-            child_7=ChildRecompile(save[154],int(save[155]),int(save[156]),int(save[157]),int(save[158]),float(save[159]),float(save[160]),float(save[161]))
-            child_8=ChildRecompile(save[162],int(save[163]),int(save[164]),int(save[165]),int(save[166]),float(save[167]),float(save[168]),float(save[169]))
+            house_count = int(save[87])
+            house_1 = House(
+                int(save[88]),
+                int(save[89]),
+                int(save[90]),
+                int(save[91]),
+                int(save[100]),
+                float(save[101]),
+            )
+            house_2 = House(
+                int(save[92]),
+                int(save[93]),
+                int(save[94]),
+                int(save[95]),
+                int(save[102]),
+                float(save[103]),
+            )
+            house_3 = House(
+                int(save[96]),
+                int(save[97]),
+                int(save[98]),
+                int(save[99]),
+                int(save[104]),
+                float(save[105]),
+            )
 
-            is_opentube=int(save[170])
-            opentube_year=int(save[171])
-            is_verif=int(save[172])
-            is_monetised=int(save[173])
-            watch_time=int(save[174])
-            channel_name=save[175]
-            subscribers=int(save[176])
-            video_count=int(save[177])
-            view_count=int(save[178])
-            opentube_year=int(save[179])
+            child_1 = ChildRecompile(
+                save[106],
+                int(save[107]),
+                int(save[108]),
+                int(save[109]),
+                int(save[110]),
+                float(save[111]),
+                float(save[112]),
+                float(save[113]),
+            )
+            child_2 = ChildRecompile(
+                save[114],
+                int(save[115]),
+                int(save[116]),
+                int(save[117]),
+                int(save[118]),
+                float(save[119]),
+                float(save[120]),
+                float(save[121]),
+            )
+            child_3 = ChildRecompile(
+                save[122],
+                int(save[123]),
+                int(save[124]),
+                int(save[125]),
+                int(save[126]),
+                float(save[127]),
+                float(save[128]),
+                float(save[129]),
+            )
+            child_4 = ChildRecompile(
+                save[130],
+                int(save[131]),
+                int(save[132]),
+                int(save[133]),
+                int(save[134]),
+                float(save[135]),
+                float(save[136]),
+                float(save[137]),
+            )
+            child_5 = ChildRecompile(
+                save[138],
+                int(save[139]),
+                int(save[140]),
+                int(save[141]),
+                int(save[142]),
+                float(save[143]),
+                float(save[144]),
+                float(save[145]),
+            )
+            child_6 = ChildRecompile(
+                save[146],
+                int(save[147]),
+                int(save[148]),
+                int(save[149]),
+                int(save[150]),
+                float(save[151]),
+                float(save[152]),
+                float(save[153]),
+            )
+            child_7 = ChildRecompile(
+                save[154],
+                int(save[155]),
+                int(save[156]),
+                int(save[157]),
+                int(save[158]),
+                float(save[159]),
+                float(save[160]),
+                float(save[161]),
+            )
+            child_8 = ChildRecompile(
+                save[162],
+                int(save[163]),
+                int(save[164]),
+                int(save[165]),
+                int(save[166]),
+                float(save[167]),
+                float(save[168]),
+                float(save[169]),
+            )
 
-            pistol_count=int(save[180])
-            knife_count=int(save[181])
-            is_smartphone=int(save[182])
-            pistol_ammo=int(save[183])
-            chainsaw_count=int(save[184])
-            taser_count=int(save[185])
-            is_common_cold=int(save[186])
-            
+            is_opentube = int(save[170])
+            opentube_year = int(save[171])
+            is_verif = int(save[172])
+            is_monetised = int(save[173])
+            watch_time = int(save[174])
+            channel_name = save[175]
+            subscribers = int(save[176])
+            video_count = int(save[177])
+            view_count = int(save[178])
+            opentube_year = int(save[179])
+
+            pistol_count = int(save[180])
+            knife_count = int(save[181])
+            is_smartphone = int(save[182])
+            pistol_ammo = int(save[183])
+            chainsaw_count = int(save[184])
+            taser_count = int(save[185])
+            is_common_cold = int(save[186])
+
             div()
             print("Successfully loaded life.")
             adult()
@@ -5150,8 +5464,12 @@ try:
             div()
             print("The save file cannot be loaded.")
             print("It has been converted from Alpha 11 to Alpha 12.4 using the OOCU.")
-            print("Due to some form of conflict, there is no upgrade utility to upgrade OOCU save files to Alpha 13.")
-            print("As a result, you can only load this save in versions between Alpha 12.4 and Alpha 13 [not inclusive].")
+            print(
+                "Due to some form of conflict, there is no upgrade utility to upgrade OOCU save files to Alpha 13."
+            )
+            print(
+                "As a result, you can only load this save in versions between Alpha 12.4 and Alpha 13 [not inclusive]."
+            )
             print("Launch ALpha 12.4+ and try again.")
             print("We apolagise for the inconvenience. This will be resolved soon.")
             br()
@@ -5282,6 +5600,7 @@ try:
             base += ""
         print(base)
         br()
+
     def load_game_a14(sn):
         print("Convert Save [A14] --> [A15]")
         # load stage
@@ -5324,6 +5643,7 @@ try:
         print("Converted save successfully.")
         div()
         load_game()
+
     def load_game_a13(sn):
         global allow_debug, did_tutor
         global happiness, health, intel, looks, ethics, money, forename, surname, age, work_e, edu_lvl, work_e_base, promo_base, degree, hours, salary, mother_rel, father_rel
@@ -6108,6 +6428,7 @@ try:
                 uni()
         else:
             uni()
+
     def adult_rel(goto):
         global edu_lvl, pension, job_lvl, is_spouse, spouse
         global salary, hours, fame, friend_count, friend_1
@@ -6317,6 +6638,7 @@ try:
                 uni()
             else:
                 adult()
+
     def uni_pause():
         div()
         print("Game Paused.")
@@ -6342,7 +6664,7 @@ try:
             print("[0] Back")
             div()
             try:
-                ch=int(input(">"))
+                ch = int(input(">"))
             except:
                 uni()
             if ch == 1:
@@ -6354,7 +6676,7 @@ try:
             print("[0] Back")
             div()
             try:
-                ch=int(input(">"))
+                ch = int(input(">"))
             except:
                 uni()
             if ch == 1:
@@ -6417,6 +6739,7 @@ try:
             uni_pause()
         else:
             uni()
+
     def uni():
         calc_stress()
         global uni_end_age
@@ -6826,24 +7149,26 @@ try:
             fame -= rng(10, 20) / 100
 
         return True
+
     def give_disease():
         global is_common_cold, is_cancer
-        chance=rng(1,3)
+        chance = rng(1, 3)
         if chance == 1 and is_common_cold == 0:
             div()
             print("You are now suffering from THE COMMON COLD.")
             is_common_cold = 1
             return True
         elif chance == 2 and is_cancer == 0:
-            chance=rng(1,100)
+            chance = rng(1, 100)
             # chance = 128
             if chance == 128:
                 div()
                 print("You are now suffering from CANCER.")
-                is_cancer=1
+                is_cancer = 1
                 return True
         else:
             return True
+
     def age_up(goto):
         global happiness, intel, is_cancer
         global money, father_rel, allow_test, child_count, child_1, child_2, child_3, child_4, child_5, child_6, child_7, child_8
@@ -6868,62 +7193,61 @@ try:
             child_7.age += 1
         if child_count >= 8:
             child_8.age += 1
-        money -= (child_count * 6000)
+        money -= child_count * 6000
         if is_cancer == 1:
-            chance=rng(1,6)
+            chance = rng(1, 6)
             if chance == 6:
                 die(3)
-        chance=rng(1,3)
+        chance = rng(1, 3)
         if chance == 1:
             give_disease()
         if is_spouse == 1:
             if spouse.pregnant == 1:
                 if spouse.craziness >= 0.75:
-                    chance=3
+                    chance = 3
                 elif spouse.craziness >= 0.5:
-                    chance=rng(1,3)
+                    chance = rng(1, 3)
                 else:
-                    chance=rng(1,5)
+                    chance = rng(1, 5)
                 if chance != 3:
                     make_child()
                 else:
                     print("You had a miscarriage and lost the baby!")
-                    happiness-=0.8
-                    spouse.rel-=0.4
-        
-        
+                    happiness -= 0.8
+                    spouse.rel -= 0.4
+
         if is_opentube == 1:
             global opentube_year, video_count, view_count, subscribers, is_monetised, yearly_videos
-            opentube_year+=1
+            opentube_year += 1
             for i in range(yearly_videos):
                 video_count += 1
-                oldsubs=subscribers
-                views_gained=(int(oldsubs+int((oldsubs/2))))
-                view_count+=views_gained
-                subs_gained=int(views_gained/3)
+                oldsubs = subscribers
+                views_gained = int(oldsubs + int((oldsubs / 2)))
+                view_count += views_gained
+                subs_gained = int(views_gained / 3)
                 if subs_gained > 7984578812 - subscribers:
                     subs_gained = 7984578812 - subscribers
-                subscribers+=subs_gained
+                subscribers += subs_gained
                 if is_monetised == 1:
-                    cpm=(views_gained/17)/100
-                    money+=int(cpm)
+                    cpm = (views_gained / 17) / 100
+                    money += int(cpm)
             for i in range(video_count):
-                oldsubs=subscribers
-                views_gained=(int(oldsubs+int((oldsubs/2))))
-                view_count+=views_gained
-                subs_gained=int(views_gained/3)
+                oldsubs = subscribers
+                views_gained = int(oldsubs + int((oldsubs / 2)))
+                view_count += views_gained
+                subs_gained = int(views_gained / 3)
                 if subs_gained > 7984578812 - subscribers:
                     subs_gained = 7984578812 - subscribers
-                subscribers+=subs_gained
+                subscribers += subs_gained
                 if is_monetised == 1:
-                    cpm=(views_gained/17)/100
-                    money+=int(cpm)
+                    cpm = (views_gained / 17) / 100
+                    money += int(cpm)
         if house_count >= 1:
-            house_1.value = int(house_1.value*1.2)
+            house_1.value = int(house_1.value * 1.2)
         if house_count >= 2:
-            house_2.value = int(house_2.value*1.2)
+            house_2.value = int(house_2.value * 1.2)
         if house_count >= 3:
-            house_3.value = int(house_3.value*1.2)
+            house_3.value = int(house_3.value * 1.2)
         if book_base > 0:
             book_base -= 1
         if is_spouse == 1:
@@ -6931,16 +7255,16 @@ try:
         global age
         global did_tutor, auto_deposit
         did_tutor = 0
-        chance=rng(1,400)
-        chance_2=rng(1,2)
+        chance = rng(1, 400)
+        chance_2 = rng(1, 2)
         if chance == 400:
             print("You were struck by lightining!")
             if chance_2 == 1:
                 print("You survived.")
-                happiness=1
-                health=1
-                looks=1
-                intel=1
+                happiness = 1
+                health = 1
+                looks = 1
+                intel = 1
             else:
                 die(6)
         # random stat change: if you have 10% or less health, you have a chance of dying!
@@ -7385,7 +7709,7 @@ try:
                 print("You were treated for the Common Cold.")
                 print("You are no longer suffering from the Common Cold.")
                 br()
-                is_common_cold=0
+                is_common_cold = 0
                 adult()
             if ch == 4 and is_cancer == 1:
                 print("You were treated for Cancer.")
@@ -7843,15 +8167,17 @@ try:
                 adult()
         else:
             adult()
+
     def openlife_times():
         print("[1] ???")
         print("[2] ???")
         print("[3] ???")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
+
     def adult_activities():
         global money, happiness, looks, health, intel, debt, auto_deposit, allow_debug, job_id, prison_years, sentence, is_wpp, gender, view_count, subscribers, video_count, is_opentube
         global happiness, health, intel, looks, ethics, money, forename, surname, age, work_e, edu_lvl, work_e_base, promo_base, degree, hours, salary
@@ -7882,7 +8208,7 @@ try:
             if is_wpp == 0:
                 print("[21] Witness Protection Program")
         print("[22] Make Friends")
-        if debt > ((money+savings)*2) :
+        if debt > ((money + savings) * 2):
             print("[23] Personal Banklrupcy")
         try:
             ch = int(input(">"))
@@ -7893,7 +8219,7 @@ try:
         elif ch == 20 and fame > 0:
             fame_menu()
         elif ch == 23:
-            if debt > (money+savings)*2:
+            if debt > (money + savings) * 2:
                 print("Are you sure you want to file for personal bankrupcy?")
                 print("[-] Your debt will be written off")
                 print("[-] You'll lose your job, degree, pension and OpenTube channel.")
@@ -7905,7 +8231,7 @@ try:
                 print("[0] GOD NO")
                 div()
                 try:
-                    ch=int(input(">"))
+                    ch = int(input(">"))
                 except:
                     adult()
                 if ch == 1:
@@ -8516,6 +8842,7 @@ try:
             adult()
         else:
             adult()
+
     def adult_item_list():
         print("Items:")
         div()
@@ -8526,15 +8853,22 @@ try:
         if pistol_ammo > 0:
             print(f"{pistol_ammo}x Pistol Ammo")
         for i in range(chainsaw_count):
-           print("1x Chainsaw")
+            print("1x Chainsaw")
         for i in range(taser_count):
             print("1x Taser")
         if is_smartphone == 1:
             print("1x Smartphone")
-        if pistol_count == 0 and knife_count == 0 and taser_count == 0 and chainsaw_count == 0 and is_smartphone == 0:
+        if (
+            pistol_count == 0
+            and knife_count == 0
+            and taser_count == 0
+            and chainsaw_count == 0
+            and is_smartphone == 0
+        ):
             print("[No items to show]")
         br()
         adult()
+
     def adult_shop():
         global money, pistol_count, knife_count
         global is_smartphone, pistol_ammo, chainsaw_count, taser_count
@@ -8547,7 +8881,7 @@ try:
             print(f"[6] 1x Smartphone [{currency}750]")
         div()
         try:
-            ch=int(input(">"))
+            ch = int(input(">"))
         except:
             adult()
         div()
@@ -8607,6 +8941,7 @@ try:
                 adult()
         else:
             adult()
+
     def adult_assets():
         global money, savings, debt, auto_deposit
         print("[0] Return")
@@ -8660,13 +8995,13 @@ try:
                 if loan < 0:
                     loan = 0
                 debt += loan
-                debt *= 1.2 #Adds interest on loan when you take it out.
+                debt *= 1.2  # Adds interest on loan when you take it out.
                 money += loan
                 adult()
             elif ch == 2:
                 if auto_deposit == 1:
-                    money+=savings
-                    savings=0
+                    money += savings
+                    savings = 0
                 if money < debt:
                     debt -= money
                     money = 0
@@ -8677,7 +9012,7 @@ try:
                     adult()
                 if auto_deposit == 1:
                     savings += money
-                    money=0
+                    money = 0
             else:
                 adult()
 
@@ -8969,6 +9304,7 @@ try:
             return True
         else:
             return True
+
     def debug_log():
         global app_version, sub_version, game_name, version, is_hbp
         global allow_debug, is_sppouse, spouse, part_time_salary, sentence, juvie_years, prison_years, friend_count, friend_1, friend_2, friend_3, fame
@@ -8985,13 +9321,13 @@ try:
         log += f"LogVersion=5\n\n"
         log += f"# Game Info\n"
         log += f"Version={version}\n"
-        app_v2=[]
+        app_v2 = []
         for item in app_version:
             app_v2.append(str(item))
-        base=".".join(app_v2)
+        base = ".".join(app_v2)
         log += f"AppVersion={base}\n"
         log += f"SubVersion={sub_version}\n"
-        
+
         log += f"\n# Basic Information\n"
         log += f"Life Name={forename} {surname}\n"
         log += f"Gender={gender}\n"
@@ -9007,7 +9343,7 @@ try:
         log += f"Debt={debt}\n"
         log += f"IsDepressed={is_depressed}\n"
         log += f"IsHBP={is_hbp}\n\n"
-        
+
         log += f"# General Information\n"
         log += f"Pension={pension}\n"
         log += f"IsJob={is_job}\n"
@@ -9019,7 +9355,7 @@ try:
         log += f"DidTutor={did_tutor}\n"
         log += f"Fake ID={fake_id}\n"
         log += f"ClubCount={club_count}\n\n"
-        
+
         log += f"# Relations Information\n"
         log += f"Mother={mother_name}\n"
         log += f"Father={father_name}\n"
@@ -9033,114 +9369,114 @@ try:
         log += f"# Child Information\n"
         log += f"Count: {child_count}\n\n"
         if child_count >= 1:
-            log+=f"## Child 1\n"
-            log+=f"Name={child_1.name}\n"
-            log+=f"Age={child_1.age}\n"
-            log+=f"Rel={child_1.rel}\n"
-            log+=f"Intel={child_1.intel}\n"
-            log+=f"Looks={child_1.looks}\n"
-            log+=f"Craziness={child_1.craziness}\n"
-            log+=f"End={child_1.end}\n"
+            log += f"## Child 1\n"
+            log += f"Name={child_1.name}\n"
+            log += f"Age={child_1.age}\n"
+            log += f"Rel={child_1.rel}\n"
+            log += f"Intel={child_1.intel}\n"
+            log += f"Looks={child_1.looks}\n"
+            log += f"Craziness={child_1.craziness}\n"
+            log += f"End={child_1.end}\n"
             if child_1.gender == 0:
-                log+=f"Gender=M\n\n"
+                log += f"Gender=M\n\n"
             else:
-                log+=f"Gender=F\n\n"
+                log += f"Gender=F\n\n"
         if child_count >= 2:
-            log+=f"## Child 2\n"
-            log+=f"Name={child_2.name}\n"
-            log+=f"Age={child_2.age}\n"
-            log+=f"Rel={child_2.rel}\n"
-            log+=f"Intel={child_2.intel}\n"
-            log+=f"Looks={child_2.looks}\n"
-            log+=f"Craziness={child_2.craziness}\n"
-            log+=f"End={child_2.end}\n"
+            log += f"## Child 2\n"
+            log += f"Name={child_2.name}\n"
+            log += f"Age={child_2.age}\n"
+            log += f"Rel={child_2.rel}\n"
+            log += f"Intel={child_2.intel}\n"
+            log += f"Looks={child_2.looks}\n"
+            log += f"Craziness={child_2.craziness}\n"
+            log += f"End={child_2.end}\n"
             if child_2.gender == 0:
-                log+=f"Gender=M\n\n"
+                log += f"Gender=M\n\n"
             else:
-                log+=f"Gender=F\n\n"
+                log += f"Gender=F\n\n"
         if child_count >= 3:
-            log+=f"## Child 3\n"
-            log+=f"Name={child_3.name}\n"
-            log+=f"Age={child_3.age}\n"
-            log+=f"Rel={child_3.rel}\n"
-            log+=f"Intel={child_3.intel}\n"
-            log+=f"Looks={child_3.looks}\n"
-            log+=f"Craziness={child_3.craziness}\n"
-            log+=f"End={child_3.end}\n"
+            log += f"## Child 3\n"
+            log += f"Name={child_3.name}\n"
+            log += f"Age={child_3.age}\n"
+            log += f"Rel={child_3.rel}\n"
+            log += f"Intel={child_3.intel}\n"
+            log += f"Looks={child_3.looks}\n"
+            log += f"Craziness={child_3.craziness}\n"
+            log += f"End={child_3.end}\n"
             if child_3.gender == 0:
-                log+=f"Gender=M\n\n"
+                log += f"Gender=M\n\n"
             else:
-                log+=f"Gender=F\n\n"
+                log += f"Gender=F\n\n"
         if child_count >= 4:
-            log+=f"## Child 4\n"
-            log+=f"Name={child_4.name}\n"
-            log+=f"Age={child_4.age}\n"
-            log+=f"Rel={child_4.rel}\n"
-            log+=f"Intel={child_4.intel}\n"
-            log+=f"Looks={child_4.looks}\n"
-            log+=f"Craziness={child_4.craziness}\n"
-            log+=f"End={child_4.end}\n"
+            log += f"## Child 4\n"
+            log += f"Name={child_4.name}\n"
+            log += f"Age={child_4.age}\n"
+            log += f"Rel={child_4.rel}\n"
+            log += f"Intel={child_4.intel}\n"
+            log += f"Looks={child_4.looks}\n"
+            log += f"Craziness={child_4.craziness}\n"
+            log += f"End={child_4.end}\n"
             if child_4.gender == 0:
-                log+=f"Gender=M\n\n"
+                log += f"Gender=M\n\n"
             else:
-                log+=f"Gender=F\n\n"
+                log += f"Gender=F\n\n"
         if child_count >= 5:
-            log+=f"## Child 5\n"
-            log+=f"Name={child_5.name}\n"
-            log+=f"Age={child_5.age}\n"
-            log+=f"Rel={child_5.rel}\n"
-            log+=f"Intel={child_5.intel}\n"
-            log+=f"Looks={child_5.looks}\n"
-            log+=f"Craziness={child_5.craziness}\n"
-            log+=f"End={child_5.end}\n"
+            log += f"## Child 5\n"
+            log += f"Name={child_5.name}\n"
+            log += f"Age={child_5.age}\n"
+            log += f"Rel={child_5.rel}\n"
+            log += f"Intel={child_5.intel}\n"
+            log += f"Looks={child_5.looks}\n"
+            log += f"Craziness={child_5.craziness}\n"
+            log += f"End={child_5.end}\n"
             if child_5.gender == 0:
-                log+=f"Gender=M\n\n"
+                log += f"Gender=M\n\n"
             else:
-                log+=f"Gender=F\n\n"
+                log += f"Gender=F\n\n"
         if child_count >= 6:
-            log+=f"## Child 6\n"
-            log+=f"Name={child_6.name}\n"
-            log+=f"Age={child_6.age}\n"
-            log+=f"Rel={child_6.rel}\n"
-            log+=f"Intel={child_6.intel}\n"
-            log+=f"Looks={child_6.looks}\n"
-            log+=f"Craziness={child_6.craziness}\n"
-            log+=f"End={child_6.end}\n"
+            log += f"## Child 6\n"
+            log += f"Name={child_6.name}\n"
+            log += f"Age={child_6.age}\n"
+            log += f"Rel={child_6.rel}\n"
+            log += f"Intel={child_6.intel}\n"
+            log += f"Looks={child_6.looks}\n"
+            log += f"Craziness={child_6.craziness}\n"
+            log += f"End={child_6.end}\n"
             if child_6.gender == 0:
-                log+=f"Gender=M\n\n"
+                log += f"Gender=M\n\n"
             else:
-                log+=f"Gender=F\n\n"
+                log += f"Gender=F\n\n"
         if child_count >= 7:
-            log+=f"## Child 7\n"
-            log+=f"Name={child_7.name}\n"
-            log+=f"Age={child_7.age}\n"
-            log+=f"Rel={child_7.rel}\n"
-            log+=f"Intel={child_7.intel}\n"
-            log+=f"Looks={child_7.looks}\n"
-            log+=f"Craziness={child_7.craziness}\n"
-            log+=f"End={child_7.end}\n"
+            log += f"## Child 7\n"
+            log += f"Name={child_7.name}\n"
+            log += f"Age={child_7.age}\n"
+            log += f"Rel={child_7.rel}\n"
+            log += f"Intel={child_7.intel}\n"
+            log += f"Looks={child_7.looks}\n"
+            log += f"Craziness={child_7.craziness}\n"
+            log += f"End={child_7.end}\n"
             if child_7.gender == 0:
-                log+=f"Gender=M\n\n"
+                log += f"Gender=M\n\n"
             else:
-                log+=f"Gender=F\n\n"
+                log += f"Gender=F\n\n"
         if child_count >= 8:
-            log+=f"## Child 8\n"
-            log+=f"Name={child_8.name}\n"
-            log+=f"Age={child_8.age}\n"
-            log+=f"Rel={child_8.rel}\n"
-            log+=f"Intel={child_8.intel}\n"
-            log+=f"Looks={child_8.looks}\n"
-            log+=f"Craziness={child_8.craziness}\n"
-            log+=f"End={child_8.end}\n"
+            log += f"## Child 8\n"
+            log += f"Name={child_8.name}\n"
+            log += f"Age={child_8.age}\n"
+            log += f"Rel={child_8.rel}\n"
+            log += f"Intel={child_8.intel}\n"
+            log += f"Looks={child_8.looks}\n"
+            log += f"Craziness={child_8.craziness}\n"
+            log += f"End={child_8.end}\n"
             if child_8.gender == 0:
-                log+=f"Gender=M\n\n"
+                log += f"Gender=M\n\n"
             else:
-                log+=f"Gender=F\n\n"       
+                log += f"Gender=F\n\n"
         log += f"# Prison Information\n"
         log += f"Sentence={sentence}\n"
         log += f"PrisonYears={prison_years}\n"
         log += f"JuvieYears={juvie_years}\n\n"
-        
+
         log += f"# Finance Information\n"
         log += f"Salary={salary}\n"
         log += f"Hours={hours}\n"
@@ -9152,8 +9488,8 @@ try:
         log += f"Expenses={expenses}\n"
         log += f"PartTimeSalry={part_time_salary}\n\n"
 
-        log+=f"# Spouse Information\n"
-        log+=f"IsSpouse={is_spouse}\n"
+        log += f"# Spouse Information\n"
+        log += f"IsSpouse={is_spouse}\n"
         if is_spouse == 1:
             log += f"SpouseName={spouse.name}\n"
             log += f"SpouseAge={spouse.age}\n"
@@ -9162,7 +9498,7 @@ try:
             log += f"SpouseLvl={spouse.lvl}\n"
             log += f"Gender={spouse.gender}\n\n"
         else:
-            log+=f"\n"
+            log += f"\n"
         log += f"# Friend Information\n"
         log += f"FriendCount={friend_count}\n\n"
         if friend_count >= 1:
@@ -9200,23 +9536,24 @@ try:
         log += f"AltLogo={alt_logo}\n"
         log += f"AllowDebug={allow_debug}\n"
         log += f"AllowTest={allow_test}\n"
-        log += f"Currency=\"{currency}\"\n"
+        log += f'Currency="{currency}"\n'
         log += f"AutoDeposit={auto_deposit}\n\n"
-        
+
         log += f"# SysConfig Information\n"
         try:
             import platform
+
             base = platform.system()
             base2 = platform.uname()[2]
             base3 = platform.architecture()
             base4 = platform.platform()
             base5 = platform.machine()
         except:
-            base="N/A"
-            base2="N/A"
-            base3="N/A"
-            base4="N/A"
-            base5="N/A"
+            base = "N/A"
+            base2 = "N/A"
+            base3 = "N/A"
+            base4 = "N/A"
+            base5 = "N/A"
         try:
             import tkinter as tk
 
@@ -9231,8 +9568,8 @@ try:
             v = platform.python_version()
             th = platform.architecture()
         except:
-            v="N/A"
-            th="N/A"
+            v = "N/A"
+            th = "N/A"
         cpu = platform.processor()
         log += f"Platform={base} {base2}\n"
         log += f"ScreenResolution={screen_width}x{screen_height}\n"
@@ -9241,7 +9578,7 @@ try:
         log += f"GeneralInfo={base4}\n"
         log += f"Machine={base5}\n"
         log += f"CPU={cpu}\n\n"
-        
+
         log += f"# This debug log is created automatically using the\n"
         log += f"# {game_name} Debug Log Creation Tool [v5.x]\n"
         log += f"# The tool is (c) 2022 WinFan3672 [MIT License]"
@@ -9256,6 +9593,7 @@ try:
         print(f"Saved as {sn}.")
         br()
         adult()
+
     def adult_pause():
         global is_depressed, money, happiness, looks, intel, ethics, health, salary, hours
         global mother_age, father_age
@@ -10056,6 +10394,7 @@ try:
             teen()
         else:
             teen()
+
     def teen_item_list():
         global knife_count, pistol_count
         print("Items")
@@ -10068,6 +10407,7 @@ try:
             print("[No items to show]")
         br()
         teen()
+
     def teen_shop():
         div()
         global money, fake_id, happiness, health, pistol_count, knife_count, is_sch_gang
@@ -10126,8 +10466,8 @@ try:
         elif ch == 4:
             div()
             if money >= 25 and is_sch_gang == 1:
-                money-=25
-                knife_count+=1
+                money -= 25
+                knife_count += 1
                 print("You now have a knife.")
                 teen()
             else:
@@ -11033,6 +11373,7 @@ try:
         elif ch == 4:
             child_activities()
         child()
+
     def child_init():
         global mother_rel, father_rel
         print(
@@ -11400,7 +11741,7 @@ try:
         global instant_life
         if has_first_run == 1:
             if instant_life == 1:
-                has_first_run=2
+                has_first_run = 2
                 quick_life()
         global alt_logo
         div()
@@ -11476,9 +11817,12 @@ try:
             quick_life()
         elif ch == 11:
             import urllib.request
+
             url = "http://winfan3672.000webhostapp.com/version_check/openlife.version"
             print("Checking for updates...")
-            print(f"Current Version: {app_version[0]}.{app_version[1]}.{app_version[2]} [sub-version {sub_version}]")
+            print(
+                f"Current Version: {app_version[0]}.{app_version[1]}.{app_version[2]} [sub-version {sub_version}]"
+            )
             try:
                 urllib.request.urlretrieve(url, "openlife.version")
             except:
@@ -11512,9 +11856,7 @@ try:
                 url = f.read()
             except:
                 url = "[Could not retrieve URL from server]"
-            not_update_text = (
-                f"An update for {game_name} [{data[0]}.{data[1]}.{data[2]}] is available.\nDownload it from:\n{url}"
-            )
+            not_update_text = f"An update for {game_name} [{data[0]}.{data[1]}.{data[2]}] is available.\nDownload it from:\n{url}"
             if data[0] > app_version[0]:
                 print(not_update_text)
             else:
@@ -11549,8 +11891,10 @@ try:
             raise ExitError
         elif ch == 0:
             div()
-            print(game_name,"is a clone of BitLife written in Python3.")
-            print("For years, BitLife: Life Simulator has suffered from a lot of issues, including:")
+            print(game_name, "is a clone of BitLife written in Python3.")
+            print(
+                "For years, BitLife: Life Simulator has suffered from a lot of issues, including:"
+            )
             div()
             print("[-] Lazy Development")
             print("[-] Cash Grabbing")
@@ -11565,14 +11909,24 @@ try:
             print("[-] More features")
             print("[-] 100% FOSS code")
             print("[-] No paywalls")
-            print("[-] A multi-platform, multi-architecture system [since it's Python3]")
+            print(
+                "[-] A multi-platform, multi-architecture system [since it's Python3]"
+            )
             print("[-] No lag [since it's a Python script, anyone can run that]")
             div()
-            print(f"On top of this, {game_name} promises to only use the Python standard library, so you do not need to install anything.")
-            print(f"{game_name} will be better than BitLife by the time 1.0.0 is released.")
+            print(
+                f"On top of this, {game_name} promises to only use the Python standard library, so you do not need to install anything."
+            )
+            print(
+                f"{game_name} will be better than BitLife by the time 1.0.0 is released."
+            )
             div()
-            print(f"The server for OpenLife is provided by 000webhost, and can be accessed by anyone [https://winfan3672.000webhostapp.com/] in order to navigate its pages.")
-            print(f"The server will only use basic HTML in order to allow for basic things such as challenges [yes!] and update checks.")
+            print(
+                f"The server for OpenLife is provided by 000webhost, and can be accessed by anyone [https://winfan3672.000webhostapp.com/] in order to navigate its pages."
+            )
+            print(
+                f"The server will only use basic HTML in order to allow for basic things such as challenges [yes!] and update checks."
+            )
             div()
             print(f"I hope you enjoy {game_name}.")
             br()
@@ -11583,7 +11937,9 @@ try:
         elif ch == 3:
             div()
             print("99% of the code was written by WinFan3672 [winfan3672@gmail.com]")
-            print("The logo for the game was generated by textkool.com. [Font: Old Banner]")
+            print(
+                "The logo for the game was generated by textkool.com. [Font: Old Banner]"
+            )
             div()
             print("Resources:")
             print("The forenames and surnames were created by MufasaKermitsSuicide.")
@@ -11649,217 +12005,90 @@ try:
             mainmenu()
         elif ch == 7:
             changelog = [
-                "Alpha 14- The Identity Update",
+                "Alpha 15- The Homesteader Update",
                 "====================",
                 "1 Preface",
                 "====================",
-                "1.1 Alpha 14",
-                "This update is a follow-up to the abysmal Alpha 13. It includes a lot of identity-related things, such as genders, and some unrelated ones, such as the Witness Protection Program.",
+                "1.1 Alpha 15",
                 "",
-                "1.2 Alpha 15",
-                "Alpha 15 will be the Homesteader update. It will include:",
-                "[-] OLL to OLL2 converter",
-                "[-] House-buying",
-                "[-] House-selling",
-                "[-] House-flipping",
-                "[-] OpenLife Times",
-                "   [-] A newspaper that changes articles depending on what happens in your life, for instance, if you enter the Witness Protection Program, there will be reported sightings of you, etc.",
-                "[-] Children",
-                "[-] Siblings",
-                "   [-] Up to 2 siblings may generate when you are born",
-                "   [-] Quick Life will NOT make any",
+                "Alpha 15 is the Homesteader Update. You can now have up to [3] houses. You can also have up to [8] children.",
                 "",
-                "1.3 Look to the future",
-                "After Alpha 15, there will be a few more Alpha builds, and the game will jump to Beta.",
-                "",
-                "[-] Alpha 16",
-                "   [-] Bug Fix Update",
-                "   [-] Squashes as many known bugs as possible",
-                "   [-] Quality of Life changes",
-                "[-] Alpha 17",
-                "   [-] Just An Update",
-                "   [-] This update has no theme and focuses on adding as much as possible to the game.",
-                "[-] Alpha 18",
-                "   [-] Sccenario Update",
-                "   [-] Adds scenarios",
-                "   [-] Includes job-specific, child, teen, adult etc.",
-                "   [-] This will be the LAST Alpha build of OpenLife. ",
-                "",
-                "This is the schedule, assuming I do not postpone anything.",
+                "1.2 Alpha 16",
+                "Alpha 16, AKA The Bug Fix Update, will include:",
+                "[-] A revamp of the codebase",
+                "[-] Bug fixes",
+                "[-] Bug fixes",
+                "[-] Bug fixes",
                 "",
                 "====================",
-                "2 Spouse",
+                "2 Children",
                 "====================",
-                "2.1 Changes",
-                "",
-                "[-] Added insults",
-                "   [-] You now call your spouse more than just a dickhead",
-                "[-] Added compliments",
-                "[-] New hitman choice for spouse",
-                "[-] Parents can now congratulate you for finding a date",
-                "[-] Now have intelligence/craziness/looks values",
-                "[-] Now have a `fortune` value, which is how much money you inherit.",
+                "You were meant to have children in Alpha 13. Now, you can. Only delayed by 2 versions.",
+                "[-] You can now make love with your spouse. They/you will become pregnant.",
+                "[-] Depending on your lover's craziness value, there is a chance of having a miscarriage [higher craziness = less likely to have child]",
+                "[-] You can interact with your children",
                 "",
                 "====================",
-                "3 Debug Log",
+                "3 University Stage",
                 "====================",
-                "",
-                "3.1 What It Is",
-                "This is a utility for creating human-readable and detailed logs that provide information about the game and the system playing it.",
-                "",
-                "3.2 What data is included",
-                "[-] Contents of game memory",
-                "[-] OS",
-                "[-] Screen resolution",
-                "[-] Python version",
-                "[-] CPU information",
-                "[-] Game settings",
-                "",
-                "3.3 Who sees this data",
-                "The log is saved to a `.log` file in your `openlife_saves` directory. You can choose who sees this data by choosing to share it. You can send it to us for bug reporting, send it to your friends because you are weird, or you could even keep it to yourself. It's up to you.",
-                "",
-                "**No data gets sent to anyone when creating the log. The delay when creating the log is the time it takes for `tkinter` to launch a window then close it in order to work out the screen resolution.**",
+                "[-] Added relationships menu",
+                "[-] Uni_age_up() removed in favour of age_up().",
                 "",
                 "====================",
-                "4 Ribbons",
+                "4 Homesteader",
                 "====================",
-                "4.1 What They Are",
-                "Ribbons are listed underneath the OpenLife Times article when you die. You can collect ribbons by fulfiling their requirements. Multiple ribbons can be collected, **just like BitLife used to do**.",
                 "",
-                "4.2 Ribbon List",
-                "[-] Rich",
-                "[-] Debt Slave",
-                "[-] Cheater",
-                "[-] Bad Karma King",
-                "[-] Geriatric",
-                "[-] Stupid",
-                "[-] Famous",
-                "[-] Nerd",
-                "[-] Wasteful",
-                "[-] Unlucky",
-                "[-] Bandit",
-                "[-] Beautiful",
-                "[-] Perfectionist",
-                "[-] Depressed",
-                "[-] Mediocre",
+                "[-] You can have up to [3] houses.",
+                "[-] The value of each house rises by 20% each year.",
+                "[-] If you buy a house, you can make more money than a savings account by selling it. ",
                 "",
                 "====================",
-                "5 Fame",
+                "5 Shop",
                 "====================",
-                "5.1 Fame",
-                "A stat you unlock that shows how famous you are.",
-                "",
-                "5.2 Perks of fame",
-                "You unlock the Fame menu, where you can become even more famous while making a lot of money.",
-                "",
-                "5.3 Witness Protection Program",
-                "When you have 100% fame, you can go into Witness Protection. You will lose all your fame and your death will be faked. You will be given a new identity.  When you actually die, the OpenLife Times will reveal that your death was faked the whole time, and that the FBI were hiding it.",
-                "",
-                "5.4 Losing Fame",
-                "When your fame <= 0%, you become Infamous. At the moment, nothing happens, but when OpenTube [OpenLife's answer to YouTube] gets added, being infamous will result in you losing subscribers instead of gaining them.",
-                "",
-                "5.5 Legendary Status",
-                "When you enter the WPP, you will gain Legendary Status. When this happens, you will be a legend, and your legacy will never be forgotten.",
+                "[-] Added more shop items",
+                "[-] Added item list",
+                "[-] Smartphone [required for dating apps]",
                 "",
                 "====================",
-                "6 Prison",
+                "6 OpenTube",
                 "====================",
-                "6.1 Juvie",
-                "If you commit a crime while underage, you will be sent to Juvie. If you are 18 and in juvie, you will get transferred to Prison [6.2]",
-                "",
-                "6.2 Prison",
-                "When 18+ and commiting a crime, you get sent to prison.",
-                "",
-                "6.3 Escaping",
-                "Once you escape prison, you may get found by the authorities and sent back to finish your sentence. [Your sentence is extended for good measure]",
+                "[-] OpenTube is OpenLife's answer to YouTube",
+                "[-] Upload videos and become a billionaire really easily!",
+                "[-] Become famous quick!",
                 "",
                 "====================",
-                "7 Stress / Teen Jobs",
+                "7 General Additions",
                 "====================",
-                "[-] High Blood Pressure",
-                "   [-] You can get it from too much stress.",
-                "   [-] You have a 25% chance of dying of a heart attack every year.",
-                "   [-] Can be cured by de-stressing, such as by increasing happiness or quitting your job",
-                "[-] calc_stress()",
-                "   [-] Function to calculate the stress level. ",
-                "   [-] Factors like happiness, hours and part-time hours are taken into account",
-                "[-] Teen job update!",
-                "   [-] More part-time jobs",
-                "   [-] Adjust hours",
-                "   [-] Stress is added when you have a part-time job",
-                "====================",
-                "8 Identity",
-                "====================",
-                "[-] Gender",
-                "   [-] You now have a gender",
-                "   [-] Wow. So original.",
-                "[-] Dating App",
-                "   [-] Costs Â£100",
-                "   [-] Choose age",
-                "[-] Gay Dating App",
-                "   [-] Same-sex relationships",
+                "[-] Lightning Strike",
+                "   [-] 1 in 400 chance",
+                "   [-] When you're struck, you have a 50% chance of dying",
+                "   [-] If you don't die, you get maxxed-out stats.",
+                "[-] Personal Bankrupcy",
+                "   [-] If your if debt > 2x savings + money, you can be elegible for personal bankrupcy",
+                "   [-] Your debt gets written off, at the cost of losing everything",
+                "[-] Added common cold",
+                "   [-] Does nothing",
                 "",
                 "====================",
-                "10 Friends",
+                "8 Bug Fixes",
                 "====================",
-                "10.1 Friends",
-                "You can have up to [3] friends. ",
-                "",
-                "10.2 Interactions",
-                "You can interact with your friends.",
-                "",
-                "10.2.1 Spend Time",
-                "Increases relation and happiness by 25%",
-                "",
-                "10.2.2 Conversation",
-                "Has a 25% chance of becoming an argument.",
-                "",
-                "10.2.3 Unfriend",
-                "Removes that friend",
-                "",
-                "10.2.4 Insult",
-                "Reduces happiness and relations by 25%",
-                "",
-                "10.2.5 Ask Out",
-                "Ask them out. If relations 75%+ they will accept.",
+                "[-] University age up system identical to normal age-up system.",
                 "",
                 "====================",
-                "11 General Additions",
+                "9 Issues",
                 "====================",
-                "[-] Doctor",
-                "   [-] Treats ailments",
-                "   [-] Free",
-                "[-] Quick Life",
-                "   [-] Menu option",
-                "   [-] Creates an 18-year-old with a random gender and stats",
-                "[-] Challenges",
-                "   [-] You were able to download them, now you can play them.",
-                "   [-] Choose a save file and, if you are on the latest version, you might get Â£1M.",
-                "   [-] Each challenge has a challenge number, and the save file keeps track of which challenge number was last completed, so that you do not complete it an infinite amount of times.",
-                "[-] If you cannot afford surgery, you will take out a loan for it",
-                "[-] Load Game will no longer report the wrong expected version, due to `check_version` [a list object] being used for both version checks and reports",
-                "[-] When doing a name change, the name cannot be longer than 16 characters long. If it exceeds the limit, characters will be removed until it is exactly 16 characters.",
-                "[-] You can now Check for Updates.",
-                "   [-] If an update is available, you will be shown a URL that you can paste into your browser to download the latest version of OpenLife.",
+                "[-] Cannot exorcise house",
+                "   [-] Will be added A16",
+                "   [-] When you exorcise a house, its value doubles.",
+                "[-] Cannot abandon children",
+                "[-] Cannot continue as your child. [Will work on]",
                 "====================",
-                "12 Bug Fixes",
+                "10 End",
                 "====================",
-                "[-] The game no longer exits when you pick an invalid choice in the Life Creator",
-                "[-] The game no longer exits when you choose an invalid save file in the Load Game screen.",
-                "[-] A lot of previously unsaved data is now saved when you save the game.",
-                "====================",
-                "13 Last Words",
-                "====================",
-                "I feel like I was way too excited to push this update out. In fact, I was so entheusiastic to do so, I pushed back a few features:",
-                "[-] An update to the Teen Shop",
-                "[-] Children",
-                "   [-] I was definitely underestimating my potential when I decided they were too difficult to implement.",
-                "[-] I almost pushed back friends, until I decided that I was capable of doing it.",
+                "The next update, Alpha 16, will add, amongst other things, bug fixes and improvements to QoL. There will be no major features, just improvements to current ones.",
                 "",
-                "I realise that Alpha 15 is so ambitious, that I have only 3 ideas scheduled for the long term on my Monday.com board. I am greatly excited about the future of OpenLife, and I hope you are too.",
-                "====================",
-                "Build Date  : 4 Nov 2022",
-                "Publish Date: 5 Nov 2022",
+                "Build Date  : 12 Nov 2022",
+                "Release Date: 14 Nov 2022",
             ]
             for l in changelog:
                 l = l.replace("{game_name}", game_name)
