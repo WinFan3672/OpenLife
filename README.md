@@ -42,8 +42,8 @@ Most people do not realise it, but there are a lot of moving parts in BitLife, m
 - Go to University and get a degree
 - Get a job and earn money
 - Find your perfect lover and marry them
-- Have [0] Children
-- Have [0] Generations of children
+- Have [8] Children
+- Have [1] Generation of children
 - Gamble
 - Play the lottery [and win trillions](https://github.com/WinFan3672/OpenLife/wiki/Guides#infinite-money-glitch-alpha-12)
 - Retire
