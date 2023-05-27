@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
-# OpenLife Beta 1
+# OpenLife Life Simulator
 
-# OpenLife is a free and open source BitLife clone, with a wide amount of features.
+# OpenLife is a free and open source BitLife clone, with a vast amount of features.
 # It has a lot of shared features with BitLife as well some *exclusive* ones.
 
 # For the official GitHub repo, https://github.com/WinFan3672/OpenLife
@@ -15,6 +15,7 @@
 
 # The compliments, insults, and Spend Time With lists were taken from fungamer2's Life-Simulator1 and edited to make it compatible with OpenLife.
 import copy
+import json
 global degrees
 degrees = [
     "None",
@@ -476,9 +477,19 @@ import pickle
 
 import tkinter as tk
 
-
 class Fuse:
+    __instance = None
+
+    def __new__(cls):
+        if cls.__instance is None:
+            cls.__instance = super().__new__(cls)
+            cls.__instance.__initialized = False
+        return cls.__instance
+
     def __init__(self):
+        if self.__initialized:
+            return
+        self.__initialized = True
         self.__blown = False
 
     def blow(self):
@@ -495,7 +506,190 @@ class Fuse:
     def __str__(self):
         return str(self.blown)
 import inspect
+import platform
+def OllTwoConverter():
+    ## OLL2 To OLL3 Conversion Utility
 
+    ## Variables is a map of all of the attributes in OLL2 and their indexes in the format index:attribute.
+    ## Some have been removed due to being useless.
+    variables = {
+        2: 'happiness',
+        3: 'health',
+        4: 'intel',
+        5: 'looks',
+        6: 'ethics',
+        7: 'money',
+        8: 'forename',
+        9: 'surname',
+        10: 'age',
+        11: 'work_e',
+        12: 'edu_lvl',
+        13: 'work_e_base',
+        14: 'promo_base',
+        15: 'is_depressed',
+        16: 'debt',
+        17: 'savings',
+        18: 'expenses',
+        19: 'pension',
+        23: 'year',
+        24: 'is_job',
+        25: 'stress',
+        26: 'mother_name',
+        27: 'father_name',
+        28: 'mother_age',
+        29: 'father_age',
+        30: 'mother_end_age',
+        31: 'father_end_age',
+        32: 'did_tutor',
+        33: 'mother_rel',
+        34: 'father_rel',
+        35: 'is_spouse',
+        36: 'spouse',
+        45: 'teen_hours',
+        46: 'teen_salary',
+        50: 'job_id',
+        52: 'gender',
+        79: 'fame',
+        80: 'is_wpp',
+        81: 'wpp_name',
+        83: 'sentence',
+        84: 'prison_years',
+        85: 'juvie_years',
+        170: 'is_opentube',
+        171: 'opentube_year',
+        172: 'is_verif',
+        173: 'is_monetised',
+        174: 'watch_time',
+        175: 'channel_name',
+        176: 'subscribers',
+        177: 'video_count',
+        178: 'view_count',
+        180: 'pistol_count',
+        181: 'knife_count',
+        182: 'is_smartphone',
+        183: 'pistol_ammo',
+        184: 'chainsaw_count',
+        185: 'taser_count',
+        186: 'is_common_cold',
+        187: 'flip_profits'
+    }
+    ## Initialisation stage
+    global x,y
+    y = dir(Player())
+    x = []
+    for item in variables:
+        if not variables[item] in y:
+            x.append(variables[item])
+    x = sorted(x)
+    def autoType(string):
+        try:
+            value = float(string)
+            if value.is_integer():
+                return int(value)
+            else:
+                return value
+        except ValueError:
+            if string.lower() == 'none':
+                return None
+            elif string.lower() == 'true':
+                return True
+            elif string.lower() == 'false':
+                return False
+            else:
+                return string    
+    def getPlayerDataBase(filename):
+        global x,y
+        with open(filename,"rb") as f:
+            ssave=f.read()
+            ssave = codecs.decode(ssave, "base64_codec")
+            ssave = ssave.decode("utf-8")
+            ssave = ssave.split("|")
+            if [ssave[0],ssave[1]] == ["Alpha","16"]:
+                print("yes")
+                return ssave
+            else:
+                print("Error: Invalid Version")
+    def getPlayerData(filename="/run/media/winfan3672/SM/Libraries/Documents/Python/OpenLife/alpha/openlife_saves/a16.oll2"):
+        global x,y
+        i = 0
+        zx = []
+        for item in variables:
+            zx.append(item)
+        v=getPlayerDataBase(filename)
+        xz = {}
+        for item in v:
+            if i in zx:
+                xz[variables[i]] = item
+            i += 1
+        x += ["spouse"]
+        return xz
+    def makePlayer(xz):
+        ## Automatic Attribute Assigning
+        p = Player()
+        for item in xz:
+            if not item in x:
+                setattr(p,item,autoType(xz[item]))
+        ## Manual Attribute Assigning
+        ### is depressed
+        p.disease["depression"] = bool(xz["is_depressed"])
+        ### channel
+        if autoType(xz["is_opentube"]):
+            o = OpenTube(xz["channel_name"])
+            o.subscribers = autoType(xz["subscribers"])
+            o.viewCount=autoType(xz["view_count"])
+            o.watchHours=autoType(xz["watch_time"])
+            o.videoCount=autoType(xz["video_count"])
+            o.year=autoType(xz["opentube_year"])
+            p.opentube.append(o)
+        ### parents
+        p.parents = []
+        m = Parent()
+        f = Parent()
+        m.create(1,p.surname)
+        f.create(0,p.surname)
+        m.name = autoType(xz["mother_name"])
+        f.name = autoType(xz["father_name"])
+        m.age = autoType(xz["mother_age"])
+        f.age = autoType(xz["father_age"])
+        m.end = autoType(xz["mother_end_age"])
+        f.end = autoType(xz["father_end_age"])
+        m.relation = autoType(xz["mother_rel"])
+        f.relation = autoType(xz["father_rel"])
+        p.parents = [m,f]
+        return p
+    import os
+    def main():
+        l = []
+        for item in os.listdir():
+            if item.endswith(".oll2"):
+                l.append(item)
+        if l == []:
+            cls()
+            div()
+            print("Error: No Alpha 16 save files present.")
+            br()
+            return None
+        cls()
+        div()
+        print("Select OLL2 Save File")
+        div()
+        for i in l:
+            print(i.replace(".oll2",""))
+        div()
+        try:
+            ch=input("FileName $")
+            xz=getPlayerData(ch+".oll2")
+            p = makePlayer(xz)
+            saveGameBase(p,ch+".oll3")
+            cls()
+            div()
+            print(f"Successfully converted to \"{ch}\".")
+
+            br()
+            
+        except Exception as e:
+            print(f"{type(e).__name__}: {e}")
+    main()
 def get_function_parameters(func):
     if not callable(func):
         return None
@@ -555,12 +749,10 @@ def uiDebugText(text):
 
 global version, app_version, subversion, game_name
 game_name = "OpenLife"
-version = "Beta 1 [21 May 2023]"
-app_version = [0, 1, 0]
-sub_version = 0
-global forename_m, forename_f, surnames, achievements, ACHIEVEMENTS
-achievements = {"didBirth": False}
-ACHIEVEMENTS = achievements
+app_version = [0, 2, 0]
+version = f"{app_version[0]}.{app_version[1]}.{app_version[2]} [26 May 2023]"
+sub_version = "xyxyx"
+global forename_m, forename_f, surnames
 forename_m = [
     "Oliver",
     "Jacob",
@@ -748,16 +940,16 @@ surnames = [
 global prefs
 prefs = {
     "version": app_version,
-    "prefVersion": [0, 0, 0],
+    "prefVersion": [0, 1, 0],
     "allowDebug": False,
-    "currency": "£",
     "hideConsole": False,
     "div": "--------------------",
-    "doNotClearVar": False,
+    "doNotClearVar": True,
     "autoDeposit": False,
     "autoPayLab": False,
 }
-prefs["doNotClearVar"] = prefs["allowDebug"]
+if prefs['allowDebug']:
+    prefs["doNotClearVar"] = prefs["allowDebug"]
 # Exceptions
 
 
@@ -767,7 +959,7 @@ class ExitError(Exception):
     pass
 
 
-# Base Classes
+## Base Classes
 class Base():
     '''
 Base class used by all classes.
@@ -1036,7 +1228,468 @@ global house_types
 house_types = [
     ["Duplex",100000,200000],["Villa",10000000,15000000],["Castle",5000000,15000000],["Farm",500000,1500000],["Geodesic Home",500000,750000],["Log Cabin",100000,200000],["Condomidium",100000,250000],["Trailer",15000,50000],["Futuristic Home",20000000,50000000],["Penthouse",5000000,25000000],["Modern Home",300000,800000],["Studio",25000,50000],["Tiny House",10000,25000]
     ]
-# Main Classes
+class Achievement(Base):
+    def __init__(self,title,description):
+        super().__init__()
+        self.title=title
+        self.desc=description
+        self.achieved=False
+        self.date=None
+    def achieve(self,player):
+        if self.achieved:
+            return None
+        if player.cheater.blown:
+            return None
+        self.achieved = True
+        div()
+        print("Earned Achievement")
+        div()
+        print(self.title)
+        div()
+        print(self.desc)
+        br()
+        self.date=time.strftime("%x %X")
+## Main Classes
+class Bond(Base):
+    """
+Bond class.
+Args:
+name: Name of bond
+maxInvestment: The maximum amount of money that can be invested. $0 = no limit
+mult: multiplier used every year. 1.2 = +20% etc.
+defChance: % chance of the bond defaulting.
+    """
+    def __init__(self,name=None,maxInvestment=None,mult=None,defChance=None):
+        super().__init__()
+        self.name=name
+        self.investment = 0
+        self.maxInvestment=maxInvestment
+        self.mult=mult
+        self.defChance=defChance
+    def age_up(self,player):
+        self.investment = int(self.investment * self.mult)
+        if pChance(self.defChance) and self.investment > 0:
+            cls()
+            div()
+            print(f"Your shares in {self.name} have been defaulted and are now worthless!")
+            br()
+            self.investment = 0
+    def interact(self,player):
+        cls()
+        div()
+        print(f"{self.name} [{Format(int((self.mult-1)*100))}% APR]")
+        print(f"Money Invested: {player.nation.currency}{Format(self.investment)}/{player.nation.currency}{Format(self.maxInvestment)}")
+        print(f"Risk: {pbar(self.defChance/100)} [{self.defChance}%]")
+        div()
+        print("[1] Invest Money")
+        if self.investment > 0:
+            print("[2] Sell Stock")
+        else:
+            print("[ ] Sell Stock")
+        div()
+        try:
+            ch=int(input("$"))
+        except:
+            return None
+        if ch == 1:
+            cls()
+            div()
+            try:
+                m = int(input("Amount $"))
+            except:
+                return None
+            if m > player.money:
+                m = player.money
+            if m > self.maxInvestment:
+                m = self.maxInvestment
+            if self.maxInvestment - (m + self.investment) < 0:
+                m = self.maxInvestment - (m + self.investment)
+            if m < 0:
+                m = 0
+            if player.money >= m:
+                player.money -= m
+                self.investment += m
+                cls()
+                div()
+                print(f"Successfully invested {player.nation.currency}{Format(m)} in {self.name}.")
+                br()
+                self.interact(player)
+            else:
+                cls()
+                div()
+                print(f"You cannot afford to invest {player.nation.currency}{Format(m)} in {self.name}.")
+                br()
+                self.interact(player)
+        elif ch == 2 and self.investment > 0:
+            cls()
+            div()
+            print(f"Investment: {player.nation.currency}{Format(self.investment)}")
+            div()
+            try:
+                ch = int(input("Amount $"))
+            except:
+                return None
+            if ch < 0:
+                ch = 0
+            if ch > self.investment:
+                ch = self.investment
+            self.investment -= ch
+            player.money += ch
+            cls()
+            div()
+            print(f"Successfully withdrew {player.nation.currency}{Format(ch)}.")
+            br()
+            self.interact(player)
+        else:
+            return None
+class Crypto(Base):
+    def __init__(self,name,symbol):
+        super().__init__()
+        self.mode = 0
+        self.price = rng(1,100)/100
+        self.name=name
+        self.symbol=symbol
+        self.investment=0
+        self.lastPrice = self.price
+    def age_up(self,player):
+        self.lastPrice = self.price
+        if self.mode == 0:
+            ## Normal mode (-15 to +15 % /Annum)
+            mult = rng(85,115)/100
+            self.price *= mult
+            if pChance(50):
+                self.mode = 0
+            else:
+                if pChance(50):
+                    self.mode = 1
+                else:
+                    self.mode = 0
+        elif self.mode == 1:
+            ## Explosion mode (+200 to +500 % /Annum)
+            mult = rng(2,5)
+            self.price *= mult
+            if pChance(60):
+                self.mode = 1
+            else:
+                if pChance(5):
+                    self.mode = 0
+                else:
+                    self.mode = 2
+        else:
+            ## Crash mode (-30 to -50 % /Annum)
+            mult = rng(50,70) / 100
+            self.price *= mult
+            if pChance(65):
+                self.mode = 2
+            else:
+                if pChance(35):
+                    self.mode = 0
+                else:
+                    self.mode = 1
+        self.price = int(self.price*100) / 100
+        if self.price == 0.0:
+            cls()
+            div()
+            print(f"The crypto, {self.name} [{self.symbol}] has crashed and will be taken off the market.")
+            br()
+            player.crypto.remove(self)
+        if self.investment > 0:
+            cls()
+            div()
+            print(f"{self.name} [{self.symbol}] Summary")
+            div()
+            print(f"Old Price: {player.nation.currency}{Format(self.lastPrice)}")
+            print(f"New Price: {player.nation.currency}{Format(self.price)}")
+            print(f"1Y Price Change: {percentChange(self.lastPrice,self.price)}%")
+            br()
+    def interact(self,player):
+        cls()
+        div()
+        print(f"{self.name} [{self.symbol}]")
+        print(f"Price: {player.nation.currency}{Format(self.price)}")
+        print(f"1Y Price Change: {percentChange(self.lastPrice,self.price)}%")
+        print(f"Holdings: {Format(self.investment)} {self.symbol}")
+        print(f"Portfolio Value: {player.nation.currency}{Format(int(self.investment*self.price))}")
+        div()
+        print(f"[1] Buy {self.symbol}")
+        if self.investment > 0:
+            print(f"[2] Sell {self.symbol}")
+        else:
+            print(f"[ ] Sell {self.symbol}")
+        div()
+        try:
+            ch=int(input("$"))
+        except:
+            return None
+        if ch == 1:
+            cls()
+            div()
+            print(f"Price: {player.nation.currency}{Format(self.price)}")
+            print(f"Money: {player.nation.currency}{Format(player.money)}")
+            print(f"Can Buy: {Format(int(player.money / self.price))}{self.symbol}")
+            div()
+            try:
+                ch=int(input("Amount $"))
+            except:
+                return None
+            if ch > int(player.money / self.price):
+                ch = int(player.money / self.price)
+            if ch < 0:
+                ch = 0
+            cls()
+            div()
+            print(f"Successfully purchased {Format(ch)}{self.symbol}.")
+            br()
+            self.investment = ch
+            player.money -= int(ch * self.price)
+            self.interact(player)
+        elif ch == 2 and self.investment > 0:
+            cls()
+            div()
+            print(f"Price: {player.nation.currency}{Format(self.price)}")
+            print(f"Holdings: {Format(self.investment)}{self.symbol}")
+            div()
+            try:
+                ch = int(input(f"{self.symbol} To Sell $"))
+            except:
+                return None
+            if ch > self.investment:
+                ch = self.investment
+            if ch < 0:
+                ch = 0
+            self.investment -= ch
+            player.money += int (ch * self.price)
+            cls()
+            div()
+            print(f"You sold {Format(ch)}{self.symbol} for {player.nation.currency}{Format(int(ch*self.price))}.")
+            br()
+            self.interact(player)
+        else:
+            return None
+class Metal(Base):
+    def __init__(self,name,basePrice,minInc,maxInc,midInc=None):
+        super().__init__()
+        self.name=name
+        self.mid = midInc
+        self.price=basePrice
+        self.min=minInc
+        self.max=maxInc
+        self.investment = 0
+    def age_up(self,player):
+        if self.mid != None:
+            mult = 1 + (weightedRNG(self.min,self.mid,self.max)/100)
+        else:
+            mult = 1 + (rng(self.min,self.max)/100)
+        p = self.price
+        self.price = self.price * mult
+        self.price *= 100
+        self.price = int(self.price) / 100
+        if self.investment > 0:
+            cls()
+            div()
+            print(f"Investment Summary: {self.name}")
+            div()
+            print(f"Old Price: {player.nation.currency}{Format(p)}")
+            print(f"New Price: {player.nation.currency}{Format(self.price)}")
+            print(f"1Y Return: {percentChange(p,self.price)}%")
+            print(f"Portfolio Value: {player.nation.currency}{Format(int(self.price * self.investment))}")
+            br()
+    def interact(self,player):
+        cls()
+        div()
+        print(f"{self.name}")
+        print(f"Investment: {Format(self.investment)} lb.")
+        print(f"Price per lb.: {player.nation.currency}{format(self.price)}")
+        print(f"Portfolio Value: {player.nation.currency}{Format(int(self.price*self.investment))}")
+        div()
+        print(f"[1] Buy {self.name}")
+        if self.investment > 0:
+            print(f"[2] Sell {self.name}")
+        else:
+            print(f"[ ] Sell {self.name}")
+        div()
+        try:
+            ch=int(input("$"))
+        except:
+            return None
+        if ch == 1:
+            cls()
+            div()
+            print(f"Price: {player.nation.currency}{Format(self.price)}")
+            print(f"Can Afford: {Format(int(player.money/self.price))} lb.")
+            div()
+            try:
+                ch=int(input("Amount $"))
+            except:
+                return None
+            if ch > int(player.money/self.price):
+                ch = int(player.money/self.price)
+            if ch < 0:
+                ch = 0
+            cls()
+            div()
+            print(f"Successfully purchased {Format(ch)} {self.name}.")
+            br()
+            player.money -= int(ch*self.price)
+            self.investment += ch
+            self.interact(player)
+        elif ch == 2 and self.investment > 0:
+            cls()
+            div()
+            print(f"Price: {player.nation.currency}{Format(self.price)}")
+            print(f"Holding: {Format(self.investment)} LB")
+            div()
+            try:
+                ch=int(input("Amount $"))
+            except:
+                return None
+            if ch < 0:
+                ch = 0
+            if ch > self.investment:
+                ch = self.investment
+            self.investment -= ch
+            x = int(ch*self.price)
+            self.money += x
+            cls()
+            div()
+            print(f"You sold {Format(ch)} lb. of {self.name} for {player.nation.currency}{Format(x)}.")
+            br()
+            self.interact(player)
+        else:
+            return None
+class IndexFund(Base):
+    def __init__(self,name):
+        super().__init__()
+        self.name=name
+        self.investment = 0
+    def age_up(self):
+        self.investment = int(self.investment * (1 + rng(5,15)/100))
+    def interact(self,player):
+        cls()
+        div()
+        print(self.name)
+        print(f"Invested: {player.nation.currency}{Format(self.investment)}")
+        div()
+        print(f"[1] Buy {self.name}")
+        print(f"[2] Sell {self.name}")
+        div()
+        try:
+            ch=int(input("$"))
+        except:
+            return None
+        if ch == 1:
+            cls()
+            div()
+            try:
+                ch=int(input("Amount $"))
+            except:
+                return None
+            if ch > player.money:
+                ch = player.money
+            if ch < 0:
+                ch = 0
+            player.money -= ch
+            self.investment += ch
+            cls()
+            div()
+            print(f"Invested {player.nation.currency}{Format(ch)} in {self.name}.")
+            br()
+        elif ch == 2:
+            cls()
+            div()
+            print(f"Invested: {player.nation.currency}{Format(self.investment)}")
+            div()
+            try:
+                ch=int(input("$"))
+            except:
+                return None
+            if ch > self.investment:
+                ch = self.investment
+            if ch < 0:
+                ch = 0
+            player.money += ch
+            self.investment -= ch
+            cls()
+            div()
+            print(f"Withdrew {player.nation.currency}{Format(ch)} from {self.name}.")
+            br()
+class Stock(Base):
+    def __init__(self,name,symb,price,vol=65):
+        super().__init__()
+        self.name=name
+        self.vol=vol
+        self.price=price
+        self.symb=symb
+        self.investment = 0
+    def age_up(self,player):
+        price = self.price
+        def simulate_stock_price(initial_price, volatility):
+            random_factor = random.uniform(-1, 1)
+            price_change = initial_price * (volatility / 100) * random_factor
+            stock_price = initial_price + price_change
+            return stock_price
+        self.price = simulate_stock_price(self.price,self.vol)
+        self.price = int(100*self.price)/100
+        if self.investment > 0:
+            cls()
+            div()
+            print(f"{self.symb}: Financial Report")
+            div()
+            print(f"Old Price: {player.nation.currency}{price}")
+            print(f"Old Price: {player.nation.currency}{self.price}")
+            print(f"1Y Price Change: {percentChange(price,self.price)}")
+            br()
+    def interact(self,player):
+        cls()
+        div()
+        print(f"{self.name} [{self.symb}]")
+        print(f"Price: {player.nation.currency}{self.price}")
+        print(f"Owned: {Format(self.investment)}")
+        div()
+        print(f"[1] Buy {self.symb}")
+        print(f"[2] Sell {self.symb}")
+        div()
+        try:
+            ch=int(input("$"))
+        except:
+            return None
+        if ch == 1:
+            cls()
+            div()
+            print(f"Can Afford: {Format(int(player.money/self.price))}")
+            try:
+                ch=int(input("Amount $"))
+            except:
+                return None
+            if ch > int(player.money/self.price):
+                ch = int(player.money/self.price)
+            if ch < 0:
+                ch = 0
+            player.money -= int(self.price * ch)
+            self.investment += ch
+            cls()
+            div()
+            print(f"Bought {Format(ch)} {self.symb}.")
+            br()
+        elif ch == 2:
+            cls()
+            div()
+            print(f"Invested: {Format(self.investment)}")
+            div()
+            try:
+                ch=int(input("$"))
+            except:
+                return None
+            if ch > self.investment:
+                ch = self.investment
+            if ch < 0:
+                ch = 0
+            player.money += ch
+            self.investment -= ch
+            cls()
+            div()
+            print(f"Sold {Format(ch)} {self.symb}.")
+            br()
 class Friend(Person):
     """
 Friend class.
@@ -1114,6 +1767,7 @@ See also:
             self.interact(player)
         elif ch == 6:
             if pChance(int(self.relation * 100)) and self.gender != player.gender:
+                grantAchievement(player,"damnThatsFine")
                 cls()
                 div()
                 print("Your friend agreed to date you.")
@@ -1126,6 +1780,26 @@ See also:
                 print("Your friend asked if you were joking.")
         else:
             return None
+class Nation(Base):
+    """
+Nation class.
+Creates a nation that can be switched to by the player.
+    """
+    def __init__(self,name,nationId,canGamble=True,canLottery=True,dropOutAge=16,deathSentence=False,currency="$",gunLicense=False,freeHealthcare=True,uniPrice=25000,incomeTaxMul=1,houseTaxMul=1,openTubeTaxMul=0.85):
+        super().__init__()
+        self.name=name
+        self.id = nationId
+        self.canGamble = canGamble
+        self.dropOutAge = dropOutAge
+        self.deathSentence = deathSentence
+        self.currency=currency
+        self.canLottery=canLottery
+        self.gunLicense = gunLicense
+        self.freeHealth=freeHealthcare
+        self.uniPrice = uniPrice
+        self.incomeTax=incomeTaxMul
+        self.houseTax=houseTaxMul
+        self.opentube=openTubeTaxMul
 class House(Base):
     """
 House class.
@@ -1182,8 +1856,8 @@ Methods:
         div()
         print(f"Condition: {pbar(self.condition)} {int(self.condition*100)}%")
         print(f"Age [Years]: {'{:,}'.format(self.age)}")
-        print(f"Original Price: {prefs['currency']}{'{:,}'.format(self.price)}")
-        print(f"Value: {prefs['currency']}{'{:,}'.format(self.value)}")
+        print(f"Original Price: {player.nation.currency}{'{:,}'.format(self.price)}")
+        print(f"Value: {player.nation.currency}{'{:,}'.format(self.value)}")
         div()
         if not self.mortgaged:
             print("[1] Sell")
@@ -1211,9 +1885,12 @@ Methods:
             cls()
             div()
             if pChance(int(self.condition * 100)):
+                ov=self.value
+                self.value = int(self.value * player.nation.houseTax)
                 print("You sold your house.")
-                print(f"You sold it for {prefs['currency']}{'{:,}'.format(self.value)}.")
-                print(f"You made {prefs['currency']}{'{:,}'.format(self.value-self.price)} in profits.")
+                print(f"You sold it for {player.nation.currency}{'{:,}'.format(self.value)}.")
+                print(f"You made {player.nation.currency}{'{:,}'.format(self.value-self.price)} in profits.")
+                print(f"Tax Paid: {player.nation.currency}{Format(ov-self.value)}")
                 br()
                 player.property.remove(self)
                 player.money += self.value
@@ -1225,7 +1902,7 @@ Methods:
             if not self.mortgaged:
                 cls()
                 div()
-                print("You mortgaged your house for {prefs['currency']}{'{:,}'.format(self.value)}.")
+                print("You mortgaged your house for {player.nation.currency}{'{:,}'.format(self.value)}.")
                 br()
                 player.money += self.value
                 self.mortgaged = True
@@ -1268,7 +1945,7 @@ Methods:
             cls()
             div()
             print("Renovation Price:")
-            print(f"{prefs['currency']}{'{:,}'.format(y)}")
+            print(f"{player.nation.currency}{'{:,}'.format(y)}")
             div()
             print("[1] Renovate")
             print("[0] Cancel")
@@ -1337,8 +2014,8 @@ Returns:
         if self.stolen:
             print("[!] Stolen Vehicle")
         print(f"Condition: {pbar(self.condition)} {int(self.condition * 100)}%")
-        print(f"Original Price: {prefs['currency']}{'{:,}'.format(self.price)}")
-        print(f"Value: {prefs['currency']}{'{:,}'.format(self.value)}")
+        print(f"Original Price: {player.nation.currency}{'{:,}'.format(self.price)}")
+        print(f"Value: {player.nation.currency}{'{:,}'.format(self.value)}")
         div()
         print("[1] Ride")
         print("[2] Wash")
@@ -1377,7 +2054,7 @@ Returns:
             cls()
             div()
             print("You sold your car.")
-            print(f"Value: {prefs['currency']}{'{:,}'.format(self.value)}")
+            print(f"Value: {player.nation.currency}{'{:,}'.format(self.value)}")
             br()
             player.money += self.value
             player.vehicles[0].remove(self)
@@ -1416,8 +2093,8 @@ class Boat(Vehicle):
         print(self.name)
         print(self.modelName)
         print(f"Condition: {pbar(self.condition)} [{int(self.condition*100)}%]")
-        print(f"Original Price: {prefs['currency']}{'{:,}'.format(self.price)}")
-        print(f"Value: {prefs['currency']}{'{:,}'.format(self.value)}")
+        print(f"Original Price: {player.nation.currency}{'{:,}'.format(self.price)}")
+        print(f"Value: {player.nation.currency}{'{:,}'.format(self.value)}")
         div()
         print("[1] Ride")
         print("[2] Maintenance")
@@ -1447,7 +2124,7 @@ class Boat(Vehicle):
             div()
             print("You had your boat scrapped" if ch == 4 else "You sold your boat.")
             if ch == 3:
-                print(f"Value: {prefs['currency']}{'{:,}'.format(self.value)}")
+                print(f"Value: {player.nation.currency}{'{:,}'.format(self.value)}")
                 player.money += self.value
             br()
             player.vehicles[1].remove(self)
@@ -1472,8 +2149,8 @@ class Plane(Vehicle):
         div()
         print(self.name)
         print(f"Condition: {pbar(self.condition)} [{int(self.condition*100)}%]")
-        print(f"Original Price: {prefs['currency']}{'{:,}'.format(self.price)}")
-        print(f"Value: {prefs['currency']}{'{:,}'.format(self.value)}")
+        print(f"Original Price: {player.nation.currency}{'{:,}'.format(self.price)}")
+        print(f"Value: {player.nation.currency}{'{:,}'.format(self.value)}")
         div()
         print("[1] Fly")
         print("[2] Maintenance")
@@ -1503,7 +2180,7 @@ class Plane(Vehicle):
             div()
             if ch == 3:
                 print("You sold your plane.")
-                print(f"Value: {prefs['currency']}{'{:,}'.format(self.value)}")
+                print(f"Value: {player.nation.currency}{'{:,}'.format(self.value)}")
                 
             else:
                 print("You scrapped your plane.")
@@ -1511,6 +2188,14 @@ class Plane(Vehicle):
             if ch == 3:
                 player.money += self.value
             player.vehicles[2].remove(self)
+def Format(num):
+    return '{:,}'.format(num)
+def percentChange(a, b):
+    try:
+        change = ((b - a) / a) * 100
+    except ZeroDivisionError:
+        change = 100
+    return change
 class OpenTube(Base):
     """
 OpenTube channel.
@@ -1602,41 +2287,32 @@ Methods:
         player.opentube.remove(self)
         main(player)
     def age_up(self, player,skip=False):
-        subs = self.subscribers
+        old = self.subscribers
         self.year += 1
-        views, subs, money = 0,0,0
-        x = self.videoCount + self.schedule
-        if x > 5000:
-            x = 5000
-        for i in range(x):
-            views += self.calcViews()[0]
-            if pChance(5):
-                views *= 20
-            subs += self.calcSubs(views)
-        if self.monetised:
-            money += self.calcMoney(views,17)
+        if self.schedule:
+            views, subs, money = 0,0,0
+            for i in range(self.schedule):
+                xviews,ldr = self.calcViews()
+                views += xviews
+            subs = self.calcSubs(views,ldr)
+            if self.monetised:
+                money += self.calcMoney(player,views,17)
             self.videoCount += self.schedule
-        self.viewCount += views
-        if self.subscribers < 8000000000:
+            self.viewCount += views
             self.subscribers += subs
-        else:
-            subs=0
-        if self.subscribers >= 8000000000:
-            self.subscribers = 8000000000
-            subs = 8000000000 - self.subscribers
-        if money > 3798257455496336041812193975643119026176:
-            money = 3798257455496336041812193975643119026176
-        player.money += money
-        self.watchHours += views
-        if not skip:
-            cls()
-            div()
-            print(f"Channel Summary('{self.name}'): Year {self.year}")
-            div()
-            print("Views Gained:",'{:,}'.format(views))
-            print("Subscribers Gained:",'{:,}'.format(self.subscribers-subs))
-            print("Money Earned:",prefs["currency"]+'{:,}'.format(money))
-            br(skip)
+            if self.subscribers >= 8000000000:
+                self.subscribers = 8000000000
+            player.money += money
+            self.watchHours += int(views/6)
+            if not skip:
+                cls()
+                div()
+                print(f"Channel Summary(\"{self.name}\"): Year {self.year}")
+                div()
+                print("Views Gained:",'{:,}'.format(views))
+                print("Subscribers Gained:",'{:,}'.format(self.subscribers-old))
+                print("Money Earned:",player.nation.currency+'{:,}'.format(money))
+                br(skip)
     def main(self, player):
         cls()
         div()
@@ -1649,7 +2325,7 @@ Methods:
         print(f"Subscribers: {'{:,}'.format(self.subscribers)}")
         print(f"Views:       {'{:,}'.format(self.viewCount)}")
         print(f"Videos:      {'{:,}'.format(self.videoCount)}")
-        print(f"Money:      {prefs['currency']}{'{:,}'.format(player.money)}")
+        print(f"Money:      {player.nation.currency}{'{:,}'.format(player.money)}")
         div()
         print("[1] Upload Video")
         if not self.monetised:
@@ -1701,7 +2377,7 @@ Methods:
             if self.subscribers >= 10000:
                 print("x")
                 price = int(self.subscribers/15)
-                print(f"An anonymous buyer is offering {prefs['currency']}{'{:,}'.format(price)} for your channel.")
+                print(f"An anonymous buyer is offering {player.nation.currency}{'{:,}'.format(price)} for your channel.")
                 print("x")
                 div()
                 print("[1] Accept Offer")
@@ -1765,23 +2441,38 @@ Methods:
             self.main(player)
         else:
             main(player)
-    def calcMoney(self, views, cpm):
-        return views//1000 * cpm
-    def calcSubs(self, views):
-        return views//3
+    def calcMoney(self, player, views, cpm):
+        return views//1000 * cpm * player.nation.opentube
+    def calcSubs(self, views,ldr):
+        return int(views/3)
+    def viralise(self,views,subs):
+        if rng(1,1000) != 1:
+            return views
+        if subs < 10000:
+            return rng(1000000,5000000)
+        elif views < 1000000:
+            return rng(1000000,10000000)
+        elif views < 10000000:
+            return rng(50000000,150000000)
+        else:
+            return 0.5 * subs * views
     def calcViews(self):
-        mode = 0
-        chance = rng(1,40)
-        v = (self.subscribers) + (self.subscribers/3)
-        if chance == 20:
-            v = int(v/9)
-            mode = 2
-        if chance == 40:
-            v *= 11
-            mode = 1
-        if v > 100000000000:
-            v = 100000000000
-        return int(v), mode
+        ## Formula:
+        ## Base Views + (Like Count / 2) + (Dislike Count * -2)
+        ## Base Views = Subscribers / 3 OR 1 if Subscribers < 1
+        ## Like:Dislike Ratio: rng(10,90) / 100
+        ## Like Count = Base Views * Like Ratio
+        ## Dislike Count = Base Views * 1 - Like Ratio
+        baseViews = int(self.subscribers / 3)
+        ldr = rng(10,90)/100
+        likeCount = int(baseViews * ldr)
+        dislikeCount = int(baseViews * (1-ldr))
+        views = int(baseViews + (likeCount/2) + (dislikeCount*-0.75))
+        if self.videoCount == 0:
+            views = 500
+        if views < 10:
+            views = 10
+        return views,ldr
     def upload(self,player,normal=True):
         if normal:
             cls()
@@ -1807,8 +2498,10 @@ Methods:
             cpm = cpms[ch-1]
         else:
             cpm=17
-        views, mode = self.calcViews()
-        subs = self.calcSubs(views)
+        views, ldr = self.calcViews()
+        subs = self.calcSubs(views,ldr)
+        if self.videoCount:
+            views = self.viralise(views,subs)
         if normal:
             cls()
             div()
@@ -1816,17 +2509,15 @@ Methods:
             br()
             cls()
             div()
-            if mode == 1:
-                print("Your video blew up!")
-            elif mode == 2:
-                print("Your video bombed.")
-            print(f"It got {'{:,}'.format(views)} views.")
-            print(f"You gained {'{:,}'.format(subs)} subscribers.")
+            print("View Count:",'{:,}'.format(views))
+            #print("Like:Dislike Ratio:",ldr)
+            print(f"{Format(int(views*ldr))} Likes {pbar(ldr)} {Format(int(views*(1-ldr)))} Dislikes")
+            print("Subscribers Gained:",'{:,}'.format(subs))
             br()
         if self.monetised:
-            money = self.calcMoney(views, cpm)
+            money = self.calcMoney(player,views, cpm)
             if normal:
-                print(f"You made {prefs['currency']}{'{:,}'.format(money)} in ad revenue!")
+                print(f"You made {player.nation.currency}{'{:,}'.format(money)} in ad revenue!")
                 br()
             player.money += money
         self.viewCount += views
@@ -1855,7 +2546,8 @@ class Child(Person):
             self.name = f"{choice(forename_f)} {player.surname}"
         self.isAdopted = 0
         self.relation = 0.5
-
+    def giveName(self):
+        self.name =  choice(forename_m if self.gender == 0 else forename_f) + " " + choice(surnames)
     def interact(self, player):
         cls()
         div()
@@ -2044,7 +2736,7 @@ class Job(Base):
         print(job_roles[self.id][self.lvl-1])
         div()
         print(f"Performance: {pbar(self.performance)} {int(self.performance*100)}%")
-        print(f"Salary: {prefs['currency']}{self.pay}/Hr.")
+        print(f"Salary: {player.nation.currency}{self.pay}/Hr.")
         print(f"Hours: {self.hours}/Week [{self.minHours} Minimum]")
         div()
         print("[1] Resign")
@@ -2067,6 +2759,7 @@ class Job(Base):
             print("You resigned from your position.")
             br()
             player.job=None
+            player.job_id, player.job_lvl = 0,0
             adult(player)
         elif ch == 2:
             cls()
@@ -2087,7 +2780,7 @@ class Job(Base):
             print("You retired.")
             player.job = None
             player.pension += int((self.pay * self.hours * 52)/2)
-            print(f"Yearly Pension: {prefs['currency']}{'{:,}'.format(player.pension)}")
+            print(f"Yearly Pension: {player.nation.currency}{'{:,}'.format(player.pension)}")
             br()
         elif ch == 0:
             return None
@@ -2164,9 +2857,10 @@ class Job(Base):
             self.work_e += 1
         if self.promoBase <= 0 and self.promoteCheck():
             self.promote(player)
+        salary = int((self.pay * self.hours * 52) * player.nation.incomeTax)
         player.money += self.pay * self.hours * 52
     def __str__(self):
-        return f"{self.name} [{prefs['currency']}{self.pay}/hr] [{self.hours} Hours/Week]"
+        return f"{self.name} [£{self.pay}/hr] [{self.hours} Hours/Week]"
 class Player(Base):
     ## This is the main player class.
     ## It is instantiated when the game creates a life, and is pickled when the game saves or loads.
@@ -2176,6 +2870,28 @@ class Player(Base):
         self.stressMode = False
         self.backup = []
         self.dic={}
+        self.funds = [
+            IndexFund("S&P 500"),
+            IndexFund("Dow Jones Industrial Average"),
+            IndexFund("GTK Technology Fund"),
+            IndexFund("GTK Hospitality Fund"),
+            IndexFund("GTK Finance Fund"),
+            IndexFund("GTK Automotive Fund"),
+            IndexFund("GTK Videogame Fund"),
+            IndexFund("GTK Aerospace Fund"),
+            ]
+        self.stocks = [
+            Stock("OpenMotors","OPMM",15,45),
+            Stock("Airfruit Inc.","AIRF",175),
+            Stock("Nanosoft Corp","NSFT",330),
+            Stock("Woogle","WOOG",125),
+            Stock("Rainforest Industries","RFST",120),
+            Stock("Boing Airspace","BNGA",747),
+            Stock("Airbuss","ABUS",320),
+            Stock("Doppelsieg Motorworks","DPSG",55),
+            Stock("OpenLife Studios","OPEN",69,10),
+            Stock("Candywriter LLC","CNDY",45,90),
+            ]
         self.lotteryWins=0
         self.behaviour = 0.0
         self.pension = 0
@@ -2186,6 +2902,13 @@ class Player(Base):
         self.forename, self.surname = "John", "Smith"
         self.job = None
         self.grades = rng(1,100)/100
+        self.metals = [
+            Metal("Gold",17000,-20,20),
+            Metal("Silver",23,-10,25),
+            Metal("Copper",5,-65,455,65),
+            Metal("Palladium",2200,-55,10),
+            Metal("Platinum",3500,-25,35)
+            ]
         if prefs["allowDebug"] == True:
             self.cheater = Fuse()
             self.cheater.blow()
@@ -2198,6 +2921,20 @@ class Player(Base):
             "tutor": False,
         }
         self.money = 0
+        self.crypto = [
+            Crypto("Xipple","XXP"),
+            Crypto("Botcoin","BTC"),
+            Crypto("ZephyrToken","ZPH"),
+            Crypto("LuminaToken","LMT"),
+            Crypto("QuantumBit","QBT"),
+            Crypto("SolsticeToken","STK"),
+            Crypto("NebulaCash","NBL"),
+            Crypto("SecuCoin","VLT"),
+            Crypto("OpenToken","OPN"),
+            Crypto("Ethereal","ETL"),
+            ]
+        random.shuffle(self.crypto)
+        self.crypto = self.crypto[3:]
         self.pregnant = False
         self.suable = []
         ### Stats values start
@@ -2208,6 +2945,7 @@ class Player(Base):
         self.looks = 1.0
         self.ethics = 1
         self.casinoWinnings = 0
+        self.criminalRecords = {}
 
         ### The stat values are in a range from 0 to 1, representing a %age.
 
@@ -2257,6 +2995,7 @@ class Player(Base):
             }
         self.years_addicted = 0
         self.children = []
+        self.nation = choice(nations)
         self.fame = 0.0
         self.wpp = {
             "enrolled":False,
@@ -2270,6 +3009,7 @@ class Player(Base):
         self.inv = []  # Contains all items
         self.flip_profits = 0  # Total profit from selling houses
         self.lottery_wins = 0  # The amount of times you've won the lottery
+        self.bonds = []
         self.licenses = {"car": False, "boat": False, "gun": False, "plane": False}
         self.lab = {}
         for item in researches:
@@ -2315,12 +3055,25 @@ class Player(Base):
         nw += self.money
         nw += self.savings
         nw -= self.debt
+        for item in self.crypto:
+            nw += int(item.investment * item.price)
+        for item in self.bonds:
+            nw += item.investment
+        for item in self.funds:
+            nw += int(item.investment)
+        for item in self.metals:
+            nw += int(item.investment * item.price)
+        for item in self.stocks:
+            nw += int(item.investment * item.price)
+        
         for item in self.vehicles:
             for i in item:
                 nw += i.value
         for item in self.property:
             if not item.mortgaged:
                 nw += item.value
+        for item in self.bonds:
+            nw += item.investment
         return nw
     def prisonAge(self):
         self.backup.append(copy.deepcopy(self))
@@ -2416,7 +3169,9 @@ class Player(Base):
         log += f"Architecture={base3}\n"
         log += f"GeneralInfo={base4}\n"
         log += f"Machine={base5}\n"
-        log += f"CPU={cpu}"
+        log += f"CPU={cpu}\n"
+        log += f"#Achievements\n"
+        log += pprint_dict(obj_to_dict(achievements))
         log += "\n\n## This log was generated using the OpenLife Log Creation Tool.\n"
         log += "## Tool (c) 2022-2023 WinFan3672, some rights reserved."
         return log
@@ -2433,6 +3188,9 @@ class Player(Base):
         looks=1,
     ):
         self.backup = []
+        self.nation = choice(nations)
+        for item in nations:
+            self.criminalRecords[item.id] = []
         ### Create parents
         mother = Parent()
         father = Parent()
@@ -2452,7 +3210,22 @@ class Player(Base):
         self.b_year = int(self.year)
         self.b_year = int(self.b_year - age)
         self.biologicalGender = self.gender
-
+        for i in range(rng(5,10)):
+            x = Bond()
+            x.maxInvestment = rng(5,250)*100000
+            x.name=getBankName()
+            typ = rng(1,3) # 1 = standard, 2 = safe, 3 = risky
+            if typ == 1:
+                x.mult = rng(110,125)/100
+                x.defChance = rng(1,10)
+            elif typ == 2:
+                x.mult = rng(101,105)/100
+                x.defChance = rng(1,10)
+            else:
+                x.mult = rng(110,150)/100
+                x.defChance=rng(10,50)
+            self.bonds.append(x)
+        grantAchievement(self,"didBirth")
     def print_backup(self):
         print(f"Age:{self.age}|Money:{self.money}|Debt:{self.debt}")
 
@@ -2463,8 +3236,6 @@ class Player(Base):
             self.backup.pop()
         # age up
         self.doScenario()
-        self.money += self.savings
-        self.savings = 0
         if self.sentence != 0:
             if rng(1, 3) == 1:
                 cls()
@@ -2488,7 +3259,13 @@ class Player(Base):
                     div()
                     print(f"Your spouse mentioned how they want to separate with you.")
                     br()
+        for item in self.metals:
+            item.age_up(self)
+        for item in self.stocks:
+            item.age_up(self)
         self.money += self.pension
+        for item in self.bonds:
+            item.age_up(self)
         if self.current_research != Player().current_research:
             self.current_research[1] -= 1
             if self.current_research[1] == 0:
@@ -2503,6 +3280,10 @@ class Player(Base):
                 self.lab[self.current_research[0]] = True
                 self.current_research = Player().current_research
         for item in self.property:
+            item.age_up(self)
+        for item in self.funds:
+            item.age_up()
+        for item in self.crypto:
             item.age_up(self)
         if self.job:
             self.job.age_up(self)
@@ -2572,7 +3353,13 @@ class Player(Base):
         self.health += rng(-10, 10) / 100
         self.intel += rng(-10, 10) / 100
         self.looks += rng(-10, 10) / 100
-
+        if not self.disease["depression"] and self.happiness <= 0.25:
+            cls()
+            div()
+            print("You are now suffering from Depression.")
+            br()
+            grantAchievement(self,"hasDepression")
+            self.disease["depression"] = True
         if self.disease["depression"] and self.happiness >= 0.8:
             cls()
             div()
@@ -2646,9 +3433,11 @@ class Player(Base):
             Scenario("Fame","You are now famous!").run()
         if x > 0 and self.fame == 0.0:
             Scenario("Fame","You are no longer famous.").run()
-        self.savings += self.money
-        self.money = 0
-        
+        if prefs['autoDeposit']:
+            self.savings += self.money
+            self.money = 0
+        if self.savings < 0:
+            self.savings = 0
     def hasAdoptedAttr(self):
         m = self.parents[0]
         f = self.parents[1]
@@ -2720,7 +3509,7 @@ class Spouse(Person):
         print("[6] Make Love")
         print("[x] Movies")
         if self.lvl == 0:
-            print(f"[8] Marriage [{prefs['currency']}75,000]")
+            print(f"[8] Marriage [{player.nation.currency}75,000]")
         else:
             print("[ ] Marriage")
         div()
@@ -2792,7 +3581,7 @@ class Spouse(Person):
                 cls()
                 div()
                 print(f"Due to your marriage agreement, your money is split 50/50 with your {x}.")
-                print(f"You each get {prefs['currency']}{int((player.money+player.savings-player.debt)/2)}.")
+                print(f"You each get {player.nation.currency}{int((player.money+player.savings-player.debt)/2)}.")
                 br()
                 player.money += player.savings
                 player.money -= player.debt
@@ -2866,7 +3655,7 @@ class Spouse(Person):
             div()
             print(f"You are now sharing assets with your {x}.")
             print("Assets:")
-            print(f"{prefs['currency']}{'{:,}'.format(self.fortune)}")
+            print(f"{player.nation.currency}{'{:,}'.format(self.fortune)}")
             self.fortune=0
             br()
         else:
@@ -2876,7 +3665,7 @@ class Suable(Person):
     def sue(self, player, damages):
         cls()
         div()
-        print(f"You successfully sued {self.name} for {prefs['currency']}{'{:,}'.format(damages)}!")
+        print(f"You successfully sued {self.name} for {player.nation.currency}{'{:,}'.format(damages)}!")
         br()
         player.money += damages
 class Surgeon(Base):
@@ -2940,7 +3729,7 @@ class Surgeon(Base):
             print(f"BaseRep:        {pbar(self.rep_base)}")
         print(f"Max Reputation: {pbar(self.rep_cap)}")
         div()
-        print(f"Price: {prefs['currency']}{'{:,}'.format(self.price)}/Yr.")
+        print(f"Price: {player.nation.currency}{'{:,}'.format(self.price)}/Yr.")
         div()
         if will_choose:
             print(f"[{no}] Hire")
@@ -3159,7 +3948,7 @@ class Parent(Base):
         br()
         cls()
         div()
-        print(f"You inherited {prefs['currency']}{self.fortune}")
+        print(f"You inherited {player.nation.currency}{Format(self.fortune)}.")
         br()
         player.money += self.fortune
         player.happiness = 0
@@ -3229,7 +4018,7 @@ class Parent(Base):
             m = rng(0, 100)
             m *= 100*self.relation
             m=int(m)
-            print(f"You got {prefs['currency']}{m}")
+            print(f"You got {player.nation.currency}{m}")
             br()
             player.money += m
             self.interact(player)
@@ -3248,6 +4037,23 @@ import random
 import tkinter as tk
 from tkinter import messagebox
 
+
+global nations
+nations = [
+    Nation("OpenLife",0,openTubeTaxMul=1,currency="£"),
+    Nation("United Kingdom",1,currency="£",incomeTaxMul=0.95,houseTaxMul=0.85),
+    Nation("United States of America",2,gunLicense=True,freeHealthcare=False,incomeTaxMul=0.95,houseTaxMul=0.85),
+    Nation("China",3,False,False,19,True,freeHealthcare=False,incomeTaxMul=0.5,houseTaxMul=0),
+    Nation("France",4,currency="€",freeHealthcare=False,incomeTaxMul=0.95,houseTaxMul=0.85),
+    Nation("Germany",5,currency="€",canGamble=False,freeHealthcare=False,incomeTaxMul=0.95,houseTaxMul=0.85),
+    Nation("Poland",6,currency="€",freeHealthcare=False,incomeTaxMul=0.9,houseTaxMul=0),
+    Nation("Turkey",7,currency="€",freeHealthcare=False,canLottery=False),
+    Nation("India",8,canGamble=False,incomeTaxMul=0.8,houseTaxMul=0.75),
+    Nation("Sweden",9,currency="€",canGamble=False,incomeTaxMul=0.95,houseTaxMul=0.95),
+    Nation("Norway",10,currency="€",incomeTaxMul=0.95,houseTaxMul=0.95),
+    Nation("Denmark",11,currency="€",incomeTaxMul=0.95,houseTaxMul=0.95),
+    Nation("UAE",12,incomeTaxMul=1,houseTaxMul=1,canGamble=False,canLottery=False),
+    ]
 
 def pChance(percent):
     if rng(1, 100) <= percent:
@@ -3369,13 +4175,102 @@ def timeTravelMenu(player):
         return None
     try:
         p = player.backup[ch - 1]
+        player.backup = player.backup [ch:]
         while len(player.backup) > ch - 1:
             player.backup.pop()
         p.backup = player.backup
         main(upgradePlayer(p, False))
     except Exception as e:
         pass
-
+global achievements, ACHIEVEMENTS
+achievements = {
+    "didBirth":Achievement("Fresh Meat","Greetings, OpenLivian!"),
+    "cheater":Achievement("Cheater!","You cheated!"),
+    "swiftLife":Achievement("Swift","Speedrun creating a life."),
+    "doDeath":Achievement("RIP","Your family will miss you."),
+##    "coldHearted":Achievement("Cold-Hearted","Kill someone."),
+##    "hireHitman":Achievement("No Payne, No Gayne","Hire a hitman."),
+##    "caughtHitman":Achievement("Wait, I was joking!","Get caught hiring a hitman."),
+    "bff":Achievement("BFF","Make a friend."),
+##    "bffl":Achievement("BFFL","Take your friendship to the next level."),
+    "damnThatsFine":Achievement("Damn, That's Fine","Take your friendship to the NEXT level."),
+    "freeEdu":Achievement("Free Education","Thanks, Mum!"),
+    "hasDepression":Achievement("Stomach Upset","Not exactly at your happiest, are you?"),
+    "unShackled":Achievement("Unshackled...","The secret to happiness is happiness..."),
+    "notDisease":Achievement("Not A Disease","Get denied donating blood due to \"poor health\""),
+    }
+ACHIEVEMENTS = achievements
+def mergeList(base, lst):
+    set_lst = set(lst)
+    merged_list = []
+    for item in base:
+        if item not in set_lst:
+            merged_list.append(item)
+    return merged_list
+def mergeDict(a, b):
+    result = a.copy()  # Create a copy of dictionary a
+    
+    for key, value in b.items():
+        if key not in a:
+            result[key] = value  # Add entries from b to result if key is not present in a
+    
+    return result
+def saveAchievements(ach):
+    with open("achievements.dat","wb") as f:
+        pickle.dump(ach,f)
+def loadAchievements():
+    global achievements
+    try:
+        with open("achievements.dat","rb") as f:
+            return mergeDict(pickle.load(f),ACHIEVEMENTS)
+    except Exception as e:
+        return e
+def grantAchievement(player=Player(),achID=None):
+    try:
+        x=achievements[achID]
+    except Exception as e:
+        return e
+    if player.cheater.blown or x.achieved:
+        return None
+    cls()
+    div()
+    print("Achievement earned!")
+    x.achieve(player)
+    achievements[achID]=x
+    saveAchievements(achievements)
+def achEarned(ach=achievements):
+    z = 0
+    for i in ach:
+        if i != "version":
+            if ach[i].achieved:
+                z += 1
+    return z
+def listAchievements(ach=achievements):
+    cls()
+    div()
+    x = []
+    z = 0
+    for item in ach.items():
+        if item[0] != "version":
+            x.append(item[1])
+    for i in x:
+        if i.achieved:
+            z += 1
+    saveAchievements(ach)
+    print(f"{z}/{len(x)}")
+    if z == 0:
+        div()
+        print("No achievements earned.")
+        print("To earn achievements, play through the game.")
+    for i in x:
+        if i.achieved:
+            div()
+            print(i.title)
+            div()
+            print(i.desc)
+            print(f"Earned: {i.date}")
+    br()
+    return z
 def viewRibbons(player,reason):
     r = []
     if player.money >= 100000000:
@@ -3431,6 +4326,7 @@ def viewRibbons(player,reason):
         print(f"Ribbon: {item}")
     br()
 def die(player, reason,subreason=-1):
+    grantAchievement(player,"doDeath")
     if player.lab['isImmortal'] and not reason in [0]:
         cls()
         div()
@@ -3841,7 +4737,7 @@ def representValue(string,value,modifier=0):
         x += " "
     x += f"{pbar(value)} {int(value*100)}%"
     return x
-def obj_to_dict(obj):
+def obj_to_dict(obj,addItemType=True):
     """
     Recursively convert an object and all its attributes to a dictionary.
     """
@@ -3856,12 +4752,14 @@ def obj_to_dict(obj):
         return [obj_to_dict(x) for x in obj]
 
     if isinstance(obj, dict):
-        obj2 = {"@itemType":type({}).__name__}
+        if addItemType:
+            obj2 = {"@itemType":type({}).__name__}
         obj2.update(obj)
         obj = obj2
         return {key: obj_to_dict(value) for key, value in obj.items()}
     obj_dict = {}
-    obj_dict["@itemType"] = type(obj).__name__
+    if addItemType:
+        obj_dict["@itemType"] = type(obj).__name__
     for attr in dir(obj):
         if attr.startswith("__") and attr.endswith("__"):
             continue
@@ -3886,9 +4784,7 @@ def obj_to_dict(obj):
 
 
 def div():
-    print("--------------------")
-
-
+    print(prefs['div'])
 def br(skip=False):
     if not skip:
         div()
@@ -4137,10 +5033,12 @@ def console(player, elev=0):
     else:
         consoleBase(player,elev,text)
 def consoleBase(player, elev, text):
+    import json
     ch = text
     if text == "":
         console(player,elev)
     elif text == "elevate" or text == "elev":
+        grantAchievement(player,"cheater")
         player.cheater.blow()
         elev=1
         console(player,elev)
@@ -4154,6 +5052,7 @@ def consoleBase(player, elev, text):
         print("load - loads a life (exits terminal)")
         print("cls - Clears console")
         print("stat - prints out all stats as a dictionary")
+        print("nation - prints information about all nations")
         div()
         print("size - prints estimated size of save, in bytes")
         print("dump - dumps player object to JSON file")
@@ -4203,6 +5102,52 @@ def consoleBase(player, elev, text):
         print("exit - return to main screen")
         div()
         console(player, elev)
+    elif text == "nation":
+        pprint(nations)
+        console(player,elev)
+    elif text == "opentube":
+        z=256
+        o=OpenTube("")
+        v = 0
+        s = 0
+        d = {}
+        print("Calculating...")
+        for i in range(z):
+            xv,l=o.calcViews()
+            o.subscribers = s
+            v += xv
+            s += o.calcSubs(xv,l)
+            if s > 8000000000:
+                s = 8000000000
+            d[i] = {"viewsGained":xv,"totalViews":v,"subs":s}
+            o.videoCount += 1
+            if i % 10 == 0:
+                xPbar(i,z)
+        with open("openTube.json","w") as f:
+            import json
+            json.dump(d,f)
+        div()
+        print("Dumped to \"openTube.json\".")
+        div()
+        console(player,elev)
+    elif text == "fund":
+        fund=IndexFund("Console Fund")
+        fund.investment = 1000
+        z={}
+        for i in range(256):
+            z[i] = fund.investment
+            fund.age_up()
+        with open("fund.json","w") as f:
+            json.dump(z,f)
+        div()
+        print("Dumped to \"fund.json\".")
+        div()
+        console(player,elev)
+    elif text == "achid":
+        for item in achievements:
+            if item != "version":
+                print([item,achievements[item].title,achievements[item].desc])
+        console(player,elev)
     elif text.startswith("degree "):
         text = text[7:]
         try:
@@ -4527,6 +5472,7 @@ def consoleBase(player, elev, text):
         )
         ch = input("Confirm? $")
         if ch == "I know what I am doing":
+            grantAchievement(player,"cheater")
             player.cheater.blow()
             console(player, 1)
         else:
@@ -4637,6 +5583,8 @@ def adultPause(player):
     print("[8] Options")
     print("[9] Print Debug Log")
     print("[10] Create Debug Log")
+    div()
+    print(f"[14] Achievements [Earned: {achEarned(loadAchievements())}/{len(loadAchievements())}]")
     div()
     try:
         ch = int(input("$"))
@@ -4762,6 +5710,9 @@ def adultPause(player):
         div()
         print("Created log", sn)
         adultPause(player)
+    elif ch == 11:
+        listAchievements(achievements)
+        adultPause(player)
     else:
         adult(player)
 
@@ -4803,18 +5754,26 @@ def lifetimeStats(player):
     print("Income: $" + (str(player.job.pay) if isinstance(player.job,Job) else "0")+"/Hr")
     print("Expenses: $" + str(player.expenses)+"/Month")
     if player.pension > 0:
-        print(f"Yearly Pension: {prefs['currency']}{'{:,}'.format(player.pension)}")
+        print(f"Yearly Pension: {player.nation.currency}{'{:,}'.format(player.pension)}")
     print("Yearly Wage: $"+('{:,}'.format(player.job.pay * player.job.hours * 52 + player.pension) if isinstance(player.job,Job) else "0"))
+    if isinstance(player.job,Job):
+        itax = player.job.pay * player.job.hours * 52
+        itax *= 1 - player.nation.incomeTax
+    else:
+        itax = 0
+    print(f"Income Tax: ${Format(itax)}")
     print("Yearly Expenses: $"+'{:,}'.format(player.expenses * 12))
     if isinstance(player.job,Job):
         x = player.job.pay * player.job.hours * 52
     else:
         x=player.pension
     print("Yearly Net Income: $"+'{:,}'.format(x-player.expenses*12))
-##    print("Misc.")
-##    div()
-##    print("Deaths: 0")
-
+    div()
+    print("Tax Rates")
+    div()
+    print(f"Income Tax:           {int((1-player.nation.incomeTax) * 100)}%")
+    print(f"House Sell Tax:       {int((1-player.nation.houseTax) * 100)}%")
+    print(f"OpenTube Revenue Tax: {int((1-player.nation.opentube) * 100)}%")
 def carDealership(player):
     cls()
     div()
@@ -4823,7 +5782,7 @@ def carDealership(player):
         x.append(Car())
     i = 1
     for item in x:
-        print(f"[{i}] {item.name} [{prefs['currency']}{'{:,}'.format(item.price)}]")
+        print(f"[{i}] {item.name} [{player.nation.currency}{'{:,}'.format(item.price)}]")
         i += 1
     div()
     try:
@@ -4837,7 +5796,7 @@ def carDealership(player):
         player.debt += y.price
     cls()
     div()
-    print(f"You purchased a {y.name} for {prefs['currency']}{'{:,}'.format(y.price)}.")
+    print(f"You purchased a {y.name} for {player.nation.currency}{'{:,}'.format(y.price)}.")
     br()
     player.vehicles[0].append(y)
 def boatDock(player):
@@ -4848,7 +5807,7 @@ def boatDock(player):
         x.append(Boat())
     i = 1
     for item in x:
-        print(f"[{i}] {item.modelName} [{prefs['currency']}{'{:,}'.format(item.price)}]")
+        print(f"[{i}] {item.modelName} [{player.nation.currency}{'{:,}'.format(item.price)}]")
         i += 1
     div()
     try:
@@ -4874,7 +5833,7 @@ def planeHangar(player):
         x.append(Plane())
     i = 1
     for item in x:
-        print(f"[{i}] {item.name} [{prefs['currency']}{'{:,}'.format(item.price)}]")
+        print(f"[{i}] {item.name} [{player.nation.currency}{'{:,}'.format(item.price)}]")
         i += 1
     div()
     try:
@@ -4943,7 +5902,7 @@ def buyHouse(player):
     i = 1
     div()
     for item in x:
-        print(f"[{i}] {item.name} [{prefs['currency']}{'{:,}'.format(item.price)}]")
+        print(f"[{i}] {item.name} [{player.nation.currency}{'{:,}'.format(item.price)}]")
         i += 1
     div()
     try:
@@ -4977,22 +5936,129 @@ def houseInteract(player):
         player.property[ch-1].interact(player)
     except:
         return None
+def bondInvest(player):
+    cls()
+    i = 1
+    for item in player.bonds:
+        div()
+        print(f"[{i}] {item.name}")
+        if item.investment > 0:
+            print(f"Invested: {player.nation.currency}{Format(item.investment)}")
+        print(f"Maximum Investment: {player.nation.currency}{'{:,}'.format(int(item.maxInvestment))}")
+        print(f"Return: {int((item.mult-1)*100)}%")
+        print(f"Risk: {pbar(item.defChance/100)} {item.defChance}%")
+        i += 1
+    div()
+    try:
+        ch=int(input("$"))
+        x = player.bonds[ch-1]
+    except:
+        return None
+    x.interact(player)
+def cryptoMenu(player):
+    cls()
+    i = 1
+    for item in player.crypto:
+        div()
+        print(f"[{i}] {item.name} [{item.symbol}]")
+        print(f"Price: {player.nation.currency}{Format(item.price)}")
+        print(f"1Y Price Change: {percentChange(item.lastPrice,item.price)}%")
+        print(f"Holdings: {Format(item.investment)}{item.symbol}")
+        print(f"Portfolio Value: {player.nation.currency}{Format(int(item.investment*item.price))}")
+        i += 1
+    div()
+    try:
+        ch=int(input("$"))
+        player.crypto[ch-1].interact(player)
+    except:
+        return None
+def metalMenu(player):
+    cls()
+    i = 1
+    for item in player.metals:
+        div()
+        print(f"[{i}] {item.name}")
+        print(f"Price: {player.nation.currency}{Format(item.price)}")
+        if item.investment > 0:
+            print(f"Holdings: {Format(self.investment)}")
+        i += 1
+    div()
+    try:
+        ch=int(input("$"))
+        player.metals[ch-1].interact(player)
+    except Exception as e:
+        pass
+def indexMenu(player):
+    cls()
+    i = 1
+    for item in player.funds:
+        div()
+        print(f"[{i}] {item.name}")
+        print(f"Invested: {player.nation.currency}{Format(item.investment)}")
+        i += 1
+    div()
+    try:
+        ch=int(input("$"))
+        player.funds[ch-1].interact(player)
+    except:
+        pass
+def stockMenu(player):
+    cls()
+    i = 1
+    for item in player.stocks:
+        div()
+        print(f"[{i}] {item.name} [{item.symb}]")
+        print(f"Price: {player.nation.currency}{Format(item.price)}")
+        print(f"Owned: {Format(item.investment)}")
+        i += 1
+    div()
+    try:
+        ch=int(input("$"))
+        player.stocks[ch-1].interact(player)
+    except:
+        pass
+def investMenu(player):
+    cls()
+    div()
+    print("[1] Stocks")
+    print("[2] Bonds")
+    print("[3] Crypto")
+    print("[4] Metals")
+    print("[5] Index Funds")
+    print("[ ] Art")
+    div()
+    try:
+        ch=int(input("$"))
+    except:
+        return None
+    if ch == 1:
+        stockMenu(player)
+    elif ch == 2:
+        bondInvest(player)
+    elif ch == 3:
+        cryptoMenu(player)
+    elif ch == 4:
+        metalMenu(player)
+    elif ch == 5:
+        indexMenu(player)
+    else:
+        return None
 def adultAssets(player):
     cls()
     div()
     print(
-        f"Money:           {prefs['currency']}" + str("{:,}".format((int(player.money))))
+        f"Money:           {player.nation.currency}" + str("{:,}".format((int(player.money))))
     )
-    print(f"Debt:            {prefs['currency']}" + str("{:,}".format((int(player.debt)))))
+    print(f"Debt:            {player.nation.currency}" + str("{:,}".format((int(player.debt)))))
     print(
-        f"Savings:         {prefs['currency']}" + str("{:,}".format((int(player.savings))))
+        f"Savings:         {player.nation.currency}" + str("{:,}".format((int(player.savings))))
     )
     print(
-        f"Flip Profits:    {prefs['currency']}"
+        f"Flip Profits:    {player.nation.currency}"
         + str("{:,}".format((int(player.flip_profits))))
     )
     print(
-        f"Casino Winnings: {prefs['currency']}{'{:,}'.format(player.casinoWinnings)}"
+        f"Casino Winnings: {player.nation.currency}{'{:,}'.format(player.casinoWinnings)}"
     )
     div()
     print("[0] Return")
@@ -5023,6 +6089,7 @@ def adultAssets(player):
         print("[13] Owned Boats")
     else:
         print("[  ] Owned Boats")
+    print("[14] Investments")
     div()
     try:
         ch = int(input("$"))
@@ -5037,7 +6104,7 @@ def adultAssets(player):
     elif ch == 3:
         cls()
         div()
-        print(f"Debt: {prefs['currency']}" + str("{:,}".format((int(player.debt)))))
+        print(f"Debt: {player.nation.currency}" + str("{:,}".format((int(player.debt)))))
         print("20% interest, 10% autopaid per year")
         div()
         print("[1] Loan")
@@ -5076,8 +6143,8 @@ def adultAssets(player):
     elif ch == 4:
         cls()
         div()
-        print(f"Money: {prefs['currency']}{'{:,}'.format(player.money)}")
-        print(f"Savings: {prefs['currency']}{'{:,}'.format(player.savings)}")
+        print(f"Money: {player.nation.currency}{'{:,}'.format(player.money)}")
+        print(f"Savings: {player.nation.currency}{'{:,}'.format(player.savings)}")
         div()
         print("[1] Deposit")
         print("[2] Withdraw")
@@ -5090,7 +6157,7 @@ def adultAssets(player):
         if ch == 1:
             cls()
             div()
-            print(f"Money: {prefs['currency']}{'{:,}'.format(player.money)}")
+            print(f"Money: {player.nation.currency}{'{:,}'.format(player.money)}")
             div()
             try:
                 am = int(input("Deposit Amount $"))
@@ -5105,7 +6172,7 @@ def adultAssets(player):
         elif ch == 2:
             cls()
             div()
-            print(f"Savings: {prefs['currency']}{'{:,}'.format(player.savings)}")
+            print(f"Savings: {player.nation.currency}{'{:,}'.format(player.savings)}")
             div()
             try:
                 am=int(input("Withdraw Amount $"))
@@ -5153,6 +6220,8 @@ def adultAssets(player):
         boatDock(player)
     elif ch == 13 and len(player.vehicles[1]) > 0:
         boatInteract(player)
+    elif ch == 14:
+        investMenu(player)
     else:
         adult(player)
 
@@ -5178,7 +6247,7 @@ def lottery(player):
                 player.money -= 100
             else:
                 player.debt += 100
-            chance = rng(1, 100000)
+            chance = rng(1, 10000000)
             if chance == 2345:
                 wins += 1
                 base = wins + losses
@@ -5254,7 +6323,7 @@ def robBank(player):
         cls()
         div()
         print("You successfully robbed the bank!")
-        x = prefs["currency"]
+        x = player.nation.currency
         y = "{:,}".format(payout)
         print(f"You got {x}{y}!")
         player.money += payout
@@ -5299,7 +6368,7 @@ def adultCrime(player, ch=""):
             x.append(y)
         i = 1
         for item in x:
-            print(f"[{i}] {item.name} [{prefs['currency']}{'{:,}'.format(item.price)}]")
+            print(f"[{i}] {item.name} [{player.nation.currency}{'{:,}'.format(item.price)}]")
             i += 1
         div()
         try:
@@ -5376,7 +6445,7 @@ def adultCrime(player, ch=""):
                 cls()
                 div()
                 print("You robbed the train successfully!")
-                print(f"You got {prefs['currency']}{'{:,}'.format(y)}")
+                print(f"You got {player.nation.currency}{'{:,}'.format(y)}")
                 br()
                 player.money += y
             else:
@@ -5395,7 +6464,7 @@ def adultCrime(player, ch=""):
                 cls()
                 div()
                 print("You robbed the train successfully!")
-                print(f"You got {prefs['currency']}{'{:,}'.format(y)}")
+                print(f"You got {player.nation.currency}{'{:,}'.format(y)}")
                 br()
                 player.money += y
             else:
@@ -5414,7 +6483,7 @@ def adultCrime(player, ch=""):
                 cls()
                 div()
                 print("You robbed the train successfully!")
-                print(f"You got {prefs['currency']}{'{:,}'.format(y)}")
+                print(f"You got {player.nation.currency}{'{:,}'.format(y)}")
                 br()
                 player.money += y
             else:
@@ -5433,7 +6502,7 @@ def adultCrime(player, ch=""):
                 cls()
                 div()
                 print("You robbed the train successfully!")
-                print(f"You got {prefs['currency']}{'{:,}'.format(y)}")
+                print(f"You got {player.nation.currency}{'{:,}'.format(y)}")
                 br()
                 player.money += y
             else:
@@ -5459,78 +6528,32 @@ def adultWill(player):
     except:
         return None
     return None
-
-
 def adoption(player):
-    child_1 = Child(rng(5, 12), rng(0, 1), 1)
-    child_1.gender = rng(0, 1)
-    if child_1.gender == 0:
-        child_1.name = choice(forename_m) + " " + choice(surnames)
-    else:
-        child_1.name = choice(forename_f) + " " + choice(surnames)
-    child_2 = Child(rng(5, 12), rng(0, 1), 1)
-    child_2.gender = rng(0, 1)
-    if child_2.gender == 0:
-        child_2.name = choice(forename_m) + " " + choice(surnames)
-    else:
-        child_2.name = choice(forename_f) + " " + choice(surnames)
-    child_3 = Child(rng(5, 12), rng(0, 1), 1)
-    child_3.gender = rng(0, 1)
-    if child_3.gender == 0:
-        child_3.name = choice(forename_m) + " " + choice(surnames)
-    else:
-        child_3.name = choice(forename_f) + " " + choice(surnames)
-    child_4 = Child(rng(5, 12), rng(0, 1), 1)
-    child_4.gender = rng(0, 1)
-    if child_4.gender == 0:
-        child_4.name = choice(forename_m) + " " + choice(surnames)
-    else:
-        child_4.name = choice(forename_f) + " " + choice(surnames)
-    child_5 = Child(rng(5, 12), rng(0, 1), 1)
-    child_5.gender = rng(0, 1)
-    if child_5.gender == 0:
-        child_5.name = choice(forename_m) + " " + choice(surnames)
-    else:
-        child_5.name = choice(forename_f) + " " + choice(surnames)
+    children = []
+    for i in range(rng(5,9)):
+        ch = Child(rng(0,12),rng(0,1),1)
+        ch.giveName()
+        children.append(ch)
     cls()
     div()
-    print("Price: $5000")
+    print(f"Price: {player.nation.currency}5,000")
     div()
-    print("[0] Return")
-    print(f"[1] {child_1.name}")
-    print(f"[2] {child_2.name}")
-    print(f"[3] {child_3.name}")
-    print(f"[4] {child_4.name}")
-    print(f"[5] {child_5.name}")
-    div()
+    i = 1
+    for item in children:
+        print(f"[{i}] {item.name}\n    Age: {item.age}\n    Gender: {'Male' if item.gender == 0 else 'Female'}")
+        i += 1
+        div()
     try:
-        ch = int(input("$"))
+        ch=int(input("$"))
+        x = children[ch-1]
     except:
-        return player
-    if ch == 1:
-        print("Purchase Successful.")
-        player.money -= 5000
-        player.children.append(child_1)
-    elif ch == 2:
-        print("Purchase Successful.")
-        player.money -= 5000
-        player.children.append(child_2)
-    elif ch == 3:
-        print("Purchase Successful.")
-        player.money -= 5000
-        player.children.append(child_3)
-    elif ch == 4:
-        print("Purchase Successful.")
-        player.money -= 5000
-        player.children.append(child_4)
-    elif ch == 5:
-        print("Purchase Successful.")
-        player.money -= 5000
-        player.children.append(child_5)
-    else:
-        pass
-    return player
-
+        return None
+    player.money -= 5000
+    player.children.append(x)
+    cls()
+    div()
+    print(f"You are now the proud owner of {x.name}.")
+    br()
 def hireSurgeon(player):
     cls()
     l = []
@@ -5694,7 +6717,7 @@ def doctorMenu(player):
         if player.disease == Player().disease and player.hasDonate == False:
             pay = rng(75, 100)
             print("You donated blood.")
-            print(f"You earned {prefs['currency']}{pay}")
+            print(f"You earned {player.nation.currency}{pay}")
             player.money += pay
             player.hasDonate = True
         elif player.hasDonate:
@@ -5703,6 +6726,10 @@ def doctorMenu(player):
             )
         else:
             print("The doctor does not want your blood due to your poor health.")
+            br()
+            if player.disease["depression"] or player.disease["anxiety"]:
+                grantAchievement(player,"notDisease")
+            return None
         br()
     elif ch == 5:
         div()
@@ -5711,7 +6738,7 @@ def doctorMenu(player):
         if player.disease == Player().disease and player.hasDonate == False:
             pay = rng(25, 250)
             print("You donated plasma.")
-            print(f"You earned {prefs['currency']}{pay}")
+            print(f"You earned {player.nation.currency}{pay}")
             player.money += pay
             player.hasDonate = True
         elif player.hasDonate:
@@ -5755,7 +6782,7 @@ def specialJobs(player):
 def freelanceWork(player):
     cls()
     div()
-    print(f"[1] Tutor [{prefs['currency']}17/hr]")
+    print(f"[1] Tutor [{player.nation.currency}17/hr]")
     div()
     try:
         ch = int(input("$"))
@@ -5767,7 +6794,7 @@ def freelanceWork(player):
         if player.freelance["tutor"]:
             print("No-one accepted your offer.")
         else:
-            print(f"You earned {prefs['currency']}{17*30} doing tutoring for 30 hours.")
+            print(f"You earned {player.nation.currency}{17*30} doing tutoring for 30 hours.")
             player.money += 17 * 30
             player.freelance["tutor"] = True
         br()
@@ -5779,7 +6806,7 @@ def giveJob(player,job):
     print("You got the job!")
     div()
     print("Job:",job_roles[job.id][job.lvl-1])
-    print(f"Pay: {prefs['currency']}{job.pay}/hr")
+    print(f"Pay: {player.nation.currency}{job.pay}/hr")
     print(f"Hours: {job.hours} Per Week")
     br()
     player.job = job
@@ -5855,7 +6882,7 @@ def payForUni(player,degree,canMoney=True,canParents=True):
     cls()
     div()
     print("How Will You Pay?")
-    print(f"Price: {prefs['currency']}25,000")
+    print(f"Price: {player.nation.currency}25,000")
     div()
     print("[0] Cancel")
     if canMoney:
@@ -5997,7 +7024,7 @@ def getJob(player):
     div()
     i = 1
     for item in j:
-        print(f"[{i}] {item}")
+        print(f"[{i}] {item.__str__().replace('£',player.nation.currency)}")
         i += 1
     div()
     try:
@@ -6019,9 +7046,9 @@ def eduMenu(player):
     cls()
     div()
     if player.edu_lvl == 0:
-        print(f"[1] GED[{prefs['currency']}1,000]")
+        print(f"[1] GED[{player.nation.currency}1,000]")
     elif player.edu_lvl == 1:
-        print(f"[1] University [{prefs['currency']}25,000]")
+        print(f"[1] University [{player.nation.currency}25,000]")
     else:
         return None
     div()
@@ -6102,7 +7129,7 @@ def prisonMenu(player):
         x = 2500000
     else:
         x = 45000*player.sentence
-    print(f"[6] Bail Out [{prefs['currency']}{'{:,}'.format(x)}]")
+    print(f"[6] Bail Out [{player.nation.currency}{'{:,}'.format(x)}]")
     div()
     try:
         ch = int(input("$"))
@@ -6234,9 +7261,9 @@ def goToPrison(player):
         print(f"And will be sentenced to [{years}] years in prison.")
     div()
     if years < 255:
-        print(f"[1] Hire Lawyers {prefs['currency']}{25000*years}")
+        print(f"[1] Hire Lawyers {player.nation.currency}{25000*years}")
     else:
-        print(f"[1] Hire Lawyers {prefs['currency']}{150000*len(offences)}")
+        print(f"[1] Hire Lawyers {player.nation.currency}{150000*len(offences)}")
     print("[0] Do Not Hire")
     div()
     try:
@@ -6300,9 +7327,9 @@ def goToPrison(player):
 def casino(player):
     cls()
     div()
-    print(f"{prefs['currency']}{'{:,}'.format(player.money)}")
+    print(f"{player.nation.currency}{'{:,}'.format(player.money)}")
     print(
-        f"Lifetime Winnings: {prefs['currency']}{'{:,}'.format(player.casinoWinnings)}"
+        f"Lifetime Winnings: {player.nation.currency}{'{:,}'.format(player.casinoWinnings)}"
     )
     div()
     print("Enter Bet:")
@@ -6317,7 +7344,7 @@ def casino(player):
     if bet > 10000000:
         bet = 10000000
     cls()
-    print(f"Your Bet: {prefs['currency']}{'{:,}'.format(bet)}")
+    print(f"Your Bet: {player.nation.currency}{'{:,}'.format(bet)}")
     if play_blackjack():
         player.money += bet
         player.casinoWinnings += bet
@@ -6352,7 +7379,7 @@ def fertilityCenter(player):
         print("[x] Receive Sperm")
     print("[x] Surrogacy")
     if player.fertile:
-        print(f"[3] Vasectomy [{prefs['currency']}2500]")
+        print(f"[3] Vasectomy [{player.nation.currency}2500]")
     else:
         print("[ ] Vasectomy")
     if player.gender == 1:
@@ -6371,7 +7398,7 @@ def fertilityCenter(player):
     elif ch == 3 and player.fertile:
         cls()
         div()
-        print(f"You paid {prefs['currency']}2500 for a vasectomy.")
+        print(f"You paid {player.nation.currency}2500 for a vasectomy.")
         player.money -= 2500
         player.fertile = False
         print("You are now infertile.")
@@ -6383,7 +7410,7 @@ def fertilityCenter(player):
 def identityMenu(player):
     cls()
     div()
-    print(f"[1] Name Change [{prefs['currency']}150]")
+    print(f"[1] Name Change [{player.nation.currency}150]")
     print("[x] Declare Gender")
     print("[x] Declare Sexuality")
     div()
@@ -6403,7 +7430,7 @@ def identityMenu(player):
 def nightlifeMenu(player):
     cls()
     div()
-    print(f"[1] Club [{prefs['currency']}450]")
+    print(f"[1] Club [{player.nation.currency}450]")
     print(f"[2] Drugs")
     div()
     try:
@@ -6422,11 +7449,11 @@ def nightlifeMenu(player):
     elif ch == 2:
         cls()
         div()
-        print(f"[1] Cocaine [{prefs['currency']}50]")
-        print(f"[2] Cannabis [{prefs['currency']}80]")
-        print(f"[3] Heroin [{prefs['currency']}250]")
-        print(f"[4] MDMA [{prefs['currency']}115]")
-        print(f"[5] Morphine [{prefs['currency']}75]")
+        print(f"[1] Cocaine [{player.nation.currency}50]")
+        print(f"[2] Cannabis [{player.nation.currency}80]")
+        print(f"[3] Heroin [{player.nation.currency}250]")
+        print(f"[4] MDMA [{player.nation.currency}115]")
+        print(f"[5] Morphine [{player.nation.currency}75]")
         # LSD $675
         # PCP $ 125
         # Magic Mushrooms $ 65
@@ -6505,9 +7532,9 @@ def nightlifeMenu(player):
 def vacationMenu(player):
     cls()
     div()
-    print(f"[1] 1st Class [{prefs['currency']}25000]")
-    print(f"[2] Business Class [{prefs['currency']}2500]")
-    print(f"[3] Economy Class [{prefs['currency']}50]")
+    print(f"[1] 1st Class [{player.nation.currency}25000]")
+    print(f"[2] Business Class [{player.nation.currency}2500]")
+    print(f"[3] Economy Class [{player.nation.currency}50]")
     div()
     try:
         ch = int(input("$"))
@@ -6592,6 +7619,15 @@ def breakUp(player):
         x=castObject(player.spouse,Ex)
         player.exes.append(x)
         player.spouse=None
+def hashData(bytes,bitSize=2048):
+    ## High accuracy checksum algorithm, default 2048 bits
+    checksum = 0
+    prime = 31  # Prime number used for hashing
+
+    for byte in bytes:
+        checksum = (checksum * prime + byte) % (2**bitSize)
+
+    return checksum
 def loveMenu(player,ch=""):
     if ch == "":
         cls()
@@ -6615,7 +7651,7 @@ def loveMenu(player,ch=""):
         else:
             print("Female")
         print(f"Age: {sp.age}")
-        print(f"Money: {prefs['currency']}{'{:,}'.format(sp.fortune)}")
+        print(f"Money: {player.nation.currency}{'{:,}'.format(sp.fortune)}")
         div()
         print("[1] Accept")
         print("[2] Try Again")
@@ -6674,7 +7710,7 @@ def lawsuit(player):
         div()
         index = 1
         for item in damages:
-            print(f"[{index}] {prefs['currency']}{'{:,}'.format(item)}")
+            print(f"[{index}] {player.nation.currency}{'{:,}'.format(item)}")
             index += 1
         div()
         try:
@@ -6773,7 +7809,7 @@ def licenseCentre(player):
     div()
     i = 1
     for item in lic:
-        print(f"[{i}] {item[0]} [{prefs['currency']}{item[2]}]")
+        print(f"[{i}] {item[0]} [{player.nation.currency}{item[2]}]")
         i += 1
     div()
     try:
@@ -6806,7 +7842,7 @@ def makeFriend(player,f=None):
     print(f.name)
     print("Female" if f.gender == 1 else "Male")
     print("Age:",f.age)
-    print(f"Salary: {prefs['currency']}{'{:,}'.format(int(f.salary*f.hours*52))}")
+    print(f"Salary: {player.nation.currency}{'{:,}'.format(int(f.salary*f.hours*52))}")
     div()
     print("[1] Make Friend")
     print("[0] Decline")
@@ -6816,6 +7852,7 @@ def makeFriend(player,f=None):
     except:
         return None
     if ch == 1:
+        grantAchievement(player,"makeFriend")
         cls()
         div()
         print(f"You are now friends with {f.name}.")
@@ -6833,7 +7870,7 @@ def goWitnessProtection(player):
     price = int(player.money/64)
     cls()
     div()
-    print(f"In order to enroll, you'll need to pay {prefs['currency']}{'{:,}'.format(price)}.")
+    print(f"In order to enroll, you'll need to pay {player.nation.currency}{'{:,}'.format(price)}.")
     div()
     print("[1] Enroll")
     print("[0] Cancel")
@@ -6894,7 +7931,7 @@ def researchLab(player):
         br()
         return None
     for item in x:
-       print(f"[{i}] {item[1]} [{prefs['currency']}{'{:,}'.format(item[2])}] [Time: {item[3]} Years]")
+       print(f"[{i}] {item[1]} [{player.nation.currency}{'{:,}'.format(item[2])}] [Time: {item[3]} Years]")
        i += 1
     div()
     try:
@@ -6919,7 +7956,7 @@ def myLab(player):
     else:
         print("[ ] Age-Down")
     if player.lab["cureCancer"] and player.disease["Cancer"]:
-        print(f"[2] Cure Cancer [{prefs['currency']}1,000,000,000]")
+        print(f"[2] Cure Cancer [{player.nation.currency}1,000,000,000]")
     elif player.lab["cureCancer"] and  not player.disease["Cancer"]:
         print("[ ] Cure Cancer [ERROR: DO NOT HAVE CANCER]")
     else:
@@ -6938,10 +7975,56 @@ def myLab(player):
     elif ch == 2 and player.lab['cureCancer'] and player.disease['Cancer']:
         cls()
         div()
-        print("You paid {prefs['currency']}1,000,000,000 to cure your cancer.")
+        print("You paid {player.nation.currency}1,000,000,000 to cure your cancer.")
         br()
         player.disease['cancer'] = False
         player.money -= 1000000000
+def emigrate(player):
+    cls()
+    div()
+    for item in nations + player.criminalRecords[player.nation.id]:
+        print(f"[{item.id}] {item.name}")
+    div()
+    try:
+        ch=int(input("$"))
+        if ch == player.nation.id:
+            raise Exception
+        x=nations[ch]
+    except:
+        return None
+    div()
+    z=[]
+    for item in player.offences:
+        if not item.served:
+            z.append(item)
+    if not z:
+        print(f"Your emigration request to {x.name} was approved.")
+        print(f"Emigrate to {x.name}?")
+    else:
+        print(f"Your emigration to {x.name} was declined.")
+        print(f"Illegaly emigrate to {x.name}?")
+    print(f"Price: {player.nation.currency}25,000")
+    div()
+    print("[1] Yes")
+    print("[0] No")
+    div()
+    try:
+        ch=int(input("$"))
+        if not ch == 1:
+            raise Exception
+    except:
+        return None
+    player.money -= 25000
+    if not z and not pChance(player.ethics*100):
+        cls()
+        div()
+        print("You were caught trying to emigrate illegaly into {x.name}!")
+        br()
+        player.offences.append(Offence("Illegal Immigration",5))
+        goToPrison(player)
+    player.criminalRecords[player.nation.id] = player.offences
+    player.nation = x
+    player.offences = player.criminalRecords[player.nation.id]
 def adultActivities(player, ch=""):
     cls()
     div()
@@ -6985,6 +8068,7 @@ def adultActivities(player, ch=""):
         print("[27] My Lab")
     else:
         print("[  ] My Lab")
+    print("[28] Emigrate")
     div()
     if ch == "":
         try:
@@ -7120,6 +8204,8 @@ def adultActivities(player, ch=""):
             return None
     elif ch == 27 and player.lab != Player().lab and player.lab != zz:
         myLab(player)
+    elif ch == 28:
+        emigrate(player)
     else:
         return None
 
@@ -7253,11 +8339,11 @@ def adult(player):
     else:
         x = "Female"
     print(player.forename + " " + player.surname + " [" + x + "]")
-
     try:
         print(job_roles[player.job_id][player.job_lvl - 1])
     except:
         print(f"InvalidJob: [{player.job_id}][{player.job_lvl}]")
+    print("Nation:",player.nation.name)
     if player.disease != Player().disease:
         div()
         print("Diseases:")
@@ -7304,7 +8390,9 @@ def adult(player):
                     print("ID:",item)
     div()
     print("Age:", player.age)
-    print(prefs["currency"] + str("{:,}".format((player.money))))
+    print(player.nation.currency + str("{:,}".format((player.money))))
+    if prefs['autoDeposit']:
+        print("Savings:",player.nation.currency + str("{:,}".format((player.savings))))
     div()
     if player.edu_lvl == 1:
         print("Education: High School")
@@ -7358,14 +8446,18 @@ def teen(player):
     div()
     print(player.forename + " " + player.surname)
     print("Age:", player.age)
-    print(prefs["currency"] + str("{:,}".format((player.money))))
+    print("Nation:",player.nation.name)
+    print(player.nation.currency + str("{:,}".format((player.money))))
     div()
     print("Happiness:", pbar(player.happiness), str(int(player.happiness * 100)) + "%")
     print("Health:   ", pbar(player.health), str(int(player.health * 100)) + "%")
     print("Smarts:   ", pbar(player.intel), str(int(player.intel * 100)) + "%")
     print("Looks:    ", pbar(player.looks), str(int(player.looks * 100)) + "%")
     div()
-    print("[1] School")
+    if not player.droppedOut:
+        print("[1] School")
+    else:
+        print("[ ] School")
     print("[x] Assets")
     print("[0] Age Up")
     print("[3] Relationships")
@@ -7384,7 +8476,7 @@ def teen(player):
             print("You are now an adult.")
             br()
         main(player)
-    elif ch == 1:
+    elif ch == 1 and not player.droppedOut:
         secondarySchool(player)
         teen(player)
     elif ch == 3:
@@ -7419,7 +8511,19 @@ def cleanTT(player):
     player.backup = x
     return player
 
-
+def allCombos(a,b):
+    z=[]
+    for item in a:
+        for i in b:
+            z.append([item,i])
+    return z
+def getBankName(r=False):
+    adjectives = ['First', 'National', 'Global', 'City', 'United', 'Capital', 'Elite', 'Secure', 'Prime', 'Royal']
+    nouns = ['Bank', 'Trust', 'Financial', 'Group', 'Savings', 'Institution', 'Union', 'Corp', 'Investments', 'Holdings']
+    if r:
+        return adjectives, nouns
+    bank_name = random.choice(adjectives) + ' ' + random.choice(nouns)
+    return bank_name
 def main(player):
     # The main() function is meant to be called after player.age_up().
     # It redirects the program to the correct stage function.
@@ -7555,6 +8659,32 @@ def primarySchool(player):
         print(choice(["You studied until you fell asleep.","You studied until you went cross-eyed.",f"You studied for {rng(5,11)} hours straight."]))
         br()
         player.grades += 0.25
+def dropOut(player):
+    if player.nation.dropOutAge <= player.age:
+        cls()
+        div()
+        print("Do you want to drop out?")
+        div()
+        print("[1] Drop Out")
+        print("[0] Cancel")
+        div()
+        try:
+            ch=int(input("$"))
+        except:
+            return None
+        if ch == 1:
+            player.droppedOut = True
+    else:
+        if player.nation.dropOutAge < 18:
+            cls()
+            div()
+            print(f"You need to be {player.nation.dropOutAge} to drop out in {player.nation.name}.")
+            br()
+        else:
+            cls()
+            div()
+            print(f"You cannot drop out in {player.nation.name}.")
+            br()
 def secondarySchool(player):
     cls()
     div()
@@ -7567,7 +8697,7 @@ def secondarySchool(player):
     print("[x] Activities...")
     print("[x] Class...")
     print("[x] Cliques...")
-    print("[x] Drop Out")
+    print("[4] Drop Out")
     print("[x] Faculty")
     print("[x] Nurse")
     print("[7] Skip School")
@@ -7585,6 +8715,8 @@ def secondarySchool(player):
         print(choice(["You studied until you fell asleep.","You studied until you went cross-eyed.",f"You studied for {rng(5,11)} hours straight."]))
         br()
         player.grades += 0.25
+    elif ch == 4:
+        dropOut(player)
     elif ch == 8:
         cls()
         div()
@@ -7915,27 +9047,31 @@ def impexFile():
     div()
     print("[1] Export Save To JSON")
     print("[2] Import Save From JSON")
+    print("[3] Import Alpha 16 File")
+    print("[4] Reset Achievements File")
     div()
     try:
         ch=int(input("$"))
     except:
         return None
-    cls()
-    fn = input("FileName $")
     if ch == 1:
+        cls()
+        fn = input("FileName $")
         x=fn
         fn += ".oll3"
         try:
             with open(fn,"rb") as f:
                 p=pickle.load(f)
             with open(x+".json","w") as f:
-                json.dump(filter_dict(obj_to_dict(p)),f)
+                json.dump(filter_dict(obj_to_dict(p,False)),f)
         except Exception as e:
             cls()
             div()
             print("Error:",e)
             cls()
     elif ch == 2:
+        cls()
+        fn = input("FileName $")
         x=fn + ".oll3"
         fn += ".json"
         try:
@@ -7956,9 +9092,15 @@ def impexFile():
                 print(f"{fx} items were reset due to corruption.")
                 print(f"To load it, use the Load Game menu.")
                 print(f"For security, the anticheat has been triggered.")
+                div()
+                print("[!] Save files imported from JSON are NOT supported and WILL break the game.")
                 br()
         except Exception as e:
             print("Error:",e)
+    elif ch == 3:
+        OllTwoConverter()
+    elif ch == 4:
+        saveAchievements(ACHIEVEMENTS)
     else:
         return None
 import platform
@@ -7976,8 +9118,47 @@ def get_platform_info():
         "python_version": platform.python_version()
     }
     return platform_info
-
+def changeLog():
+    cls()
+    div()
+    print("OpenLife  0.2 Changes")
+    div()
+    print("0.2 is the Stock Ticker Update, allowing you to invest your money and either win big or lose it all!")
+    print("It also adds nations and achievements.")
+    div()
+    print("[-] Added Nation-States")
+    print("   [-] You are born into a random one and can emigrate to new ones.")
+    print("   [-] Each nation has different policies and tax rates")
+    print("   [-] Added tax")
+    print("      [-] Added Income Tax, OpenTube Revenue Tax, and House Sell Tax.")
+    print("      [-] The tax rate you receive is viewable in the Lifetime Stats menu.")
+    print("[-] Investments")
+    print("   [-] You can now invest in stocks, crypto, index funds, bonds, and metals")
+    print("   [-] Each has its own properties and varying risk levels")
+    print("[-] Added achievements")
+    print("   [-] Earned through performing certain activities")
+    print("[-] OpenTube tweaks")
+    print("   [-] View formula tweaked to be less broken")
+    print("      [-] As a result, the progress is a bit more flat.")
+    print("   [-] Updates to OpenTube coming soon.")
+    print("[-] Console Tweaks")
+    print("   [-] More commands added")
+    print("[-] Misc. Changes")
+    print("   [-] Added Alpha 16 Save Converter")
+    print("      [-] Converts Alpha 16 saves to the latest version")
+    print("      [-] Some features, such as property, do not get ported over.")
+    print("      [-] These features will be ported over *soon*")
+    print("   [-] Main Menu now shows proper game version [AKA 0.2.0]")
+    print("   [-] Tweaked parent death menu to display formatted inheritance amount")
+    print("   [-] Lottery odds now 1/10,000,000")
+    print("      [-] This is to reflect OpenLife's new direction of avoiding exploits like the lottery exploit")
+    print("      [-] The lottery is still potentially profitable, but it is no longer an instant money maker")
+    print("   [-] Fuse class now uses Singleton design pattern")
+    print("      [-] This means you can't replace the player.cheater value directly anymore :)")
+    br()
 def mainMenu(ch=0):
+    global achievements
+    achievements = loadAchievements()
     prefs = loadPrefs()
     cls()
     div()
@@ -8007,14 +9188,20 @@ def mainMenu(ch=0):
     print("[10] Quick Create Life")
     print("[11] Check for Updates")
     #print("[  ] Download OpenLife Times Article")
-    print("[13] Import/Export Save File [Experimental!]")
+    print("[13] Tools")
+    print(f"[14] Achievements [Earned: {achEarned(loadAchievements())}/{len(loadAchievements())}]")
     print("[0] About Game")
     div()
     print("Version:", version)
     div()
     if ch == 0:
         try:
-            ch = int(input("$"))
+            x = input("$")
+            if x == "hidden test":
+                prefs["allowDebug"] = True
+                savePrefs(prefs)
+                mainMenu()
+            ch=int(x)
         except:
             mainMenu()
     if ch == 1:
@@ -8052,21 +9239,7 @@ def mainMenu(ch=0):
     elif ch == 6:
         raise ExitError
     elif ch == 7:
-        cls()
-        div()
-        print("OpenLife Beta 1 Changes")
-        div()
-        print("The entire game has been rewritten to be more modern.")
-        print("The GUI had been overhauled, the save format has been changed,")
-        print("And a lot of backend mechanics have been revamped, all with basically no change on the frontend.")
-        div()
-        print("Some mechanics have had tweaks made, including:")
-        print("[-] OpenTube")
-        print("   [-] Multiple channel support")
-        print("   [-] The game is MORE broken now")
-        print("[-] Casino")
-        print("   [-] Overhauled game")
-        br()
+        changeLog()
         mainMenu()
     elif ch == 9:
         savePrefs(editPrefs(prefs))
@@ -8075,6 +9248,7 @@ def mainMenu(ch=0):
         print(prefs)
         mainMenu()
     elif ch == 10:
+        grantAchievement(achID="swiftLife")
         player = Player()
         player.edu_lvl = 1
         player.gender = rng(0, 1)
@@ -8092,6 +9266,7 @@ def mainMenu(ch=0):
             rng(1, 100) / 100,
             rng(1, 100) / 100,
         )
+        player.nation=nations[0]
         player.parents[0].age += 18
         player.parents[1].age += 18
         adult(player)
@@ -8141,6 +9316,8 @@ def mainMenu(ch=0):
         mainMenu()
     elif ch == 13:
         impexFile()
+    elif ch == 14:
+        listAchievements(loadAchievements())
     elif ch == 0:
         cls()
         div()
@@ -8202,3 +9379,7 @@ except ExitError:
         prefs = loadPrefs()
         p = Player()
         p.create()
+        c=Crypto("xRipple","XRP")
+        p.money = 10000
+        m=p.metals[0]
+        m.investment = 1
