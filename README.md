@@ -1,5 +1,5 @@
 # OpenLife
-An open-source [hence the name] life simulator inspired by BitLife written in Python.
+An open-source life simulator inspired by BitLife written in Python.
 ### [Download](https://github.com/WinFan3672/OpenLife/raw/main/openlife.py)
 # What Is It
 It is an attempt at recreating the BitLife environment in Python, while keeping all functionality open-source. 
