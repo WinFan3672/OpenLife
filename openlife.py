@@ -944,7 +944,7 @@ prefs = {
     "allowDebug": False,
     "hideConsole": False,
     "div": "--------------------",
-    "doNotClearVar": True,
+    "doNotClearVar": False,
     "autoDeposit": False,
     "autoPayLab": False,
 }
