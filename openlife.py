@@ -749,8 +749,8 @@ def uiDebugText(text):
 
 global version, app_version, subversion, game_name
 game_name = "OpenLife"
-app_version = [0, 2, 0]
-version = f"{app_version[0]}.{app_version[1]}.{app_version[2]} [26 May 2023]"
+app_version = [0, 2, 1]
+version = f"{app_version[0]}.{app_version[1]}.{app_version[2]} [27 May 2023]"
 sub_version = "xyxyx"
 global forename_m, forename_f, surnames
 forename_m = [
@@ -1351,6 +1351,7 @@ class Crypto(Base):
         self.symbol=symbol
         self.investment=0
         self.lastPrice = self.price
+        self.ownCrypto=False
     def age_up(self,player):
         self.lastPrice = self.price
         if self.mode == 0:
@@ -1393,6 +1394,7 @@ class Crypto(Base):
             print(f"The crypto, {self.name} [{self.symbol}] has crashed and will be taken off the market.")
             br()
             player.crypto.remove(self)
+            return None
         if self.investment > 0:
             cls()
             div()
@@ -1402,6 +1404,46 @@ class Crypto(Base):
             print(f"New Price: {player.nation.currency}{Format(self.price)}")
             print(f"1Y Price Change: {percentChange(self.lastPrice,self.price)}%")
             br()
+    def ownInteract(self,player):
+        cls()
+        div()
+        print(f"{self.name} [{self.symbol}]")
+        print(f"Price: {player.nation.currency}{Format(self.price)}")
+        print(f"1Y Price Change: {percentChange(self.lastPrice,self.price)}%")
+        print(f"Holdings: {Format(self.investment)} {self.symbol}")
+        print(f"Portfolio Value: {player.nation.currency}{Format(int(self.investment*self.price))}")
+        div()
+        print("[1] Dump All Coins")
+        div()
+        try:
+            ch=int(input("$"))
+        except:
+            return None
+        if ch == 1:
+            cls()
+            div()
+            print("You performed a pump-and-dump scheme.")
+            br()
+            player.money += int(self.price * self.investment)
+            cls()
+            div()
+            print(f"You made {player.nation.currency}{Format(int(self.price * self.investment))}.")
+            br()
+            cls()
+            div()
+            print("The coin crashed and was removed from the market.")
+            br()
+            if pChance(20):
+                cls()
+                div()
+                print("The FCC performed a formal investigation.")
+                br()
+                cls()
+                div()
+                print("You were found guilty of fraud.")
+                player.offences.append(Offence("Fraud",30))
+                goToPrison(player)
+            player.crypto.remove(self)
     def interact(self,player):
         cls()
         div()
@@ -2622,6 +2664,7 @@ class Offence(Base):
         self.years = years
         self.served = False
         self.years_served = 0
+        self.id=None
 
     def age_up(self):
         self.years_served += 1
@@ -5053,6 +5096,9 @@ def consoleBase(player, elev, text):
         print("cls - Clears console")
         print("stat - prints out all stats as a dictionary")
         print("nation - prints information about all nations")
+        print("opentube - simulates an OpenTube channel for 256 years and dumps data to a JSON file")
+        print("achid - lists all achievements and their ID's")
+        print("fund - simulates an index fund for 256 years")
         div()
         print("size - prints estimated size of save, in bytes")
         print("dump - dumps player object to JSON file")
@@ -5082,6 +5128,8 @@ def consoleBase(player, elev, text):
             print("killp - forces your parents to die when you age up")
             print("age <age> - sets your age to <age>")
             print("sweep - opens a game of Minesweeper")
+            print("cargen - adds a randomly-generated car")
+            print("unichance - shows the probability of the player's parents paying for uni")
             if prefs["allowDebug"] == True:
                 print("dgboff - disables debug mode")
             div()
@@ -5969,9 +6017,12 @@ def cryptoMenu(player):
     div()
     try:
         ch=int(input("$"))
-        player.crypto[ch-1].interact(player)
-    except:
-        return None
+        if player.crypto[ch-1].ownCrypto == True:
+            player.crypto[ch-1].ownInteract(player)
+        else:
+            player.crypto[ch-1].interact(player)
+    except Exception as e:
+        print(e)
 def metalMenu(player):
     cls()
     i = 1
@@ -6759,7 +6810,23 @@ def doctorMenu(player):
     else:
         return None
 
-
+def makeCrypto(player):
+    cls()
+    div()
+    name = input("Enter Crypto Name $")
+    if name == "":
+        name = random.choice(["Bitcoin","Monero","Ethereum","Ripple","Dogecoin","Shiba Inu Token"])
+    c=Crypto(name,"CSTM")
+    c.price = rng(1,5)/100
+    c.lastPrice=c.price
+    c.ownCrypto = True
+    c.investment = 32000000
+    player.crypto.append(c)
+    cls()
+    div()
+    print(f"Your crypto, {c.name} [{c.symbol}], has been created.")
+    print(f"Price: {player.nation.currency}{Format(c.price)}")
+    br()
 def specialJobs(player):
     cls()
     div()
@@ -6768,6 +6835,7 @@ def specialJobs(player):
     print("[x] Mafia")
     print("[x] Politics")
     print("[x] Local Gangs")
+    print("[5] Create Cryptocurrency...")
     div()
     try:
         ch = int(input("$"))
@@ -6775,6 +6843,8 @@ def specialJobs(player):
         return None
     if ch == 1:
         return None
+    elif ch == 5:
+        makeCrypto(player)
     else:
         return None
 
@@ -9123,38 +9193,13 @@ def changeLog():
     div()
     print("OpenLife  0.2 Changes")
     div()
-    print("0.2 is the Stock Ticker Update, allowing you to invest your money and either win big or lose it all!")
-    print("It also adds nations and achievements.")
+    print("0.2.1 is a bugfix release that also adds a minor feature :)")
     div()
-    print("[-] Added Nation-States")
-    print("   [-] You are born into a random one and can emigrate to new ones.")
-    print("   [-] Each nation has different policies and tax rates")
-    print("   [-] Added tax")
-    print("      [-] Added Income Tax, OpenTube Revenue Tax, and House Sell Tax.")
-    print("      [-] The tax rate you receive is viewable in the Lifetime Stats menu.")
-    print("[-] Investments")
-    print("   [-] You can now invest in stocks, crypto, index funds, bonds, and metals")
-    print("   [-] Each has its own properties and varying risk levels")
-    print("[-] Added achievements")
-    print("   [-] Earned through performing certain activities")
-    print("[-] OpenTube tweaks")
-    print("   [-] View formula tweaked to be less broken")
-    print("      [-] As a result, the progress is a bit more flat.")
-    print("   [-] Updates to OpenTube coming soon.")
-    print("[-] Console Tweaks")
-    print("   [-] More commands added")
-    print("[-] Misc. Changes")
-    print("   [-] Added Alpha 16 Save Converter")
-    print("      [-] Converts Alpha 16 saves to the latest version")
-    print("      [-] Some features, such as property, do not get ported over.")
-    print("      [-] These features will be ported over *soon*")
-    print("   [-] Main Menu now shows proper game version [AKA 0.2.0]")
-    print("   [-] Tweaked parent death menu to display formatted inheritance amount")
-    print("   [-] Lottery odds now 1/10,000,000")
-    print("      [-] This is to reflect OpenLife's new direction of avoiding exploits like the lottery exploit")
-    print("      [-] The lottery is still potentially profitable, but it is no longer an instant money maker")
-    print("   [-] Fuse class now uses Singleton design pattern")
-    print("      [-] This means you can't replace the player.cheater value directly anymore :)")
+    print("[-] Added Custom Crypto")
+    print("   [-] Occupation > Special Careers > Create Cryptocurrency")
+    print("   [-] You start with 32,000,000 coins")
+    print("   [-] You can dump all of your money for profit")
+    print("   [-] If you dump it, there's a 20% chance you go to jail for fraud")
     br()
 def mainMenu(ch=0):
     global achievements
